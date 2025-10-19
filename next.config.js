@@ -1,9 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // output: 'export', // Отключаем для поддержки API routes
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
-  distDir: 'out',
   images: {
     unoptimized: true
   },
