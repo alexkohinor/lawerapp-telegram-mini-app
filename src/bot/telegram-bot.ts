@@ -65,14 +65,16 @@ bot.command('start', async (ctx) => {
   });
 
   // Отправляем уведомление о регистрации
-  notificationService.createFromTemplate(
-    'user_registration',
-    {
-      userName: ctx.from?.first_name || 'Пользователь',
-      planName: 'Бесплатный'
-    },
-    ctx.from?.id.toString()
-  );
+  if (ctx.from?.id) {
+    notificationService.createFromTemplate(
+      'user_registration',
+      {
+        userName: ctx.from?.first_name || 'Пользователь',
+        planName: 'Бесплатный'
+      },
+      ctx.from.id.toString()
+    );
+  }
 });
 
 // Команда /help
