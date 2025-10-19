@@ -357,13 +357,13 @@ async function testMiniAppURL() {
 
 async function runAllTests() {
   log('🚀 Запуск тестирования Telegram Mini App', 'bold');
-  log('=' * 50, 'blue');
+  log('='.repeat(50), 'blue');
   
   await testLocalApp();
   await testTelegramBot();
   await testMiniAppURL();
   
-  log('\n' + '=' * 50, 'blue');
+  log('\n' + '='.repeat(50), 'blue');
   log('✅ Тестирование завершено!', 'green');
   log('\n📋 Следующие шаги:', 'yellow');
   log('1. Откройте test-miniapp.html в браузере', 'blue');
