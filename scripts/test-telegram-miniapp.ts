@@ -36,11 +36,11 @@ const colors = {
   bold: '\x1b[1m'
 };
 
-function log(message, color = 'reset') {
+function log(message: string, color: keyof typeof colors = 'reset') {
   console.log(`${colors[color]}${message}${colors.reset}`);
 }
 
-function makeRequest(url, options = {}) {
+function makeRequest(url: string, options: any = {}) {
   return new Promise((resolve, reject) => {
     const isHttps = url.startsWith('https://');
     const client = isHttps ? https : http;
