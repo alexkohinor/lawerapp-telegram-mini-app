@@ -40,7 +40,13 @@ function log(message: string, color: keyof typeof colors = 'reset') {
   console.log(`${colors[color]}${message}${colors.reset}`);
 }
 
-function makeRequest(url: string, options: any = {}) {
+interface HttpResponse {
+  statusCode: number;
+  headers: any;
+  data: string;
+}
+
+function makeRequest(url: string, options: any = {}): Promise<HttpResponse> {
   return new Promise((resolve, reject) => {
     const isHttps = url.startsWith('https://');
     const client = isHttps ? https : http;
