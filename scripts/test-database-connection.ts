@@ -81,8 +81,8 @@ async function testDatabaseConnection() {
       await prisma.$executeRaw`DROP TABLE IF EXISTS lawerapp_test_connection`;
       console.log('✅ Очистка тестовой таблицы успешна');
 
-    } catch (error: any) {
-      console.error('❌ Ошибка тестирования таблицы:', error.message);
+    } catch (error) {
+      console.error('❌ Ошибка тестирования таблицы:', error instanceof Error ? error.message : String(error));
     }
 
     // 6. Проверяем производительность
@@ -112,16 +112,16 @@ async function testDatabaseConnection() {
     console.log('\n🎉 Все тесты подключения к базе данных прошли успешно!');
     console.log('✅ База данных готова для работы LawerApp');
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('\n❌ Ошибка подключения к базе данных:');
-    console.error('🔍 Детали ошибки:', error.message);
+    console.error('🔍 Детали ошибки:', error instanceof Error ? error.message : String(error));
     
-    if (error.code) {
-      console.error('📋 Код ошибки:', error.code);
+    if (error && typeof error === 'object' && 'code' in error) {
+      console.error('📋 Код ошибки:', (error as { code: string }).code);
     }
     
-    if (error.meta) {
-      console.error('📊 Метаданные:', error.meta);
+    if (error && typeof error === 'object' && 'meta' in error) {
+      console.error('📊 Метаданные:', (error as { meta: unknown }).meta);
     }
 
     // Предложения по устранению
@@ -145,7 +145,7 @@ if (require.main === module) {
       console.log('\n✅ Тест подключения завершен успешно');
       process.exit(0);
     })
-    .catch((error) => {
+    .catch(() => {
       console.error('\n❌ Тест подключения завершен с ошибкой');
       process.exit(1);
     });

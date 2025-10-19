@@ -2,7 +2,7 @@
  * Запуск Telegram бота в polling режиме для локального тестирования
  */
 
-const { Bot } = require('grammy');
+import { Bot } from 'grammy';
 
 // Конфигурация
 const BOT_TOKEN = '8208499008:AAHd9069cfFeM0OIqWrm86QyM0DEUBbV2z8';

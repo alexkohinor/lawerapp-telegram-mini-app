@@ -34,9 +34,9 @@ async function initDatabase() {
         try {
           await prisma.$executeRawUnsafe(command);
           console.log(`✅ Выполнена команда: ${command.substring(0, 50)}...`);
-        } catch (error: any) {
+        } catch (error) {
           // Игнорируем ошибки "уже существует"
-          if (!error.message.includes('already exists')) {
+          if (error instanceof Error && !error.message.includes('already exists')) {
             console.warn(`⚠️ Предупреждение: ${error.message}`);
           }
         }

@@ -3,8 +3,9 @@
  * Проверяет все основные функции приложения
  */
 
-const https = require('https');
-const http = require('http');
+import https from 'https';
+import http from 'http';
+import fs from 'fs';
 
 // Конфигурация
 const CONFIG = {
@@ -344,7 +345,7 @@ async function testMiniAppURL() {
 </html>`;
 
   // Сохраняем тестовую страницу
-  require('fs').writeFileSync('test-miniapp.html', testHtml);
+  fs.writeFileSync('test-miniapp.html', testHtml);
   log('📄 Создана тестовая страница: test-miniapp.html', 'green');
 }
 
