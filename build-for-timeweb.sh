@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 echo "Building Next.js application..."
-npm run build
+npx next build
 echo "Creating out directory..."
 mkdir -p out
 echo "Copying static files to out directory..."
