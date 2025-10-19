@@ -3,7 +3,18 @@
 import React, { useState, useEffect } from 'react';
 
 export default function MiniAppTestPage() {
-  const [telegramData, setTelegramData] = useState<any>(null);
+  const [telegramData, setTelegramData] = useState<{
+    version: string;
+    platform: string;
+    colorScheme: string;
+    user?: {
+      first_name?: string;
+    };
+    themeParams: Record<string, string>;
+    isExpanded: boolean;
+    viewportHeight: number;
+    viewportStableHeight: number;
+  } | null>(null);
   const [isInTelegram, setIsInTelegram] = useState(false);
 
   useEffect(() => {
@@ -129,9 +140,9 @@ export default function MiniAppTestPage() {
           <div className="mt-6 p-4 bg-blue-50 rounded-lg">
             <h3 className="font-semibold mb-2">📋 Как протестировать:</h3>
             <ol className="list-decimal list-inside space-y-1 text-sm text-gray-600">
-              <li>Нажмите "Открыть в Telegram" (если не в Telegram)</li>
+              <li>Нажмите &quot;Открыть в Telegram&quot; (если не в Telegram)</li>
               <li>Telegram откроется и запустит Mini App</li>
-              <li>Нажмите "Тест Telegram API" для проверки функций</li>
+              <li>Нажмите &quot;Тест Telegram API&quot; для проверки функций</li>
               <li>Проверьте все интерактивные элементы</li>
             </ol>
           </div>
