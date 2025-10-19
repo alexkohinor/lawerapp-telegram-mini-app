@@ -58,7 +58,7 @@ export default function TestPage() {
         alert('Тест уведомления!');
         addTestResult('✅ Уведомление показано (через alert)');
       } catch (error) {
-        addTestResult(`❌ Ошибка уведомления: ${error.message || error}`);
+        addTestResult(`❌ Ошибка уведомления: ${error instanceof Error ? error.message : String(error)}`);
       }
     } else {
       alert('Тест уведомления!');
@@ -125,7 +125,7 @@ export default function TestPage() {
         addTestResult('❌ Storage API недоступен');
       }
     } catch (error) {
-      addTestResult(`❌ Ошибка Storage: ${error.message || error}`);
+      addTestResult(`❌ Ошибка Storage: ${error instanceof Error ? error.message : String(error)}`);
     }
   };
 
