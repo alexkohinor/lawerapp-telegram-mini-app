@@ -56,7 +56,7 @@ function makeRequest(url: string, options: any = {}): Promise<HttpResponse> {
       res.on('data', chunk => data += chunk);
       res.on('end', () => {
         resolve({
-          statusCode: res.statusCode,
+          statusCode: res.statusCode || 0,
           headers: res.headers,
           data: data
         });
