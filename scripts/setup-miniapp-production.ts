@@ -21,11 +21,11 @@ function log(message: string, color: keyof typeof colors = 'reset') {
 
 interface TelegramResponse {
   ok: boolean;
-  result?: any;
+  result?: unknown;
   description?: string;
 }
 
-function makeRequest(url: string, options: any = {}): Promise<TelegramResponse> {
+function makeRequest(url: string, options: Record<string, unknown> = {}): Promise<TelegramResponse> {
   return new Promise((resolve, reject) => {
     const isHttps = url.startsWith('https://');
     const client = isHttps ? https : http;
@@ -37,7 +37,7 @@ function makeRequest(url: string, options: any = {}): Promise<TelegramResponse> 
         try {
           const response = JSON.parse(data);
           resolve(response);
-        } catch (error) {
+        } catch {
           reject(new Error(`Invalid JSON response: ${data}`));
         }
       });

@@ -24,11 +24,11 @@ function log(message: string, color: keyof typeof colors = 'reset') {
 
 interface TelegramResponse {
   ok: boolean;
-  result?: any;
+  result?: unknown;
   description?: string;
 }
 
-function makeTelegramRequest(method: string, data: any): Promise<TelegramResponse> {
+function makeTelegramRequest(method: string, data: Record<string, unknown>): Promise<TelegramResponse> {
   return new Promise((resolve, reject) => {
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
     if (!botToken) {

@@ -2,7 +2,11 @@
  * Скрипт для запуска Telegram бота
  */
 
+import { config } from 'dotenv';
 import { startBot } from './telegram-bot';
+
+// Загружаем переменные окружения
+config({ path: '.env.local' });
 
 // Запускаем бота
 startBot().catch(console.error);

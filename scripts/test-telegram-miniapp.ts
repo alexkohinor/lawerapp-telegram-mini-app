@@ -42,11 +42,11 @@ function log(message: string, color: keyof typeof colors = 'reset') {
 
 interface HttpResponse {
   statusCode: number;
-  headers: any;
+  headers: Record<string, string>;
   data: string;
 }
 
-function makeRequest(url: string, options: any = {}): Promise<HttpResponse> {
+function makeRequest(url: string, options: Record<string, unknown> = {}): Promise<HttpResponse> {
   return new Promise((resolve, reject) => {
     const isHttps = url.startsWith('https://');
     const client = isHttps ? https : http;

@@ -3,9 +3,13 @@
  * Основано на TECHNICAL_SETUP.md и ARCHITECTURE.md
  */
 
+import { config } from 'dotenv';
 import { Bot } from 'grammy';
 import { notificationService } from '@/lib/notifications/notification-service';
 import { alertService } from '@/lib/alerts/alert-service';
+
+// Загружаем переменные окружения
+config({ path: '.env.local' });
 
 // Создаем экземпляр бота
 const bot = new Bot(process.env.TELEGRAM_BOT_TOKEN || '');
@@ -58,7 +62,7 @@ bot.command('start', async (ctx) => {
           { text: '🔒 Безопасность', callback_data: 'security' }
         ],
         [
-          { text: '🌐 Открыть приложение', url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000' }
+          { text: '🌐 Открыть приложение', url: 'https://alexkohinor-lawerapp-telegram-mini-app-8a0e.twc1.net' }
         ]
       ]
     }
@@ -182,7 +186,7 @@ bot.on('callback_query:data', async (ctx) => {
               { text: '📑 Соглашение', callback_data: 'doc_agreement' }
             ],
             [
-              { text: '🌐 Открыть приложение', url: `${process.env.NEXT_PUBLIC_APP_URL}/documents` }
+              { text: '🌐 Открыть приложение', url: `https://alexkohinor-lawerapp-telegram-mini-app-8a0e.twc1.net/documents` }
             ]
           ]
         }
@@ -200,7 +204,7 @@ bot.on('callback_query:data', async (ctx) => {
             ],
             [
               { text: '📊 Статистика', callback_data: 'disputes_stats' },
-              { text: '🌐 Открыть приложение', url: `${process.env.NEXT_PUBLIC_APP_URL}/disputes` }
+              { text: '🌐 Открыть приложение', url: `https://alexkohinor-lawerapp-telegram-mini-app-8a0e.twc1.net/disputes` }
             ]
           ]
         }
@@ -221,7 +225,7 @@ bot.on('callback_query:data', async (ctx) => {
               { text: '📊 История платежей', callback_data: 'payment_history' }
             ],
             [
-              { text: '🌐 Открыть приложение', url: `${process.env.NEXT_PUBLIC_APP_URL}/subscription` }
+              { text: '🌐 Открыть приложение', url: `https://alexkohinor-lawerapp-telegram-mini-app-8a0e.twc1.net/subscription` }
             ]
           ]
         }
@@ -234,7 +238,7 @@ bot.on('callback_query:data', async (ctx) => {
         reply_markup: {
           inline_keyboard: [
             [
-              { text: '🌐 Открыть дашборд', url: `${process.env.NEXT_PUBLIC_APP_URL}/monitoring` }
+              { text: '🌐 Открыть дашборд', url: `https://alexkohinor-lawerapp-telegram-mini-app-8a0e.twc1.net/monitoring` }
             ]
           ]
         }
@@ -251,7 +255,7 @@ bot.on('callback_query:data', async (ctx) => {
               { text: '📊 Активность', callback_data: 'security_activity' }
             ],
             [
-              { text: '🌐 Открыть приложение', url: `${process.env.NEXT_PUBLIC_APP_URL}/security` }
+              { text: '🌐 Открыть приложение', url: `https://alexkohinor-lawerapp-telegram-mini-app-8a0e.twc1.net/security` }
             ]
           ]
         }
@@ -277,7 +281,7 @@ bot.on('message:text', async (ctx) => {
     reply_markup: {
       inline_keyboard: [
         [
-          { text: '🌐 Открыть полный чат', url: `${process.env.NEXT_PUBLIC_APP_URL}/ai-chat` }
+          { text: '🌐 Открыть полный чат', url: `https://alexkohinor-lawerapp-telegram-mini-app-8a0e.twc1.net/ai-chat` }
         ]
       ]
     }
@@ -289,7 +293,7 @@ bot.on('message:text', async (ctx) => {
       reply_markup: {
         inline_keyboard: [
           [
-            { text: '🌐 Открыть приложение', url: `${process.env.NEXT_PUBLIC_APP_URL}/ai-chat` }
+            { text: '🌐 Открыть приложение', url: `https://alexkohinor-lawerapp-telegram-mini-app-8a0e.twc1.net/ai-chat` }
           ]
         ]
       }

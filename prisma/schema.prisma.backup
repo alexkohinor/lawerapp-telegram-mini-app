@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -62,7 +62,7 @@ model Dispute {
   legalArea       String?   @map("legal_area")
   status          String    @default("draft")
   priority        String    @default("medium")
-  estimatedValue  Float?  @map("estimated_value") 
+  estimatedValue  Decimal?  @map("estimated_value") @db.Decimal(15, 2)
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime  @updatedAt @map("updated_at")
   resolvedAt      DateTime? @map("resolved_at")
@@ -98,7 +98,7 @@ model Document {
 model Payment {
   id                  String    @id @default(uuid())
   userId              String    @map("user_id")
-  amount              Float   
+  amount              Decimal   @db.Decimal(10, 2)
   currency            String    @default("RUB")
   paymentMethod       String?   @map("payment_method")
   paymentProviderId   String?   @map("payment_provider_id")
@@ -170,7 +170,7 @@ model AiMonitoring {
   tokensInput    Int?          @map("tokens_input")
   tokensOutput   Int?          @map("tokens_output")
   responseTimeMs Int?          @map("response_time_ms")
-  costUsd        Float?      @map("cost_usd") 
+  costUsd        Decimal?      @map("cost_usd") @db.Decimal(10, 6)
   errorMessage   String?       @map("error_message")
   createdAt      DateTime      @default(now()) @map("created_at")
 
