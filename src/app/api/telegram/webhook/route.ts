@@ -21,6 +21,12 @@ export async function POST(request: NextRequest) {
 
     // Обрабатываем webhook
     const update = JSON.parse(body);
+    
+    // Инициализируем бота если нужно
+    if (!bot.botInfo) {
+      await bot.init();
+    }
+    
     await bot.handleUpdate(update);
     
     console.log('✅ Webhook обработан успешно');

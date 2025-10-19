@@ -5,8 +5,20 @@
 
 import { Bot } from 'grammy';
 
-// Создаем экземпляр бота
-const bot = new Bot(process.env.TELEGRAM_BOT_TOKEN || '8208499008:AAHd9069cfFeM0OIqWrm86QyM0DEUBbV2z8');
+// Создаем экземпляр бота с предустановленной информацией
+const bot = new Bot(process.env.TELEGRAM_BOT_TOKEN || '8208499008:AAHd9069cfFeM0OIqWrm86QyM0DEUBbV2z8', {
+  botInfo: {
+    id: 8208499008,
+    is_bot: true,
+    first_name: 'МиниАпп для юрконсультаций',
+    username: 'miniappadvokat_bot',
+    can_join_groups: true,
+    can_read_all_group_messages: false,
+    supports_inline_queries: false,
+    can_connect_to_business: false,
+    has_main_web_app: false
+  }
+});
 
 // Middleware для логирования
 bot.use(async (ctx, next) => {
