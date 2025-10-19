@@ -21,6 +21,7 @@
     "db:test": "tsx scripts/test-database-connection.ts",
     "setup:local": "tsx scripts/setup-local-dev.ts",
     "setup:telegram": "tsx scripts/setup-telegram-webapp.ts",
+    "setup:miniapp": "tsx scripts/setup-miniapp-production.ts",
     "lint:fix": "next lint --fix",
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
