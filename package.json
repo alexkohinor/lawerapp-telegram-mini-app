@@ -18,7 +18,13 @@
     "db:studio": "prisma studio",
     "db:init": "tsx scripts/init-database.ts",
     "db:seed": "tsx scripts/seed-database.ts",
-    "db:test": "tsx scripts/test-database-connection.ts"
+    "db:test": "tsx scripts/test-database-connection.ts",
+    "setup:local": "tsx scripts/setup-local-dev.ts",
+    "setup:telegram": "tsx scripts/setup-telegram-webapp.ts",
+    "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.913.0",
