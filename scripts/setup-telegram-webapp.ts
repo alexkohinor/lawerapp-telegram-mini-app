@@ -22,13 +22,34 @@ function log(message: string, color: keyof typeof colors = 'reset') {
   console.log(`${colors[color]}${message}${colors.reset}`);
 }
 
-interface TelegramResponse {
+interface TelegramResponse<T = unknown> {
   ok: boolean;
-  result?: unknown;
+  result?: T;
   description?: string;
 }
 
-function makeTelegramRequest(method: string, data: Record<string, unknown>): Promise<TelegramResponse> {
+interface TelegramBot {
+  id: number;
+  is_bot: boolean;
+  first_name: string;
+  username?: string;
+  can_join_groups?: boolean;
+  can_read_all_group_messages?: boolean;
+  supports_inline_queries?: boolean;
+  has_main_web_app?: boolean;
+}
+
+interface WebhookInfo {
+  url?: string;
+  has_custom_certificate?: boolean;
+  pending_update_count?: number;
+  last_error_date?: number;
+  last_error_message?: string;
+  max_connections?: number;
+  allowed_updates?: string[];
+}
+
+function makeTelegramRequest<T = unknown>(method: string, data: Record<string, unknown>): Promise<TelegramResponse<T>> {
   return new Promise((resolve, reject) => {
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
     if (!botToken) {
@@ -75,11 +96,11 @@ function makeTelegramRequest(method: string, data: Record<string, unknown>): Pro
 async function getBotInfo(): Promise<void> {
   try {
     log('🤖 Получение информации о боте...', 'blue');
-    const response = await makeTelegramRequest('getMe', {});
+    const response = await makeTelegramRequest<TelegramBot>('getMe', {});
     
-    if (response.ok) {
+    if (response.ok && response.result) {
       const bot = response.result;
-      log(`✅ Бот найден: @${bot.username} (${bot.first_name})`, 'green');
+      log(`✅ Бот найден: @${bot.username || 'unknown'} (${bot.first_name})`, 'green');
       log(`   ID: ${bot.id}`, 'cyan');
       log(`   Может присоединяться к группам: ${bot.can_join_groups ? 'Да' : 'Нет'}`, 'cyan');
       log(`   Может читать сообщения: ${bot.can_read_all_group_messages ? 'Да' : 'Нет'}`, 'cyan');
@@ -161,9 +182,9 @@ async function getWebhookInfo(): Promise<void> {
   try {
     log('🔍 Проверка текущего webhook...', 'blue');
     
-    const response = await makeTelegramRequest('getWebhookInfo', {});
+    const response = await makeTelegramRequest<WebhookInfo>('getWebhookInfo', {});
     
-    if (response.ok) {
+    if (response.ok && response.result) {
       const webhookInfo = response.result;
       if (webhookInfo.url) {
         log(`✅ Webhook установлен: ${webhookInfo.url}`, 'green');

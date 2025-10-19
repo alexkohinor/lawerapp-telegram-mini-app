@@ -19,13 +19,24 @@ function log(message: string, color: keyof typeof colors = 'reset') {
   console.log(`${colors[color]}${message}${colors.reset}`);
 }
 
-interface TelegramResponse {
+interface TelegramResponse<T = unknown> {
   ok: boolean;
-  result?: unknown;
+  result?: T;
   description?: string;
 }
 
-function makeRequest(url: string, options: Record<string, unknown> = {}): Promise<TelegramResponse> {
+interface TelegramBot {
+  id: number;
+  is_bot: boolean;
+  first_name: string;
+  username?: string;
+  can_join_groups?: boolean;
+  can_read_all_group_messages?: boolean;
+  supports_inline_queries?: boolean;
+  has_main_web_app?: boolean;
+}
+
+function makeRequest<T = unknown>(url: string, options: Record<string, unknown> = {}): Promise<TelegramResponse<T>> {
   return new Promise((resolve, reject) => {
     const isHttps = url.startsWith('https://');
     const client = isHttps ? https : http;
@@ -53,13 +64,13 @@ async function getBotInfo(): Promise<void> {
   log('🤖 Получение информации о боте...', 'blue');
   
   try {
-    const response = await makeRequest(
+    const response = await makeRequest<TelegramBot>(
       `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/getMe`
     );
     
-    if (response.ok) {
+    if (response.ok && response.result) {
       const bot = response.result;
-      log(`✅ Бот найден: @${bot.username} (${bot.first_name})`, 'green');
+      log(`✅ Бот найден: @${bot.username || 'unknown'} (${bot.first_name})`, 'green');
       log(`   ID: ${bot.id}`, 'cyan');
       log(`   Может присоединяться к группам: ${bot.can_join_groups ? 'Да' : 'Нет'}`, 'cyan');
       log(`   Поддерживает inline запросы: ${bot.supports_inline_queries ? 'Да' : 'Нет'}`, 'cyan');
@@ -148,8 +159,8 @@ async function getWebAppInfo(): Promise<void> {
       `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/getWebApp`
     );
     
-    if (response.ok) {
-      const webApp = response.result;
+    if (response.ok && response.result) {
+      const webApp = response.result as { url?: string };
       if (webApp && webApp.url) {
         log(`✅ Web App настроен: ${webApp.url}`, 'green');
       } else {

@@ -42,7 +42,7 @@ function log(message: string, color: keyof typeof colors = 'reset') {
 
 interface HttpResponse {
   statusCode: number;
-  headers: Record<string, string>;
+  headers: Record<string, string | string[] | undefined>;
   data: string;
 }
 
