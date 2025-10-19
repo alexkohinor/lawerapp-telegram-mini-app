@@ -53,38 +53,42 @@ export default function HomePage() {
           </p>
         </div>
         
-        <div className="space-y-3">
-          <button 
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
-            onClick={handleButtonClick}
-          >
-            Тестовая кнопка
-          </button>
-          
-          <button 
-            className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors"
-            onClick={() => {
-              setClickCount(0);
-              alert('Счетчик сброшен!');
-            }}
-          >
-            Сбросить счетчик
-          </button>
-          
-          <button 
-            className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors"
-            onClick={() => {
-              const colors = ['bg-red-500', 'bg-yellow-500', 'bg-green-500', 'bg-blue-500', 'bg-purple-500'];
-              const randomColor = colors[Math.floor(Math.random() * colors.length)];
-              document.body.className = `min-h-screen ${randomColor}`;
-              setTimeout(() => {
-                document.body.className = 'min-h-screen bg-gray-50';
-              }, 1000);
-            }}
-          >
-            Сменить цвет фона
-          </button>
-        </div>
+              <div className="space-y-3">
+                <button
+                  className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+                  onClick={handleButtonClick}
+                >
+                  Тестовая кнопка
+                </button>
+
+                <button
+                  className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors"
+                  onClick={() => {
+                    setClickCount(0);
+                    alert('Счетчик сброшен!');
+                  }}
+                >
+                  Сбросить счетчик
+                </button>
+
+                <button
+                  className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors"
+                  onClick={() => {
+                    window.location.href = '/miniapp-test';
+                  }}
+                >
+                  📱 Тест Mini App
+                </button>
+
+                <button
+                  className="w-full bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-700 transition-colors"
+                  onClick={() => {
+                    window.location.href = '/test';
+                  }}
+                >
+                  🧪 Расширенное тестирование
+                </button>
+              </div>
       </div>
     </div>
   );

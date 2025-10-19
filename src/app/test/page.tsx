@@ -3,7 +3,15 @@
 import React, { useState, useEffect } from 'react';
 
 export default function TestPage() {
-  const [telegramData, setTelegramData] = useState<any>(null);
+  const [telegramData, setTelegramData] = useState<{
+    version: string;
+    platform: string;
+    colorScheme: string;
+    user?: {
+      first_name?: string;
+    };
+    themeParams: Record<string, string>;
+  } | null>(null);
   const [testResults, setTestResults] = useState<string[]>([]);
 
   useEffect(() => {

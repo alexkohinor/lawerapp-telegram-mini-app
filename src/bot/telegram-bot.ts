@@ -3,7 +3,7 @@
  * Основано на TECHNICAL_SETUP.md и ARCHITECTURE.md
  */
 
-import { Bot, webhookCallback } from 'grammy';
+import { Bot } from 'grammy';
 import { notificationService } from '@/lib/notifications/notification-service';
 import { alertService } from '@/lib/alerts/alert-service';
 

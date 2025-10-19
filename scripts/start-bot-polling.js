@@ -35,32 +35,8 @@ bot.command('start', async (ctx) => {
 /info - информация о боте
 `;
 
-  // Создаем inline клавиатуру с кнопкой Mini App
-  const keyboard = {
-    inline_keyboard: [
-      [
-        {
-          text: '🚀 Запустить LawerApp',
-          web_app: { url: 'http://localhost:3000' }
-        }
-      ],
-      [
-        {
-          text: '🌐 Открыть в браузере',
-          url: 'http://localhost:3000'
-        }
-      ],
-      [
-        {
-          text: '🧪 Тестовая страница',
-          url: 'http://localhost:3000/test'
-        }
-      ]
-    ]
-  };
-
+  // Для локального тестирования убираем все кнопки (Telegram требует HTTPS)
   await ctx.reply(welcomeMessage, {
-    reply_markup: keyboard,
     parse_mode: 'HTML'
   });
 });

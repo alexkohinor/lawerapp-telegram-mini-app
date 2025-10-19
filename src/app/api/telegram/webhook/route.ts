@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   // Проверка webhook
   return new NextResponse('Telegram Webhook is working', { status: 200 });
 }

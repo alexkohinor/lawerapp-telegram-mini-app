@@ -33,7 +33,7 @@ export default function RootLayout({
       <head>
         <script
           src="https://telegram.org/js/telegram-web-app.js"
-          strategy="afterInteractive"
+          async
         />
       </head>
       <body className={inter.className}>

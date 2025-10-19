@@ -35,7 +35,7 @@ async function checkDatabase(): Promise<{ status: string; message: string }> {
     // const prisma = new PrismaClient();
     // await prisma.$queryRaw`SELECT 1`;
     return { status: 'healthy', message: 'Database connection OK' };
-  } catch (error) {
+  } catch {
     return { status: 'unhealthy', message: 'Database connection failed' };
   }
 }
@@ -48,7 +48,7 @@ async function checkStorage(): Promise<{ status: string; message: string }> {
       return { status: 'unhealthy', message: 'S3 endpoint not configured' };
     }
     return { status: 'healthy', message: 'S3 storage configured' };
-  } catch (error) {
+  } catch {
     return { status: 'unhealthy', message: 'Storage check failed' };
   }
 }
@@ -60,7 +60,7 @@ async function checkTelegram(): Promise<{ status: string; message: string }> {
       return { status: 'unhealthy', message: 'Telegram bot token not configured' };
     }
     return { status: 'healthy', message: 'Telegram bot configured' };
-  } catch (error) {
+  } catch {
     return { status: 'unhealthy', message: 'Telegram check failed' };
   }
 }

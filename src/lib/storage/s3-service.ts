@@ -63,11 +63,11 @@ export class S3Service {
       const response = await this.client.send(command);
       const chunks: Uint8Array[] = [];
       
-      if (response.Body) {
-        for await (const chunk of response.Body as any) {
-          chunks.push(chunk);
-        }
-      }
+            if (response.Body) {
+              for await (const chunk of response.Body as AsyncIterable<Uint8Array>) {
+                chunks.push(chunk);
+              }
+            }
 
       return Buffer.concat(chunks);
     } catch (error) {

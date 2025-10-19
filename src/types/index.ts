@@ -152,7 +152,7 @@ export interface AppState {
 }
 
 // API Response Types
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
   error?: string;
@@ -165,7 +165,7 @@ export interface SecurityEvent {
   severity: 'info' | 'low' | 'medium' | 'high' | 'critical';
   timestamp: Date;
   userId?: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
 }
 
 // Monitoring Types
