@@ -1,38 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // output: 'export', // Отключаем для поддержки API routes
-  trailingSlash: true,
-  skipTrailingSlashRedirect: true,
+  output: 'export',           // ОБЯЗАТЕЛЬНО для статического экспорта
+  trailingSlash: true,        // ОБЯЗАТЕЛЬНО для TimeWeb Cloud
   images: {
-    unoptimized: true
+    unoptimized: true,        // ОБЯЗАТЕЛЬНО для статического экспорта
+    domains: ['telegram.org', 'cdn.telegram.org'],
+    formats: ['image/webp', 'image/avif'],
   },
-  // experimental: {
-  //   appDir: true // Устаревшая опция в Next.js 15
-  // },
   env: {
     CUSTOM_KEY: process.env.CUSTOM_KEY,
   },
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff'
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin'
-          }
-        ]
-      }
-    ];
-  }
 };
 
 module.exports = nextConfig;

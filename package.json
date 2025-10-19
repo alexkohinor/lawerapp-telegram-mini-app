@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build && mkdir -p out && cp -r .next/server/app/* out/ 2>/dev/null || true && cp -r public/* out/ 2>/dev/null || true",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "bot": "tsx src/bot/start-bot.ts",
