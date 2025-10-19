@@ -3,6 +3,24 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  
+  /* Telegram WebApp Theme Variables */
+  --tg-theme-bg-color: #ffffff;
+  --tg-theme-text-color: #000000;
+  --tg-theme-hint-color: #999999;
+  --tg-theme-link-color: #2481cc;
+  --tg-theme-button-color: #2481cc;
+  --tg-theme-button-text-color: #ffffff;
+  --tg-theme-secondary-bg-color: #f1f1f1;
+  
+  /* Custom Telegram variables for components */
+  --telegram-bg: var(--tg-theme-bg-color, #ffffff);
+  --telegram-text: var(--tg-theme-text-color, #000000);
+  --telegram-hint: var(--tg-theme-hint-color, #999999);
+  --telegram-link: var(--tg-theme-link-color, #2481cc);
+  --telegram-accent: var(--tg-theme-button-color, #2481cc);
+  --telegram-secondary: var(--tg-theme-secondary-bg-color, #f1f1f1);
+  --telegram-border: #e5e5e5;
 }
 
 @theme inline {

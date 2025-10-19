@@ -1,36 +1,214 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏛️ LawerApp - Telegram Mini App
 
-## Getting Started
+**Правовая помощь с AI в Telegram**
 
-First, run the development server:
+LawerApp - это Telegram Mini App для получения правовых консультаций с использованием искусственного интеллекта. Приложение предоставляет пользователям быстрый доступ к правовой информации, генерации документов и управлению правовыми спорами.
 
+## ✨ Основные функции
+
+- 🤖 **AI Консультации** - Получение правовых консультаций с помощью OpenAI
+- ⚖️ **Управление спорами** - Создание и отслеживание правовых споров
+- 📄 **Генерация документов** - Автоматическое создание правовых документов
+- 💳 **Платежная система** - Интеграция с российскими платежными системами
+- 📊 **Мониторинг** - Отслеживание производительности и ошибок
+- 🔔 **Уведомления** - Система алертов и уведомлений
+
+## 🛠️ Технологический стек
+
+- **Frontend**: Next.js 14, React, TypeScript, Tailwind CSS
+- **Backend**: Next.js API Routes, Prisma ORM
+- **База данных**: PostgreSQL
+- **Хранилище**: S3 (TimeWeb Cloud)
+- **AI**: OpenAI GPT-4
+- **Платежи**: ЮKassa, ЮMoney, СБП
+- **Деплой**: TimeWeb Cloud
+- **Мониторинг**: Prometheus, Grafana
+
+## 🚀 Быстрый старт
+
+### Предварительные требования
+
+- Node.js 18+ 
+- npm или yarn
+- PostgreSQL
+- OpenAI API ключ
+- Telegram Bot Token
+
+### Установка
+
+1. **Клонируйте репозиторий:**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/alexkohinor/lawerapp-telegram-mini-app.git
+cd lawerapp-telegram-mini-app
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Установите зависимости:**
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Настройте переменные окружения:**
+```bash
+cp .env.example .env.local
+# Отредактируйте .env.local с вашими данными
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. **Инициализируйте базу данных:**
+```bash
+npm run db:generate
+npm run db:init
+```
 
-## Learn More
+5. **Запустите приложение:**
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 📁 Структура проекта
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+lawerapp-telegram-mini-app/
+├── src/
+│   ├── app/                    # Next.js App Router
+│   │   ├── api/               # API маршруты
+│   │   ├── consultations/     # Страницы консультаций
+│   │   ├── disputes/          # Страницы споров
+│   │   └── page.tsx           # Главная страница
+│   ├── components/            # React компоненты
+│   │   ├── ui/               # UI компоненты
+│   │   ├── layout/           # Компоненты макета
+│   │   └── features/         # Функциональные компоненты
+│   ├── lib/                  # Утилиты и сервисы
+│   │   ├── database/         # Prisma схема
+│   │   ├── payments/         # Платежные системы
+│   │   ├── ai/              # AI сервисы
+│   │   └── telegram/        # Telegram интеграция
+│   └── types/               # TypeScript типы
+├── prisma/                  # Prisma схема и миграции
+├── docs/                   # Документация
+├── scripts/               # Скрипты для разработки
+└── public/               # Статические файлы
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🔧 Команды разработки
 
-## Deploy on Vercel
+```bash
+# Разработка
+npm run dev              # Запуск в режиме разработки
+npm run dev:all          # Запуск приложения и бота
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Сборка
+npm run build            # Сборка для продакшена
+npm run start            # Запуск продакшен версии
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# База данных
+npm run db:generate      # Генерация Prisma клиента
+npm run db:push          # Применение изменений схемы
+npm run db:migrate       # Создание миграций
+npm run db:studio        # Открытие Prisma Studio
+npm run db:init          # Инициализация БД
+npm run db:test          # Тест подключения к БД
+
+# Telegram Bot
+npm run bot              # Запуск бота
+npm run bot:dev          # Запуск бота в режиме разработки
+
+# Тестирование
+npm run test             # Запуск тестов
+npm run test:watch       # Тесты в режиме наблюдения
+npm run test:coverage    # Покрытие тестами
+
+# Линтинг
+npm run lint             # Проверка кода
+npm run lint:fix         # Автоисправление
+```
+
+## 🌐 Деплой
+
+### TimeWeb Cloud
+
+1. **Создайте приложение в TimeWeb Cloud:**
+```bash
+# Используйте MCP Server TimeWeb Cloud
+mcp_timeweb-mcp-server_create_timeweb_app
+```
+
+2. **Настройте переменные окружения в панели TimeWeb**
+
+3. **Деплой автоматически выполнится при push в main ветку**
+
+### Переменные окружения
+
+```env
+# Telegram Bot
+TELEGRAM_BOT_TOKEN=your_bot_token
+TELEGRAM_BOT_USERNAME=your_bot_username
+
+# База данных
+DATABASE_URL=postgresql://user:password@host:port/database
+
+# S3 Storage
+S3_ENDPOINT=https://s3.twcstorage.ru
+S3_ACCESS_KEY=your_access_key
+S3_SECRET_KEY=your_secret_key
+S3_BUCKET_NAME=your_bucket_name
+
+# AI Services
+OPENAI_API_KEY=your_openai_key
+
+# Платежные системы
+YOOKASSA_SHOP_ID=your_shop_id
+YOOKASSA_SECRET_KEY=your_secret_key
+```
+
+## 📊 Мониторинг
+
+- **Метрики**: Prometheus + Grafana
+- **Логи**: Структурированное логирование
+- **Алерты**: Автоматические уведомления
+- **Здоровье**: Health check endpoints
+
+## 🔒 Безопасность
+
+- **Аутентификация**: NextAuth + Telegram WebApp
+- **Авторизация**: Role-based access control
+- **Шифрование**: AES-256-GCM для персональных данных
+- **Валидация**: Zod схемы для всех входных данных
+- **Rate Limiting**: Защита от злоупотреблений
+
+## 📚 Документация
+
+- [Настройка инфраструктуры](docs/INFRASTRUCTURE_INTEGRATION.md)
+- [Настройка TimeWeb Cloud](docs/TIMEWEB_CLOUD_SETUP.md)
+- [Настройка базы данных](docs/DATABASE_SETUP.md)
+- [API документация](docs/API.md)
+- [Руководство по развертыванию](docs/DEPLOYMENT.md)
+
+## 🤝 Участие в разработке
+
+1. Fork репозитория
+2. Создайте feature ветку (`git checkout -b feature/amazing-feature`)
+3. Commit изменения (`git commit -m 'Add amazing feature'`)
+4. Push в ветку (`git push origin feature/amazing-feature`)
+5. Откройте Pull Request
+
+## 📄 Лицензия
+
+Этот проект лицензирован под MIT License - см. файл [LICENSE](LICENSE) для деталей.
+
+## 📞 Поддержка
+
+- **Email**: support@lawerapp.ru
+- **Telegram**: [@lawerapp_support](https://t.me/lawerapp_support)
+- **Документация**: [docs.lawerapp.ru](https://docs.lawerapp.ru)
+
+## 🙏 Благодарности
+
+- OpenAI за предоставление AI API
+- Telegram за платформу Mini Apps
+- TimeWeb за облачную инфраструктуру
+- Сообщество разработчиков за вклад в проект
+
+---
+
+**LawerApp** - Правовая помощь нового поколения 🤖⚖️
