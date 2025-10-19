@@ -45,20 +45,10 @@ export default function TestPage() {
 
   const testAlert = () => {
     if (window.Telegram?.WebApp) {
-      // showAlert не поддерживается в версии 6.0, используем showPopup
       try {
-        if (window.Telegram.WebApp.showPopup) {
-          window.Telegram.WebApp.showPopup({
-            title: 'Тест уведомления',
-            message: 'Это тестовое уведомление!',
-            buttons: [{ id: 'ok', type: 'ok' }]
-          });
-          addTestResult('✅ Уведомление показано');
-        } else {
-          // Fallback для старых версий
-          window.Telegram.WebApp.showAlert('Тест уведомления!');
-          addTestResult('✅ Уведомление показано');
-        }
+        // В версии 6.0 многие методы не поддерживаются, используем простой alert
+        alert('Тест уведомления!');
+        addTestResult('✅ Уведомление показано (через alert)');
       } catch (error) {
         addTestResult(`❌ Ошибка уведомления: ${error.message || error}`);
       }
@@ -111,30 +101,23 @@ export default function TestPage() {
   };
 
   const testStorage = () => {
-    if (window.Telegram?.WebApp?.CloudStorage) {
-      try {
-        // Проверяем, поддерживается ли CloudStorage
-        if (typeof window.Telegram.WebApp.CloudStorage.setItem === 'function') {
-          window.Telegram.WebApp.CloudStorage.setItem('test_key', 'test_value');
-          const value = window.Telegram.WebApp.CloudStorage.getItem('test_key');
-          
-          if (value === 'test_value') {
-            addTestResult('✅ Telegram Cloud Storage работает');
-          } else {
-            addTestResult('❌ Telegram Cloud Storage не работает');
-          }
+    // CloudStorage не поддерживается в версии 6.0, используем localStorage как fallback
+    try {
+      if (typeof Storage !== 'undefined') {
+        localStorage.setItem('test_key', 'test_value');
+        const value = localStorage.getItem('test_key');
+        
+        if (value === 'test_value') {
+          addTestResult('✅ Local Storage работает (CloudStorage недоступен в v6.0)');
+          localStorage.removeItem('test_key'); // Очищаем тестовые данные
         } else {
-          addTestResult('❌ CloudStorage API не поддерживается в этой версии');
+          addTestResult('❌ Local Storage не работает');
         }
-      } catch (error) {
-        if (error.message && error.message.includes('WebAppMethodUnsupported')) {
-          addTestResult('❌ CloudStorage не поддерживается в версии 6.0');
-        } else {
-          addTestResult(`❌ Ошибка Storage: ${error.message || error}`);
-        }
+      } else {
+        addTestResult('❌ Storage API недоступен');
       }
-    } else {
-      addTestResult('❌ Telegram Cloud Storage недоступен (запущено не в Telegram)');
+    } catch (error) {
+      addTestResult(`❌ Ошибка Storage: ${error.message || error}`);
     }
   };
 
