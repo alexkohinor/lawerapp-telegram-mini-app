@@ -107,10 +107,10 @@ export default function TestPage() {
           addTestResult('❌ Telegram Cloud Storage не работает');
         }
       } catch (error) {
-        addTestResult(`❌ Ошибка Storage: ${error}`);
+        addTestResult(`❌ Ошибка Storage: ${error.message || error}`);
       }
     } else {
-      addTestResult('❌ Telegram Cloud Storage недоступен');
+      addTestResult('❌ Telegram Cloud Storage недоступен (запущено не в Telegram)');
     }
   };
 

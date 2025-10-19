@@ -6,9 +6,9 @@ const nextConfig = {
   images: {
     unoptimized: true
   },
-  experimental: {
-    appDir: true
-  },
+  // experimental: {
+  //   appDir: true // Устаревшая опция в Next.js 15
+  // },
   env: {
     CUSTOM_KEY: process.env.CUSTOM_KEY,
   },
