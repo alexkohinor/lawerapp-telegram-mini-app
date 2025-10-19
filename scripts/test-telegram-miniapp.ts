@@ -104,7 +104,7 @@ async function testLocalApp() {
       log(`❌ Ошибка: HTTP ${response.statusCode}`, 'red');
     }
   } catch (error) {
-    log(`❌ Ошибка подключения: ${error.message}`, 'red');
+    log(`❌ Ошибка подключения: ${error instanceof Error ? error.message : String(error)}`, 'red');
   }
 }
 
@@ -133,7 +133,7 @@ async function testTelegramBot() {
       log(`❌ HTTP ошибка: ${response.statusCode}`, 'red');
     }
   } catch (error) {
-    log(`❌ Ошибка подключения к Bot API: ${error.message}`, 'red');
+    log(`❌ Ошибка подключения к Bot API: ${error instanceof Error ? error.message : String(error)}`, 'red');
   }
 }
 
@@ -161,7 +161,7 @@ async function testWebhook() {
       }
     }
   } catch (error) {
-    log(`❌ Ошибка проверки webhook: ${error.message}`, 'red');
+    log(`❌ Ошибка проверки webhook: ${error instanceof Error ? error.message : String(error)}`, 'red');
   }
 }
 
@@ -293,7 +293,7 @@ async function testMiniAppURL() {
                     addResult('❌ Локальный API не отвечает', 'error');
                 }
             } catch (error) {
-                addResult(\`❌ Ошибка API: \${error.message}\`, 'error');
+                addResult(\`❌ Ошибка API: \${error instanceof Error ? error.message : String(error)}\`, 'error');
             }
         }
         
@@ -320,7 +320,7 @@ async function testMiniAppURL() {
                     addResult('❌ Webhook API не отвечает', 'error');
                 }
             } catch (error) {
-                addResult(\`❌ Ошибка Webhook: \${error.message}\`, 'error');
+                addResult(\`❌ Ошибка Webhook: \${error instanceof Error ? error.message : String(error)}\`, 'error');
             }
         }
         
@@ -336,7 +336,7 @@ async function testMiniAppURL() {
                     addResult('❌ Telegram Cloud Storage не работает', 'error');
                 }
             } catch (error) {
-                addResult(\`❌ Ошибка Storage: \${error.message}\`, 'error');
+                addResult(\`❌ Ошибка Storage: \${error instanceof Error ? error.message : String(error)}\`, 'error');
             }
         }
         
