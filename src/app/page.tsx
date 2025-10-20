@@ -10,16 +10,19 @@ export default function Home() {
   // Force refresh for cache busting
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      window.location.reload = () => {
-        window.location.href = window.location.href + '?v=' + Date.now();
-      };
+      // Force reload with cache busting
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set('v', Date.now().toString());
+      if (window.location.href !== currentUrl.toString()) {
+        window.location.href = currentUrl.toString();
+      }
     }
   }, []);
 
   return (
     <div className="container-narrow">
       <main>
-        <h1 className="text-2xl" style={{ marginBottom: 16 }}>Юридический ассистент</h1>
+        <h1 className="text-2xl" style={{ marginBottom: 16, color: 'var(--telegram-text)' }}>Юридический ассистент</h1>
 
         <div className="grid-1 section">
           <div className="card">
