@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { Input } from '@/components/ui/Input';
+import { StickyBottomBar } from '@/components/ui/StickyBottomBar';
 
 interface Message {
   id: string;
@@ -41,6 +41,8 @@ export default function ConsultationsPage() {
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const presets = ['Возврат товара', 'Расторгнуть договор', 'Жалоба в Роспотребнадзор'];
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -109,135 +111,106 @@ export default function ConsultationsPage() {
     }
   };
 
+  const handleAutoGrow = () => {
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 160) + 'px';
+  };
+
   const clearChat = () => {
     setMessages([]);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            AI Консультации
-          </h1>
-          <p className="text-gray-600">
-            Получите правовую консультацию с помощью искусственного интеллекта
-          </p>
-        </div>
+    <div className="container-narrow">
+      <div className="section">
+        <h1 className="text-xl" style={{ fontWeight: 700, marginBottom: 8 }}>AI Консультации</h1>
+        <div className="text-muted">Получите правовую консультацию с помощью искусственного интеллекта</div>
+      </div>
 
-        {/* Chat Interface */}
-        <Card className="h-[600px] flex flex-col">
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <Card>
+        <div style={{ height: 480, overflowY: 'auto', padding: 12 }}>
             {messages.length === 0 ? (
-              <div className="text-center text-gray-500 mt-8">
-                <div className="text-4xl mb-4">⚖️</div>
-                <p className="text-lg font-medium">Добро пожаловать в AI консультации!</p>
-                <p className="text-sm">Задайте ваш правовой вопрос, и я помогу вам разобраться.</p>
-              </div>
+            <div style={{ textAlign: 'center', color: 'var(--telegram-hint)', marginTop: 24 }}>
+              <div style={{ fontSize: 40, marginBottom: 8 }}>⚖️</div>
+              <div style={{ fontWeight: 600, marginBottom: 4 }}>Добро пожаловать в AI консультации!</div>
+              <div style={{ fontSize: 14 }}>Задайте ваш правовой вопрос, и я помогу вам разобраться.</div>
+            </div>
             ) : (
-              messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div
-                    className={`max-w-[80%] rounded-lg p-3 ${
-                      message.isUser
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-900'
-                    }`}
-                  >
-                    <p className="text-sm">{message.text}</p>
-                    <div className="flex items-center justify-between mt-2 text-xs opacity-70">
-                      <span>
-                        {message.timestamp.toLocaleTimeString('ru-RU', {
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
-                      </span>
-                      {message.confidence && (
-                        <span>
-                          Уверенность: {Math.round(message.confidence * 100)}%
-                        </span>
-                      )}
-                    </div>
-                    {message.sources && message.sources.length > 0 && (
-                      <div className="mt-2 pt-2 border-t border-gray-300">
-                        <p className="text-xs font-medium mb-1">Источники:</p>
-                        <ul className="text-xs space-y-1">
-                          {message.sources.map((source, index) => (
-                            <li key={index}>• {source}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
+            messages.map((message) => (
+              <div key={message.id} style={{ display: 'flex', justifyContent: message.isUser ? 'flex-end' : 'flex-start', marginBottom: 12 }}>
+                <div style={{
+                  maxWidth: '80%',
+                  borderRadius: 12,
+                  padding: '8px 12px',
+                  background: message.isUser ? 'var(--primary)' : 'var(--telegram-secondary)',
+                  color: message.isUser ? '#fff' : 'var(--telegram-text)'
+                }}>
+                  <div style={{ fontSize: 14, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{message.text}</div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, opacity: 0.7, fontSize: 12 }}>
+                    <span>{message.timestamp.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}</span>
+                    {message.confidence && (<span>Уверенность: {Math.round(message.confidence * 100)}%</span>)}
                   </div>
+                  {message.sources && message.sources.length > 0 && (
+                    <div style={{ marginTop: 6, paddingTop: 6, borderTop: '1px solid var(--telegram-border)' }}>
+                      <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>Источники:</div>
+                      <ul style={{ paddingLeft: 16, margin: 0 }}>
+                        {message.sources.map((source, index) => (<li key={index} style={{ fontSize: 12 }}>{source}</li>))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
-              ))
+              </div>
+            ))
             )}
             {isLoading && (
-              <div className="flex justify-start">
-                <div className="bg-gray-100 rounded-lg p-3">
-                  <div className="flex items-center space-x-2">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-                    <span className="text-sm text-gray-600">AI думает...</span>
-                  </div>
-                </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+              <div style={{ background: 'var(--telegram-secondary)', borderRadius: 12, padding: 8 }}>
+                <span style={{ fontSize: 14, color: 'var(--telegram-hint)' }}>AI печатает…</span>
               </div>
+            </div>
             )}
             <div ref={messagesEndRef} />
-          </div>
+        </div>
+      </Card>
 
-          {/* Input */}
-          <div className="border-t border-gray-200 p-4">
-            <div className="flex space-x-2">
-              <Input
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Задайте ваш правовой вопрос..."
-                disabled={isLoading}
-                className="flex-1"
-              />
-              <Button
-                onClick={handleSendMessage}
-                disabled={!inputText.trim() || isLoading}
-                loading={isLoading}
-              >
-                Отправить
-              </Button>
-            </div>
-            <div className="flex justify-between items-center mt-2">
-              <p className="text-xs text-gray-500">
-                Нажмите Enter для отправки, Shift+Enter для новой строки
-              </p>
-              {messages.length > 0 && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={clearChat}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  Очистить чат
-                </Button>
-              )}
-            </div>
-          </div>
-        </Card>
-
-        {/* Tips */}
-        <Card className="mt-4">
-          <h3 className="font-medium text-gray-900 mb-2">💡 Советы для лучших консультаций:</h3>
-          <ul className="text-sm text-gray-600 space-y-1">
-            <li>• Опишите ситуацию максимально подробно</li>
-            <li>• Укажите важные детали и обстоятельства</li>
-            <li>• Задавайте конкретные вопросы</li>
-            <li>• При необходимости приложите документы</li>
-          </ul>
-        </Card>
+      {/* Preset chips */}
+      <div className="section" style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        {presets.map((p) => (
+          <button key={p} className="chip" onClick={() => setInputText(p)}>{p}</button>
+        ))}
       </div>
+
+      {/* Sticky composer */}
+      <StickyBottomBar>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <textarea
+            ref={textareaRef}
+            rows={1}
+            value={inputText}
+            onChange={(e) => { setInputText(e.target.value); handleAutoGrow(); }}
+            onKeyDown={handleKeyPress}
+            placeholder="Опишите вашу ситуацию…"
+            style={{
+              flex: 1,
+              resize: 'none',
+              maxHeight: 160,
+              padding: '10px 12px',
+              borderRadius: 12,
+              border: '1px solid var(--telegram-border)'
+            }}
+          />
+          <button
+            className="btn-primary"
+            onClick={handleSendMessage}
+            disabled={!inputText.trim() || isLoading}
+            style={{ minWidth: 120 }}
+          >
+            {isLoading ? 'Отправка…' : 'Отправить'}
+          </button>
+        </div>
+      </StickyBottomBar>
     </div>
   );
 }
