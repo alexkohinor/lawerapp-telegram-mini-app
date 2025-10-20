@@ -1,8 +1,11 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
+  
   // One-time cache busting only on first load
   useEffect(() => {
     if (typeof window !== 'undefined' && !sessionStorage.getItem('cacheBusted')) {
@@ -15,27 +18,11 @@ export default function Home() {
     }
   }, []);
 
-  // Navigation function that works in Telegram WebApp
-  const navigateTo = (path: string) => {
-    console.log('Navigating to:', path);
-    if (typeof window !== 'undefined') {
-      try {
-        // For Telegram WebApp, use window.location for navigation
-        const baseUrl = window.location.origin;
-        const fullUrl = `${baseUrl}${path}`;
-        console.log('Full URL:', fullUrl);
-        window.location.href = fullUrl;
-      } catch (error) {
-        console.error('Navigation error:', error);
-        // Fallback to window.location
-        window.location.href = path;
-      }
-    }
-  };
-
-  // Handle button clicks with haptic feedback
+  // Handle button clicks with haptic feedback and navigation
   const handleButtonClick = (path: string) => {
     console.log('Button clicked, navigating to:', path);
+    console.log('Current location:', window.location.href);
+    console.log('Router available:', !!router);
     
     // Add haptic feedback if available
     if (typeof window !== 'undefined' && (window as unknown as { Telegram?: { WebApp?: { HapticFeedback?: { impactOccurred: (type: string) => void } } } }).Telegram?.WebApp?.HapticFeedback) {
@@ -47,8 +34,16 @@ export default function Home() {
       }
     }
     
-    // Navigate to the path
-    navigateTo(path);
+    // Try multiple navigation methods
+    try {
+      console.log('Attempting router.push...');
+      router.push(path);
+      console.log('Router.push completed');
+    } catch (error) {
+      console.error('Router navigation failed:', error);
+      console.log('Falling back to window.location...');
+      window.location.href = path;
+    }
   };
 
   return (
@@ -75,6 +70,9 @@ export default function Home() {
             >
               Открыть консультации
             </button>
+            <a href="/consultations" className="btn" style={{ display: 'block', marginTop: '8px', textDecoration: 'none' }}>
+              [Тест] Консультации (ссылка)
+            </a>
           </div>
 
           <div className="card">
