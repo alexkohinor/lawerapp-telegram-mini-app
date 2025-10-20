@@ -76,6 +76,15 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
   };
 
   const processFile = async (file: File, type: 'camera' | 'file') => {
+    // Проверяем лимит документов
+    const documentsUsed = parseInt(localStorage.getItem('documents_used') || '0');
+    const isPremium = localStorage.getItem('is_premium') === 'true';
+    
+    if (!isPremium && documentsUsed >= 1) {
+      alert('Вы исчерпали лимит бесплатных документов. Перейдите на премиум-тариф для продолжения.');
+      return;
+    }
+
     setIsUploading(true);
     setUploadedFile(file);
     
@@ -106,6 +115,11 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
         date: new Date().toISOString(),
         confidence: 0.85
       };
+      
+      // Увеличиваем счетчик использованных документов
+      if (!isPremium) {
+        localStorage.setItem('documents_used', (documentsUsed + 1).toString());
+      }
       
       onDocumentUploaded(file, type);
       onAnalysisComplete(mockExtractedData);

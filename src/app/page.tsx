@@ -5,6 +5,8 @@ import DocumentUpload from '@/components/DocumentUpload';
 import ExtractedData from '@/components/ExtractedData';
 import SolutionProposal from '@/components/SolutionProposal';
 import DocumentExport from '@/components/DocumentExport';
+import SubscriptionCheck from '@/components/SubscriptionCheck';
+import SubscriptionStatus from '@/components/SubscriptionStatus';
 import { ExtractedData as ExtractedDataType, Solution } from '@/types/document';
 
 type WorkflowStep = 'upload' | 'extracted' | 'solutions' | 'export';
@@ -137,119 +139,131 @@ ${new Date().toLocaleDateString('ru-RU')}
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '100%' }}>
-      <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-        <h1 style={{ 
-          color: 'var(--tg-theme-text-color, #111827)', 
-          marginBottom: '10px',
-          fontSize: '24px'
-        }}>
-          Юридический ассистент
-        </h1>
-        
-        <p style={{ 
-          color: 'var(--tg-theme-hint-color, #6b7280)',
-          fontSize: '14px',
-          margin: 0
-        }}>
-          Загрузите документ → ИИ проанализирует → Предложит решение → Сгенерирует ответ
-        </p>
-      </div>
+    <SubscriptionCheck
+      onSubscriptionVerified={(isSubscribed) => {
+        console.log('Subscription verified:', isSubscribed);
+      }}
+      onLimitExceeded={() => {
+        console.log('Document limit exceeded');
+      }}
+    >
+      <div style={{ padding: '20px', maxWidth: '100%' }}>
+        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+          <h1 style={{ 
+            color: 'var(--tg-theme-text-color, #111827)', 
+            marginBottom: '10px',
+            fontSize: '24px'
+          }}>
+            Юридический ассистент
+          </h1>
+          
+          <p style={{ 
+            color: 'var(--tg-theme-hint-color, #6b7280)',
+            fontSize: '14px',
+            margin: 0
+          }}>
+            Загрузите документ → ИИ проанализирует → Предложит решение → Сгенерирует ответ
+          </p>
+        </div>
 
-      {/* Progress indicator */}
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        marginBottom: '30px',
-        gap: '8px'
-      }}>
-        {['upload', 'extracted', 'solutions', 'export'].map((step, index) => (
-          <div
-            key={step}
-            style={{
-              width: '12px',
-              height: '12px',
-              borderRadius: '50%',
-              background: currentStep === step 
-                ? 'var(--tg-theme-button-color, #2563eb)' 
-                : index < ['upload', 'extracted', 'solutions', 'export'].indexOf(currentStep)
-                ? '#10b981'
-                : '#e5e7eb',
-              transition: 'all 0.3s ease'
-            }}
-          />
-        ))}
-      </div>
+        {/* Статус подписки */}
+        <SubscriptionStatus />
 
-      {/* Current step content */}
-      {renderCurrentStep()}
-
-      {/* Navigation buttons */}
-      {currentStep !== 'upload' && (
+        {/* Progress indicator */}
         <div style={{ 
           display: 'flex', 
-          justifyContent: 'space-between', 
-          marginTop: '20px',
-          gap: '12px'
+          justifyContent: 'center', 
+          marginBottom: '30px',
+          gap: '8px'
         }}>
-          <button
-            onClick={resetWorkflow}
-            style={{
-              padding: '12px 20px',
-              background: 'var(--tg-theme-secondary-bg-color, #f3f4f6)',
-              color: 'var(--tg-theme-text-color, #111827)',
-              border: '1px solid #d1d5db',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontSize: '14px'
-            }}
-          >
-            ← Начать заново
-          </button>
-          
-          <button
-            onClick={() => window.location.href = '/consultations'}
-            style={{
-              padding: '12px 20px',
-              background: 'var(--tg-theme-button-color, #2563eb)',
-              color: 'var(--tg-theme-button-text-color, #ffffff)',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontSize: '14px'
-            }}
-          >
-            AI Консультации →
-          </button>
+          {['upload', 'extracted', 'solutions', 'export'].map((step, index) => (
+            <div
+              key={step}
+              style={{
+                width: '12px',
+                height: '12px',
+                borderRadius: '50%',
+                background: currentStep === step 
+                  ? 'var(--tg-theme-button-color, #2563eb)' 
+                  : index < ['upload', 'extracted', 'solutions', 'export'].indexOf(currentStep)
+                  ? '#10b981'
+                  : '#e5e7eb',
+                transition: 'all 0.3s ease'
+              }}
+            />
+          ))}
         </div>
-      )}
 
-      {/* Footer */}
-      <div style={{ 
-        marginTop: '30px', 
-        textAlign: 'center',
-        fontSize: '12px', 
-        color: 'var(--tg-theme-hint-color, #6b7280)'
-      }}>
-        <p style={{ margin: '0 0 5px 0' }}>
-          Бесплатно можно загрузить и проанализировать только один документ.
-        </p>
-        <p style={{ margin: '0 0 10px 0' }}>
-          Не является юридической услугой.
-        </p>
-        
-        <a
-          href="https://t.me/+79688398919"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ 
-            color: 'var(--tg-theme-link-color, #2563eb)', 
-            textDecoration: 'underline' 
-          }}
-        >
-          Связаться с адвокатом
-        </a>
+        {/* Current step content */}
+        {renderCurrentStep()}
+
+        {/* Navigation buttons */}
+        {currentStep !== 'upload' && (
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            marginTop: '20px',
+            gap: '12px'
+          }}>
+            <button
+              onClick={resetWorkflow}
+              style={{
+                padding: '12px 20px',
+                background: 'var(--tg-theme-secondary-bg-color, #f3f4f6)',
+                color: 'var(--tg-theme-text-color, #111827)',
+                border: '1px solid #d1d5db',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}
+            >
+              ← Начать заново
+            </button>
+            
+            <button
+              onClick={() => window.location.href = '/consultations'}
+              style={{
+                padding: '12px 20px',
+                background: 'var(--tg-theme-button-color, #2563eb)',
+                color: 'var(--tg-theme-button-text-color, #ffffff)',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}
+            >
+              AI Консультации →
+            </button>
+          </div>
+        )}
+
+        {/* Footer */}
+        <div style={{ 
+          marginTop: '30px', 
+          textAlign: 'center',
+          fontSize: '12px', 
+          color: 'var(--tg-theme-hint-color, #6b7280)'
+        }}>
+          <p style={{ margin: '0 0 5px 0' }}>
+            Бесплатно можно загрузить и проанализировать только один документ.
+          </p>
+          <p style={{ margin: '0 0 10px 0' }}>
+            Не является юридической услугой.
+          </p>
+          
+          <a
+            href="https://t.me/+79688398919"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ 
+              color: 'var(--tg-theme-link-color, #2563eb)', 
+              textDecoration: 'underline' 
+            }}
+          >
+            Связаться с адвокатом
+          </a>
+        </div>
       </div>
-    </div>
+    </SubscriptionCheck>
   );
 }
