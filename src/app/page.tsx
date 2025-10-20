@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import React from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
-  const [isTelegramApp, setIsTelegramApp] = useState(false);
+  const router = useRouter();
 
   return (
     <div className="container">
@@ -35,7 +36,7 @@ export default function Home() {
                   fontSize: '14px',
                   fontWeight: 'bold'
                 }}
-                onClick={() => alert('Функция AI консультаций в разработке')}
+                onClick={() => router.push('/consultations')}
               >
                 Получить консультацию
               </button>
@@ -61,7 +62,7 @@ export default function Home() {
                   fontSize: '14px',
                   fontWeight: 'bold'
                 }}
-                onClick={() => alert('Генератор документов в разработке')}
+                onClick={() => router.push('/documents')}
               >
                 Создать документ
               </button>
@@ -87,7 +88,7 @@ export default function Home() {
                   fontSize: '14px',
                   fontWeight: 'bold'
                 }}
-                onClick={() => alert('Управление спорами в разработке')}
+                onClick={() => router.push('/disputes')}
               >
                 Управлять спорами
               </button>
@@ -113,7 +114,7 @@ export default function Home() {
                   fontSize: '14px',
                   fontWeight: 'bold'
                 }}
-                onClick={() => alert('Платежная система в разработке')}
+                onClick={() => router.push('/payments')}
               >
                 Оплатить услуги
               </button>
