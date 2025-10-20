@@ -1,161 +1,21 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
-import { Input } from '@/components/ui/Input';
-import { Modal } from '@/components/ui/Modal';
+import React from 'react';
 import { AppHeader } from '@/components/ui/AppHeader';
 
-interface DocumentForm {
-  type: string;
-  title: string;
-  description: string;
-  data: Record<string, unknown>;
-}
-
-interface GeneratedDocument {
-  id: string;
-  type: string;
-  title: string;
-  content: string;
-  status: string;
-  createdAt: string;
-  downloadUrl: string;
-}
-
-const generateMockDocument = (type: string, data: Record<string, unknown>): string => {
-  switch (type) {
-    case 'claim':
-      return `ПРЕТЕНЗИЯ
-о нарушении прав потребителя
-
-${data.sellerName || '[Наименование продавца]'}
-${data.sellerAddress || '[Адрес продавца]'}
-
-От: ${data.consumerName || '[Ваше ФИО]'}
-Адрес: ${data.consumerAddress || '[Ваш адрес]'}
-
-ПРЕТЕНЗИЯ
-
-${new Date().toLocaleDateString('ru-RU')} мной был приобретен товар: ${data.productName || '[Наименование товара]'} за сумму ${data.amount || '[Сумма]'} рублей.
-
-В процессе эксплуатации обнаружены следующие недостатки: ${data.defects || '[Описание недостатков]'}.
-
-Согласно ст. 18 Закона "О защите прав потребителей", при обнаружении недостатков товара потребитель вправе потребовать:
-- замены товара на товар надлежащего качества;
-- соразмерного уменьшения покупной цены;
-- незамедлительного безвозмездного устранения недостатков товара;
-- возмещения расходов на устранение недостатков товара;
-- возврата уплаченной за товар суммы.
-
-На основании изложенного, прошу:
-1. ${data.requirement || 'Заменить товар на товар надлежащего качества'}
-2. Возместить причиненные убытки в размере ${data.damages || '0'} рублей
-
-В случае отказа в удовлетворении претензии буду вынужден обратиться в суд с требованием о защите прав потребителя.
-
-Ответ прошу предоставить в письменном виде в течение 10 дней с момента получения претензии.
-
-${data.consumerName || '[Ваше ФИО]'}
-${new Date().toLocaleDateString('ru-RU')}`;
-    
-    case 'contract':
-      return `ДОГОВОР ОКАЗАНИЯ УСЛУГ № ${data.contractNumber || '001'}
-
-${new Date().toLocaleDateString('ru-RU')}
-
-Исполнитель: ${data.executorName || '[Наименование исполнителя]'}
-Адрес: ${data.executorAddress || '[Адрес исполнителя]'}
-
-Заказчик: ${data.customerName || '[Наименование заказчика]'}
-Адрес: ${data.customerAddress || '[Адрес заказчика]'}
-
-ПРЕДМЕТ ДОГОВОРА
-
-1.1. Исполнитель обязуется оказать услуги: ${data.services || '[Описание услуг]'}
-1.2. Стоимость услуг: ${data.cost || '[Стоимость]'} рублей
-
-ОБЯЗАННОСТИ СТОРОН
-
-2.1. Исполнитель обязуется:
-- Оказать услуги в полном объеме и в установленные сроки
-- Обеспечить надлежащее качество оказываемых услуг
-
-2.2. Заказчик обязуется:
-- Принять оказанные услуги
-- Оплатить услуги в размере и в сроки, установленные договором
-
-ПОРЯДОК РАСЧЕТОВ
-
-3.1. Стоимость услуг составляет ${data.cost || '[Стоимость]'} рублей
-3.2. Оплата производится ${data.paymentTerms || '[Условия оплаты]'}
-
-ОТВЕТСТВЕННОСТЬ СТОРОН
-
-4.1. За неисполнение или ненадлежащее исполнение обязательств стороны несут ответственность в соответствии с действующим законодательством
-
-ЗАКЛЮЧИТЕЛЬНЫЕ ПОЛОЖЕНИЯ
-
-5.1. Договор вступает в силу с момента подписания
-5.2. Все споры решаются путем переговоров, а при недостижении согласия - в судебном порядке
-
-ИСПОЛНИТЕЛЬ:                    ЗАКАЗЧИК:
-${data.executorName || '[ФИО]'}                    ${data.customerName || '[ФИО]'}`;
-    
-    case 'complaint':
-      return `ЖАЛОБА
-в Роспотребнадзор
-
-В Управление Роспотребнадзора по ${data.region || '[Регион]'}
-
-От: ${data.complainantName || '[Ваше ФИО]'}
-Адрес: ${data.complainantAddress || '[Ваш адрес]'}
-Телефон: ${data.phone || '[Ваш телефон]'}
-
-ЖАЛОБА
-
-${new Date().toLocaleDateString('ru-RU')} мной была подана претензия в адрес ${data.companyName || '[Наименование организации]'} по поводу ${data.issue || '[Описание проблемы]'}.
-
-В нарушение ст. 18 Закона "О защите прав потребителей" моя претензия была оставлена без ответа (или получен неудовлетворительный ответ).
-
-Прошу:
-1. Провести проверку деятельности ${data.companyName || '[Наименование организации]'}
-2. Принять меры по защите моих прав как потребителя
-3. Привлечь нарушителя к административной ответственности
-
-Прилагаю копии документов, подтверждающих изложенные обстоятельства.
-
-${data.complainantName || '[Ваше ФИО]'}
-${new Date().toLocaleDateString('ru-RU')}`;
-    
-    default:
-      return `ПРАВОВОЙ ДОКУМЕНТ
-
-Дата: ${new Date().toLocaleDateString('ru-RU')}
-
-${data.content || '[Содержание документа]'}
-
-Документ подготовлен на основе предоставленных данных и действующего законодательства РФ.
-
-Рекомендации:
-- Перед использованием документа проконсультируйтесь с юристом
-- Проверьте актуальность ссылок на нормативные акты
-- При необходимости внесите корректировки с учетом конкретных обстоятельств`;
-  }
-};
-
 export default function DocumentsPage() {
-  const [documents, setDocuments] = useState<GeneratedDocument[]>([]);
-  const [isGenerating, setIsGenerating] = useState(false);
-  // const [showModal, setShowModal] = useState(false);
-  const [selectedDocument, setSelectedDocument] = useState<GeneratedDocument | null>(null);
-  const [form, setForm] = useState<DocumentForm>({
-    type: 'claim',
-    title: '',
-    description: '',
-    data: {}
-  });
+  return (
+    <div className="container-narrow">
+      <AppHeader title="Генерация документов" showBack onBack={() => history.back()} />
+      <div className="section">
+        <div className="card">
+          <div className="text-lg" style={{ fontWeight: 600, marginBottom: 8 }}>Раздел в разработке</div>
+          <div className="text-muted">Мастер создания документов будет добавлен на следующем шаге. Навигация уже доступна.</div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
   const documentTypes = [
     { id: 'claim', name: 'Претензия', description: 'Претензия о нарушении прав потребителя' },
