@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LawerApp Telegram Mini App - Ссылка для запуска</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .subtitle {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        .link-button {
+            display: inline-block;
+            background: #25D366;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        }
+        .link-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+        }
+        .secondary-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        .secondary-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .info {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #4CAF50;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin: 10px 0;
+        }
+        .emoji {
+            font-size: 1.5em;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏛️ LawerApp</h1>
+        <p class="subtitle">Telegram Mini App для правовых консультаций</p>
+        
+        <div class="status">✅ Бот активен • ✅ Приложение запущено</div>
+        
+        <a href="https://t.me/miniappadvokat_bot?startapp=lawerapp" class="link-button">
+            🚀 Открыть Mini App в Telegram
+        </a>
+        
+        <a href="http://localhost:3000" class="link-button secondary-button">
+            🌐 Открыть в браузере
+        </a>
+        
+        <a href="http://localhost:3000/test" class="link-button secondary-button">
+            🧪 Тестовая страница
+        </a>
+        
+        <div class="info">
+            <h3>📱 Как использовать:</h3>
+            <p><strong>1.</strong> Нажмите "Открыть Mini App в Telegram"</p>
+            <p><strong>2.</strong> Telegram откроется и запустит Mini App</p>
+            <p><strong>3.</strong> Или найдите бота @miniappadvokat_bot в Telegram</p>
+            <p><strong>4.</strong> Отправьте команду <code>/start</code></p>
+            
+            <h3>🔧 Для разработки:</h3>
+            <p>• <strong>Локальное приложение:</strong> http://localhost:3000</p>
+            <p>• <strong>API Health:</strong> http://localhost:3000/api/health</p>
+            <p>• <strong>GitHub:</strong> <a href="https://github.com/alexkohinor/lawerapp-telegram-mini-app" style="color: #25D366;">alexkohinor/lawerapp-telegram-mini-app</a></p>
+        </div>
+    </div>
+</body>
+</html>

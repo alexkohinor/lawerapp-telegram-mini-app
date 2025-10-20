@@ -1,0 +1,181 @@
+// Prisma schema для LawerApp
+// Использует PostgreSQL из advokat-fomin.ru
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String    @id @default(uuid())
+  telegramId            BigInt    @unique @map("telegram_id")
+  telegramUsername      String?   @map("telegram_username")
+  firstName             String?   @map("first_name")
+  lastName              String?   @map("last_name")
+  phone                 String?
+  email                 String?
+  subscriptionPlan      String    @default("free") @map("subscription_plan")
+  subscriptionExpiresAt DateTime? @map("subscription_expires_at")
+  isActive              Boolean   @default(true) @map("is_active")
+  createdAt             DateTime  @default(now()) @map("created_at")
+  updatedAt             DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  consultations         Consultation[]
+  disputes              Dispute[]
+  documents             Document[]
+  payments              Payment[]
+  notifications         Notification[]
+  sessions              Session[]
+  accounts              Account[]
+
+  @@map("lawerapp_users")
+}
+
+model Consultation {
+  id          String      @id @default(uuid())
+  userId      String      @map("user_id")
+  question    String
+  answer      String?
+  legalArea   String?     @map("legal_area")
+  status      String      @default("pending")
+  tokensUsed  Int         @default(0) @map("tokens_used")
+  createdAt   DateTime    @default(now()) @map("created_at")
+  completedAt DateTime?   @map("completed_at")
+
+  // Relations
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  aiMonitoring AiMonitoring[]
+
+  @@map("lawerapp_consultations")
+}
+
+model Dispute {
+  id              String    @id @default(uuid())
+  userId          String    @map("user_id")
+  title           String
+  description     String?
+  legalArea       String?   @map("legal_area")
+  status          String    @default("draft")
+  priority        String    @default("medium")
+  estimatedValue  Decimal?  @map("estimated_value") @db.Decimal(15, 2)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  resolvedAt      DateTime? @map("resolved_at")
+
+  // Relations
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  documents       Document[]
+
+  @@map("lawerapp_disputes")
+}
+
+model Document {
+  id          String    @id @default(uuid())
+  userId      String    @map("user_id")
+  disputeId   String?   @map("dispute_id")
+  title       String
+  content     String?
+  documentType String?  @map("document_type")
+  filePath    String?   @map("file_path")
+  fileSize    Int?      @map("file_size")
+  mimeType    String?   @map("mime_type")
+  status      String    @default("draft")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dispute     Dispute?  @relation(fields: [disputeId], references: [id], onDelete: SetNull)
+
+  @@map("lawerapp_documents")
+}
+
+model Payment {
+  id                  String    @id @default(uuid())
+  userId              String    @map("user_id")
+  amount              Decimal   @db.Decimal(10, 2)
+  currency            String    @default("RUB")
+  paymentMethod       String?   @map("payment_method")
+  paymentProviderId   String?   @map("payment_provider_id")
+  status              String    @default("pending")
+  subscriptionPlan    String?   @map("subscription_plan")
+  subscriptionPeriod  Int?      @map("subscription_period")
+  metadata            Json?
+  createdAt           DateTime  @default(now()) @map("created_at")
+  completedAt         DateTime? @map("completed_at")
+
+  // Relations
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("lawerapp_payments")
+}
+
+model Notification {
+  id            String    @id @default(uuid())
+  userId        String    @map("user_id")
+  type          String
+  title         String
+  message       String
+  isRead        Boolean   @default(false) @map("is_read")
+  telegramSent  Boolean   @default(false) @map("telegram_sent")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  readAt        DateTime? @map("read_at")
+
+  // Relations
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("lawerapp_notifications")
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  userId       String   @map("user_id")
+  sessionToken String   @unique @map("session_token")
+  expiresAt    DateTime @map("expires_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  // Relations
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("lawerapp_sessions")
+}
+
+model Account {
+  id                String   @id @default(uuid())
+  userId            String   @map("user_id")
+  accountId         String   @map("account_id")
+  provider          String
+  providerAccountId String   @map("provider_account_id")
+  accessToken       String?  @map("access_token")
+  refreshToken      String?  @map("refresh_token")
+  expiresAt         DateTime? @map("expires_at")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  // Relations
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("lawerapp_accounts")
+}
+
+model AiMonitoring {
+  id             String        @id @default(uuid())
+  consultationId String        @map("consultation_id")
+  model          String?
+  tokensInput    Int?          @map("tokens_input")
+  tokensOutput   Int?          @map("tokens_output")
+  responseTimeMs Int?          @map("response_time_ms")
+  costUsd        Decimal?      @map("cost_usd") @db.Decimal(10, 6)
+  errorMessage   String?       @map("error_message")
+  createdAt      DateTime      @default(now()) @map("created_at")
+
+  // Relations
+  consultation   Consultation @relation(fields: [consultationId], references: [id], onDelete: Cascade)
+
+  @@map("lawerapp_ai_monitoring")
+}

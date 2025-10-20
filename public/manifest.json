@@ -1,0 +1,17 @@
+{
+  "name": "LawerApp - Правовая помощь",
+  "short_name": "LawerApp",
+  "description": "Telegram Mini App для правовой помощи и консультаций",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0088cc",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}
