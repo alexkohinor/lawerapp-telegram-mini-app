@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -21,6 +21,8 @@ model User {
   subscriptionPlan      String    @default("free") @map("subscription_plan")
   subscriptionExpiresAt DateTime? @map("subscription_expires_at")
   isActive              Boolean   @default(true) @map("is_active")
+  documentsUsed         Int       @default(0) @map("documents_used") // Счетчик использованных документов
+  lastLoginAt           DateTime? @map("last_login_at")
   createdAt             DateTime  @default(now()) @map("created_at")
   updatedAt             DateTime  @updatedAt @map("updated_at")
 
@@ -32,6 +34,11 @@ model User {
   notifications         Notification[]
   sessions              Session[]
   accounts              Account[]
+  
+  // RAG Relations
+  ragConsultations      RAGConsultation[]
+  processedDocuments    ProcessedDocument[]
+  ragQueries           RAGQuery[]
 
   @@map("lawerapp_users")
 }
@@ -194,3 +201,84 @@ model TimelineEvent {
 
   @@map("lawerapp_timeline_events")
 }
+
+// RAG System Models
+
+model RAGConsultation {
+  id              String    @id @default(uuid())
+  userId          String    @map("user_id")
+  question        String
+  answer          String?
+  legalArea       String?   @map("legal_area")
+  sources         Json?     // RAG источники как JSON
+  confidence      Float?    // Уверенность ответа (0-1)
+  tokensUsed      Int       @default(0) @map("tokens_used")
+  costUsd         Float?    @map("cost_usd")
+  responseTimeMs  Int?      @map("response_time_ms")
+  status          String    @default("pending")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  completedAt     DateTime? @map("completed_at")
+
+  // Relations
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  aiMonitoring    AiMonitoring[]
+
+  @@map("rag_consultations")
+}
+
+model ProcessedDocument {
+  id                String    @id @default(uuid())
+  userId            String    @map("user_id")
+  originalName      String    @map("original_name")
+  s3Key             String    @map("s3_key")
+  fileSize          Int       @map("file_size")
+  mimeType          String    @map("mime_type")
+  chunksCount       Int       @map("chunks_count")
+  legalArea         String?   @map("legal_area")
+  documentType      String?   @map("document_type")
+  processingStatus  String    @default("pending") @map("processing_status")
+  vectorDbIds       String[]  @map("vector_db_ids") // Массив ID чанков в векторной БД
+  errorMessage      String?   @map("error_message")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  processedAt       DateTime? @map("processed_at")
+
+  // Relations
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chunks            DocumentChunk[]
+
+  @@map("processed_documents")
+}
+
+model RAGQuery {
+  id              String    @id @default(uuid())
+  userId          String    @map("user_id")
+  query           String
+  legalArea       String?   @map("legal_area")
+  maxResults      Int       @default(5) @map("max_results")
+  threshold       Float     @default(0.7)
+  results         Json?     // Результаты поиска как JSON
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  // Relations
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("rag_queries")
+}
+
+model DocumentChunk {
+  id              String    @id @default(uuid())
+  documentId      String    @map("document_id")
+  chunkIndex      Int       @map("chunk_index")
+  content         String
+  startPosition   Int       @map("start_position")
+  endPosition     Int       @map("end_position")
+  vectorId        String?   @map("vector_id") // ID в векторной БД
+  embedding       Float[]?  // Эмбеддинг (для локального хранения)
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  // Relations
+  document        ProcessedDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@map("document_chunks")
+}
+
