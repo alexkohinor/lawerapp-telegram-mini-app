@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
-import { Button } from '@/components/ui/Button';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Card } from '@/components/ui/Card';
 import { StickyBottomBar } from '@/components/ui/StickyBottomBar';
 import { AppHeader } from '@/components/ui/AppHeader';
+import Chip from '@/components/ui/Chip';
+import Composer from '@/components/ui/Composer';
 
 interface Message {
   id: string;
@@ -42,8 +43,8 @@ export default function ConsultationsPage() {
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const presets = ['Возврат товара', 'Расторгнуть договор', 'Жалоба в Роспотребнадзор'];
+  const tgRef = useRef<unknown>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -53,8 +54,42 @@ export default function ConsultationsPage() {
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = async () => {
+  // Инициализация Telegram WebApp и MainButton
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    // @ts-expect-error Telegram injected by platform
+    const tg = window?.Telegram?.WebApp;
+    tgRef.current = tg;
+    try { tg?.BackButton?.show?.(); } catch {}
+  }, []);
+
+  // Управление MainButton (отправка) и haptic feedback
+  useEffect(() => {
+    const tg = tgRef.current as { MainButton?: { setText: (text: string) => void; show: () => void; hide: () => void; onClick: (callback: () => void) => void; offClick: () => void }; HapticFeedback?: { impactOccurred: (type: string) => void } } | null;
+    if (!tg || isLoading) {
+      try { tg?.MainButton?.hide?.(); } catch {}
+      return;
+    }
+    if (inputText.trim().length === 0) {
+      try { tg?.MainButton?.hide?.(); } catch {}
+      return;
+    }
+    try {
+      tg.MainButton?.setText('Отправить');
+      tg.MainButton?.show();
+      tg.MainButton?.onClick(() => {
+        try { tg?.HapticFeedback?.impactOccurred?.('light'); } catch {}
+        handleSendMessage();
+      });
+    } catch {}
+    return () => {
+      try { tg?.MainButton?.offClick?.(); } catch {}
+    };
+  }, [inputText, isLoading]);
+
+  const handleSendMessage = useCallback(async () => {
     if (!inputText.trim() || isLoading) return;
+    try { (tgRef.current as { HapticFeedback?: { impactOccurred: (type: string) => void } } | null)?.HapticFeedback?.impactOccurred?.('light'); } catch {}
 
     const userMessage: Message = {
       id: `user_${Date.now()}`,
@@ -103,25 +138,7 @@ export default function ConsultationsPage() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
-
-  const handleAutoGrow = () => {
-    const el = textareaRef.current;
-    if (!el) return;
-    el.style.height = 'auto';
-    el.style.height = Math.min(el.scrollHeight, 160) + 'px';
-  };
-
-  const clearChat = () => {
-    setMessages([]);
-  };
+  }, [inputText, isLoading]);
 
   return (
     <div className="container-narrow">
@@ -177,38 +194,19 @@ export default function ConsultationsPage() {
       {/* Preset chips */}
       <div className="section wrap-chips">
         {presets.map((p) => (
-          <button key={p} className="chip" onClick={() => setInputText(p)}>{p}</button>
+          <Chip key={p} onClick={() => setInputText(p)}>{p}</Chip>
         ))}
       </div>
 
       {/* Sticky composer */}
       <StickyBottomBar>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <textarea
-            ref={textareaRef}
-            rows={1}
-            value={inputText}
-            onChange={(e) => { setInputText(e.target.value); handleAutoGrow(); }}
-            onKeyDown={handleKeyPress}
-            placeholder="Опишите вашу ситуацию…"
-            style={{
-              flex: 1,
-              resize: 'none',
-              maxHeight: 160,
-              padding: '10px 12px',
-              borderRadius: 12,
-              border: '1px solid var(--telegram-border)'
-            }}
-          />
-          <button
-            className="btn-primary"
-            onClick={handleSendMessage}
-            disabled={!inputText.trim() || isLoading}
-            style={{ minWidth: 120, maxWidth: '40%' }}
-          >
-            {isLoading ? 'Отправка…' : 'Отправить'}
-          </button>
-        </div>
+        <Composer
+          value={inputText}
+          onChange={setInputText}
+          onSend={handleSendMessage}
+          disabled={isLoading}
+          placeholder="Опишите вашу ситуацию…"
+        />
       </StickyBottomBar>
     </div>
   );
