@@ -1,5 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Prisma schema для LawerApp (SQLite для тестирования)
+// Использует SQLite для локального тестирования
 
 generator client {
   provider = "prisma-client-js"
@@ -7,157 +7,301 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
+  url      = "file:./test.db"
 }
 
 model User {
-  id        String   @id @default(cuid())
-  telegramId String  @unique
-  username  String?
-  firstName String?
-  lastName  String?
-  languageCode String?
-  isPremium Boolean  @default(false)
-  photoUrl  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                    String    @id @default(uuid())
+  telegramId            BigInt    @unique @map("telegram_id")
+  telegramUsername      String?   @map("telegram_username")
+  firstName             String?   @map("first_name")
+  lastName              String?   @map("last_name")
+  phone                 String?
+  email                 String?
+  subscriptionPlan      String    @default("free") @map("subscription_plan")
+  subscriptionExpiresAt DateTime? @map("subscription_expires_at")
+  isActive              Boolean   @default(true) @map("is_active")
+  documentsUsed         Int       @default(0) @map("documents_used")
+  lastLoginAt           DateTime? @map("last_login_at")
+  createdAt             DateTime  @default(now()) @map("created_at")
+  updatedAt             DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  consultations         Consultation[]
+  disputes              Dispute[]
+  documents             Document[]
+  payments              Payment[]
+  notifications         Notification[]
+  sessions              Session[]
+  accounts              Account[]
   
-  disputes Dispute[]
-  subscriptions Subscription[]
-  payments Payment[]
-  consultations AIConsultation[]
-  
-  @@map("users")
+  // RAG Relations
+  ragConsultations      RAGConsultation[]
+  processedDocuments    ProcessedDocument[]
+  ragQueries           RAGQuery[]
+
+  @@map("lawerapp_users")
 }
 
-model Dispute {
-  id          String      @id @default(cuid())
-  title       String
-  description String
-  type        DisputeType
-  status      DisputeStatus @default(ACTIVE)
-  amount      Float?
-  deadline    DateTime?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  
-  userId      String
+model Consultation {
+  id          String      @id @default(uuid())
+  userId      String      @map("user_id")
+  question    String
+  answer      String?
+  legalArea   String?     @map("legal_area")
+  status      String      @default("pending")
+  priority    String?     @default("medium")
+  source      String?     @default("manual")
+  tags        Json?       @default("[]")
+  metadata    Json?       // Дополнительные метаданные
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  // Relations
   user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  documents   Document[]
-  
-  @@map("disputes")
+  aiMonitoring AiMonitoring[]
+
+  @@map("lawerapp_consultations")
 }
 
 model Document {
-  id        String       @id @default(cuid())
-  title     String
-  content   String
-  type      DocumentType
-  metadata  Json?
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
-  
-  disputeId String
-  dispute   Dispute      @relation(fields: [disputeId], references: [id], onDelete: Cascade)
-  
-  @@map("documents")
+  id              String    @id @default(uuid())
+  userId          String    @map("user_id")
+  title           String
+  description     String?
+  fileName        String    @map("file_name")
+  fileSize        Int       @map("file_size")
+  mimeType        String    @map("mime_type")
+  documentType    String?   @map("document_type")
+  legalArea       String?   @map("legal_area")
+  status          String    @default("uploaded")
+  s3Key           String?   @map("s3_key")
+  tags            Json?     @default("[]")
+  metadata        Json?     // Дополнительные метаданные
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("lawerapp_documents")
 }
 
-model Subscription {
-  id            String           @id @default(cuid())
-  plan          SubscriptionPlan
-  status        SubscriptionStatus @default(PENDING)
-  startDate     DateTime
-  endDate       DateTime
-  autoRenew     Boolean          @default(true)
-  paymentMethod PaymentMethod
-  transactionId String?
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
-  
-  userId        String
-  user          User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  @@map("subscriptions")
+model Dispute {
+  id              String    @id @default(uuid())
+  userId          String    @map("user_id")
+  title           String
+  description     String?
+  legalArea       String?   @map("legal_area")
+  status          String    @default("open")
+  priority        String?   @default("medium")
+  disputeType     String?   @map("dispute_type")
+  estimatedValue  Float?    @map("estimated_value")
+  currency        String?   @default("RUB")
+  deadline        DateTime?
+  tags            Json?     @default("[]")
+  metadata        Json?     // Дополнительные метаданные
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  timelineEvents  TimelineEvent[]
+
+  @@map("lawerapp_disputes")
 }
 
 model Payment {
-  id            String        @id @default(cuid())
-  amount        Float
-  currency      String        @default("rub")
-  description   String
-  method        PaymentMethod
-  status        PaymentStatus @default(PENDING)
-  transactionId String?
-  metadata      Json?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  
-  userId        String
-  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  @@map("payments")
+  id              String    @id @default(uuid())
+  userId          String    @map("user_id")
+  amount          Float
+  currency        String    @default("RUB")
+  description     String?
+  paymentMethod   String    @map("payment_method")
+  paymentType     String?   @map("payment_type")
+  status          String    @default("pending")
+  externalId      String?   @map("external_id")
+  metadata        Json?     // Дополнительные метаданные
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("lawerapp_payments")
 }
 
-model AIConsultation {
-  id          String   @id @default(cuid())
-  query       String
-  response    String
-  confidence  Float
-  sources     String[]
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
-  
-  @@map("ai_consultations")
+model Notification {
+  id          String    @id @default(uuid())
+  userId      String    @map("user_id")
+  type        String    // info, warning, error, success
+  title       String
+  message     String
+  priority    String    @default("medium") // low, medium, high, urgent
+  category    String?   // system, payment, consultation, dispute
+  isRead      Boolean   @default(false) @map("is_read")
+  actionUrl   String?   @map("action_url")
+  actionText  String?   @map("action_text")
+  metadata    Json?     // Дополнительные метаданные
+  createdAt   DateTime  @default(now()) @map("created_at")
+  readAt      DateTime? @map("read_at")
+
+  // Relations
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("lawerapp_notifications")
 }
 
-enum DisputeType {
-  CONSUMER_RIGHTS
-  CONTRACT_DISPUTE
-  SERVICE_QUALITY
-  DELIVERY_ISSUE
-  OTHER
+model Session {
+  id          String    @id @default(uuid())
+  userId      String    @map("user_id")
+  sessionToken String   @unique @map("session_token")
+  expiresAt   DateTime  @map("expires_at")
+  isActive    Boolean   @default(true) @map("is_active")
+  userAgent   String?   @map("user_agent")
+  ipAddress   String?   @map("ip_address")
+  metadata    Json?     // Дополнительные метаданные
+  createdAt   DateTime  @default(now()) @map("created_at")
+  lastUsedAt  DateTime? @map("last_used_at")
+
+  // Relations
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("lawerapp_sessions")
 }
 
-enum DisputeStatus {
-  ACTIVE
-  RESOLVED
-  CLOSED
-  ESCALATED
+model Account {
+  id                String    @id @default(uuid())
+  userId            String    @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String    @map("provider_account_id")
+  refresh_token     String?   @map("refresh_token")
+  access_token      String?   @map("access_token")
+  expires_at        Int?      @map("expires_at")
+  token_type        String?   @map("token_type")
+  scope             String?
+  id_token          String?   @map("id_token")
+  session_state     String?   @map("session_state")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("lawerapp_accounts")
 }
 
-enum DocumentType {
-  CLAIM
-  COMPLAINT
-  CONTRACT
-  OTHER
+model AiMonitoring {
+  id                String          @id @default(uuid())
+  consultationId    String?         @map("consultation_id")
+  ragConsultationId String?         @map("rag_consultation_id")
+  model             String?         // gpt-4, claude-3, etc.
+  tokensInput       Int?            @map("tokens_input")
+  tokensOutput      Int?            @map("tokens_output")
+  responseTimeMs    Int?            @map("response_time_ms")
+  costUsd           Float?          @map("cost_usd") 
+  errorMessage      String?         @map("error_message")
+  createdAt         DateTime        @default(now()) @map("created_at")
+
+  // Relations
+  consultation      Consultation?   @relation(fields: [consultationId], references: [id], onDelete: Cascade)
+  ragConsultation   RAGConsultation? @relation(fields: [ragConsultationId], references: [id], onDelete: Cascade)
+
+  @@map("lawerapp_ai_monitoring")
 }
 
-enum SubscriptionPlan {
-  FREE
-  PREMIUM
-  BUSINESS
-  STUDENT
+model TimelineEvent {
+  id          String   @id @default(uuid())
+  disputeId   String   @map("dispute_id")
+  type        String   // CREATED, UPDATED, DOCUMENT_ADDED, STATUS_CHANGED
+  description String
+  userId      String   @map("user_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relations
+  dispute     Dispute  @relation(fields: [disputeId], references: [id], onDelete: Cascade)
+
+  @@map("lawerapp_timeline_events")
 }
 
-enum SubscriptionStatus {
-  ACTIVE
-  CANCELLED
-  EXPIRED
-  PENDING
+// RAG System Models
+
+model RAGConsultation {
+  id              String    @id @default(uuid())
+  userId          String    @map("user_id")
+  question        String
+  answer          String?
+  legalArea       String?   @map("legal_area")
+  sources         Json?     // RAG источники как JSON
+  confidence      Float?    // Уверенность ответа (0-1)
+  tokensUsed      Int       @default(0) @map("tokens_used")
+  costUsd         Float?    @map("cost_usd")
+  responseTimeMs  Int?      @map("response_time_ms")
+  status          String    @default("pending")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  completedAt     DateTime? @map("completed_at")
+
+  // Relations
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  aiMonitoring    AiMonitoring[]
+
+  @@map("rag_consultations")
 }
 
-enum PaymentMethod {
-  TELEGRAM_STARS
-  STRIPE
-  BANK_TRANSFER
+model ProcessedDocument {
+  id              String    @id @default(uuid())
+  userId          String    @map("user_id")
+  originalName    String    @map("original_name")
+  s3Key           String    @map("s3_key")
+  fileSize        Int       @map("file_size")
+  mimeType        String    @map("mime_type")
+  chunksCount     Int       @map("chunks_count")
+  legalArea       String?   @map("legal_area")
+  documentType    String?   @map("document_type")
+  processingStatus String   @default("pending") @map("processing_status")
+  vectorDbIds     Json?     @map("vector_db_ids") @default("[]")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  processedAt     DateTime? @map("processed_at")
+
+  // Relations
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chunks          DocumentChunk[]
+
+  @@map("processed_documents")
 }
 
-enum PaymentStatus {
-  PENDING
-  COMPLETED
-  FAILED
-  CANCELLED
+model RAGQuery {
+  id              String    @id @default(uuid())
+  userId          String    @map("user_id")
+  query           String
+  legalArea       String?   @map("legal_area")
+  results         Json?     // Результаты поиска
+  tokensUsed      Int       @default(0) @map("tokens_used")
+  costUsd         Float?    @map("cost_usd")
+  responseTimeMs  Int?      @map("response_time_ms")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  // Relations
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("rag_queries")
+}
+
+model DocumentChunk {
+  id              String    @id @default(uuid())
+  documentId      String    @map("document_id")
+  chunkIndex      Int       @map("chunk_index")
+  content         String
+  startPosition   Int       @map("start_position")
+  endPosition     Int       @map("end_position")
+  vectorId        String?   @map("vector_id") // ID в векторной БД
+  embedding       Json?     // Эмбеддинг (для локального хранения)
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  // Relations
+  document        ProcessedDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@map("document_chunks")
 }

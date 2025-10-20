@@ -172,18 +172,20 @@ model Account {
 }
 
 model AiMonitoring {
-  id             String        @id @default(uuid())
-  consultationId String        @map("consultation_id")
-  model          String?
-  tokensInput    Int?          @map("tokens_input")
-  tokensOutput   Int?          @map("tokens_output")
-  responseTimeMs Int?          @map("response_time_ms")
-  costUsd        Float?      @map("cost_usd") 
-  errorMessage   String?       @map("error_message")
-  createdAt      DateTime      @default(now()) @map("created_at")
+  id                String          @id @default(uuid())
+  consultationId    String?         @map("consultation_id")
+  ragConsultationId String?         @map("rag_consultation_id")
+  model             String?         // gpt-4, claude-3, etc.
+  tokensInput       Int?            @map("tokens_input")
+  tokensOutput      Int?            @map("tokens_output")
+  responseTimeMs    Int?            @map("response_time_ms")
+  costUsd           Float?          @map("cost_usd") 
+  errorMessage      String?         @map("error_message")
+  createdAt         DateTime        @default(now()) @map("created_at")
 
   // Relations
-  consultation   Consultation @relation(fields: [consultationId], references: [id], onDelete: Cascade)
+  consultation      Consultation?   @relation(fields: [consultationId], references: [id], onDelete: Cascade)
+  ragConsultation   RAGConsultation? @relation(fields: [ragConsultationId], references: [id], onDelete: Cascade)
 
   @@map("lawerapp_ai_monitoring")
 }
@@ -273,7 +275,7 @@ model DocumentChunk {
   startPosition   Int       @map("start_position")
   endPosition     Int       @map("end_position")
   vectorId        String?   @map("vector_id") // ID в векторной БД
-  embedding       Float[]?  // Эмбеддинг (для локального хранения)
+  embedding       Json?     // Эмбеддинг (для локального хранения)
   createdAt       DateTime  @default(now()) @map("created_at")
 
   // Relations
