@@ -170,6 +170,25 @@ a:focus-visible {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-8);
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 var(--space-12);
+  border-radius: 9999px;
+  border: 1px solid var(--telegram-border);
+  background: var(--telegram-secondary);
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+  flex-shrink: 0;
+  max-width: calc(100% - var(--space-8));
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .h-scroll-chips {

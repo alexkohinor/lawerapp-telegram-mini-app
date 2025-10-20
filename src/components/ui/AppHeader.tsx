@@ -34,27 +34,94 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ title, showBack = false, o
   }, [showBack, onBack]);
 
   return (
-    <div style={{ padding: '8px 16px', position: 'sticky', top: 0, background: 'var(--telegram-bg)', zIndex: 10, borderBottom: '1px solid var(--telegram-border)' }}>
-      <div className="container-narrow" style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'space-between' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+    <div style={{ 
+      padding: '8px 16px', 
+      position: 'sticky', 
+      top: 0, 
+      background: 'var(--telegram-bg)', 
+      zIndex: 10, 
+      borderBottom: '1px solid var(--telegram-border)',
+      minHeight: '44px'
+    }}>
+      <div className="container-narrow" style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        gap: 4, 
+        justifyContent: 'space-between',
+        minWidth: 0
+      }}>
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: 4,
+          flex: 1,
+          minWidth: 0
+        }}>
           {showBack && (
             <button
               onClick={onBack}
               className="btn-outline hit-lg"
-              style={{ height: 36, padding: '0 12px' }}
+              style={{ 
+                height: 32, 
+                padding: '0 8px',
+                fontSize: '12px',
+                flexShrink: 0
+              }}
               aria-label="Назад"
             >
-              Назад
+              ←
             </button>
           )}
-          <h1 className="text-xl" style={{ fontWeight: 700, margin: 0 }}>{title}</h1>
+          <h1 className="text-lg" style={{ 
+            fontWeight: 600, 
+            margin: 0,
+            flex: 1,
+            textAlign: 'center',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            minWidth: 0
+          }}>
+            {title}
+          </h1>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: 4,
+          flexShrink: 0
+        }}>
           {showHome && (
-            <a href={homeHref} className="btn-outline hit-lg" style={{ height: 36, padding: '0 12px', textDecoration: 'none' }}>Домой</a>
+            <a 
+              href={homeHref} 
+              className="btn-outline hit-lg" 
+              style={{ 
+                height: 32, 
+                padding: '0 8px', 
+                textDecoration: 'none',
+                fontSize: '12px',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              Домой
+            </a>
           )}
           {showContact && (
-            <a href={contactHref} target="_blank" rel="noopener noreferrer" className="btn-primary hit-lg" style={{ height: 36, padding: '0 12px', textDecoration: 'none' }}>Контакты</a>
+            <a 
+              href={contactHref} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="btn-primary hit-lg" 
+              style={{ 
+                height: 32, 
+                padding: '0 8px', 
+                textDecoration: 'none',
+                fontSize: '12px',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              Конт
+            </a>
           )}
         </div>
       </div>

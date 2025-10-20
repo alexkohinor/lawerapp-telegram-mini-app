@@ -192,7 +192,7 @@ export default function ConsultationsPage() {
       </Card>
 
       {/* Preset chips */}
-      <div className="section wrap-chips">
+      <div className="section wrap-chips" style={{ padding: '0 16px' }}>
         {presets.map((p) => (
           <Chip key={p} onClick={() => setInputText(p)}>{p}</Chip>
         ))}

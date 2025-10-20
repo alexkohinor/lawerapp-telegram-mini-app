@@ -11,8 +11,8 @@ interface StickyBottomBarProps {
 export const StickyBottomBar: React.FC<StickyBottomBarProps> = ({ children, className, style }) => {
   return (
     <div className={`sticky-bottom ${className || ''}`} style={style}>
-      <div className="container-narrow" style={{ padding: 0, display: 'flex', justifyContent: 'center' }}>
-        <div style={{ width: '100%', maxWidth: 720 }}>{children}</div>
+      <div className="container-narrow" style={{ padding: '0 16px', display: 'flex', justifyContent: 'center', width: '100%', maxWidth: '100%' }}>
+        <div style={{ width: '100%', maxWidth: '100%' }}>{children}</div>
       </div>
     </div>
   );
