@@ -20,6 +20,7 @@
     "db:seed": "tsx scripts/seed-database.ts",
     "db:test": "tsx scripts/test-database-connection.ts",
     "db:test-rag": "tsx scripts/test-prisma-integration.ts",
+    "auth:test": "tsx scripts/test-auth-system.ts",
     "setup:local": "tsx scripts/setup-local-dev.ts",
     "setup:telegram": "tsx scripts/setup-telegram-webapp.ts",
     "setup:miniapp": "tsx scripts/setup-miniapp-production.ts",
