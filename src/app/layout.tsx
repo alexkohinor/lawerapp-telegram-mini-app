@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import ThemeBridge from '@/components/ThemeBridge';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -42,6 +43,7 @@ export default function RootLayout({
           <div className="min-h-screen bg-gray-50">
             {children}
           </div>
+          <ThemeBridge />
       </body>
     </html>
   );
