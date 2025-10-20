@@ -1,0 +1,945 @@
+14:24:16 | Preparing environment
+14:24:16 | Creating base layer
+14:24:16 | Using existing image static-advanced-node-12-ng20:latest
+14:24:16 | Building keys layer
+14:24:17 | DEBUG | 2025/10/19 14:24:17 in: []string{}
+14:24:17 | DEBUG | 2025/10/19 14:24:17 Parsed entitlements: []
+14:24:17 | DEBUG | #0 building with "default" instance using docker driver
+14:24:17 | DEBUG | 
+14:24:17 | DEBUG | #1 [internal] load build definition from Dockerfile
+14:24:17 | DEBUG | #1 transferring dockerfile:
+14:24:17 | DEBUG | #1 transferring dockerfile: 182B done
+14:24:17 | DEBUG | #1 DONE 0.2s
+14:24:17 | DEBUG | 
+14:24:17 | DEBUG | #2 [internal] load metadata for docker.io/library/static-advanced-node-12-ng20:latest
+14:24:17 | DEBUG | #2 DONE 0.0s
+14:24:17 | DEBUG | 
+14:24:17 | DEBUG | #3 [internal] load .dockerignore
+14:24:17 | DEBUG | #3 transferring context:
+14:24:17 | DEBUG | #3 transferring context: 2B done
+14:24:17 | DEBUG | #3 DONE 0.2s
+14:24:17 | DEBUG | 
+14:24:17 | DEBUG | #4 [1/4] FROM docker.io/library/static-advanced-node-12-ng20:latest
+14:24:17 | DEBUG | #4 DONE 0.0s
+14:24:17 | DEBUG | 
+14:24:17 | DEBUG | #5 [2/4] WORKDIR /opt/build
+14:24:17 | DEBUG | #5 CACHED
+14:24:17 | DEBUG | 
+14:24:17 | DEBUG | #6 [3/4] RUN mkdir -p /root/.ssh
+14:24:18 | DEBUG | #6 DONE 0.4s
+14:24:18 | DEBUG | 
+14:24:18 | DEBUG | #7 [4/4] RUN ssh-keyscan -t rsa github.com > /root/.ssh/known_hosts
+14:24:18 | DEBUG | #7 0.730 # github.com:22 SSH-2.0-85ba476
+14:24:19 | DEBUG | #7 DONE 1.0s
+14:24:19 | DEBUG | 
+14:24:19 | DEBUG | #8 exporting to image
+14:24:19 | DEBUG | #8 exporting layers 0.0s done
+14:24:19 | DEBUG | #8 writing image sha256:7135cf0feff558b5b98f045c198df0b087af6dd8f828f164aacebe34579db7c4 done
+14:24:19 | DEBUG | #8 naming to docker.io/library/final-image-0e4f056f-e4c2-44ef-b20b-d5eef17f0876-keys done
+14:24:19 | DEBUG | #8 DONE 0.1s
+14:24:19 | Layer final-image-0e4f056f-e4c2-44ef-b20b-d5eef17f0876-keys built successfully
+14:24:19 | Cloning code
+14:24:19 | Building code layer
+14:24:19 | DEBUG | 2025/10/19 14:24:19 in: []string{}
+14:24:19 | DEBUG | 2025/10/19 14:24:19 Parsed entitlements: []
+14:24:19 | DEBUG | #0 building with "default" instance using docker driver
+14:24:19 | DEBUG | 
+14:24:19 | DEBUG | #1 [internal] load build definition from Dockerfile
+14:24:19 | DEBUG | #1 transferring dockerfile: 348B done
+14:24:19 | DEBUG | #1 DONE 0.0s
+14:24:19 | DEBUG | 
+14:24:19 | DEBUG | #2 [internal] load metadata for docker.io/library/final-image-0e4f056f-e4c2-44ef-b20b-d5eef17f0876-keys:latest
+14:24:19 | DEBUG | #2 DONE 0.0s
+14:24:19 | DEBUG | 
+14:24:19 | DEBUG | #3 [internal] load .dockerignore
+14:24:19 | DEBUG | #3 transferring context: 2B done
+14:24:19 | DEBUG | #3 DONE 0.0s
+14:24:19 | DEBUG | 
+14:24:19 | DEBUG | #4 [1/6] FROM docker.io/library/final-image-0e4f056f-e4c2-44ef-b20b-d5eef17f0876-keys:latest
+14:24:19 | DEBUG | #4 DONE 0.0s
+14:24:19 | DEBUG | 
+14:24:19 | DEBUG | #5 [2/6] WORKDIR /opt/build
+14:24:19 | DEBUG | #5 DONE 0.1s
+14:24:20 | DEBUG | 
+14:24:20 | DEBUG | #6 [3/6] RUN git clone "https://github.com/alexkohinor/lawerapp-telegram-mini-app.git" -b main /opt/build
+14:24:20 | DEBUG | #6 0.370 Cloning into '/opt/build'...
+14:24:21 | DEBUG | #6 DONE 1.3s
+14:24:21 | DEBUG | 
+14:24:21 | DEBUG | #7 [4/6] RUN cd /opt/build
+14:24:21 | DEBUG | #7 DONE 0.5s
+14:24:21 | DEBUG | 
+14:24:21 | DEBUG | #8 [5/6] RUN git remote rm origin
+14:24:22 | DEBUG | #8 DONE 0.4s
+14:24:22 | DEBUG | 
+14:24:22 | DEBUG | #9 [6/6] RUN git checkout 831dc545ba456206483bd4c0439fc8187d30de7b
+14:24:22 | DEBUG | #9 0.488 Note: switching to '831dc545ba456206483bd4c0439fc8187d30de7b'.
+14:24:22 | DEBUG | #9 0.488 
+14:24:22 | DEBUG | #9 0.488 You are in 'detached HEAD' state. You can look around, make experimental
+14:24:22 | DEBUG | #9 0.488 changes and commit them, and you can discard any commits you make in this
+14:24:22 | DEBUG | #9 0.488 state without impacting any branches by switching back to a branch.
+14:24:22 | DEBUG | #9 0.488 
+14:24:22 | DEBUG | #9 0.488 If you want to create a new branch to retain commits you create, you may
+14:24:22 | DEBUG | #9 0.488 do so (now or later) by using -c with the switch command. Example:
+14:24:22 | DEBUG | #9 0.488 
+14:24:22 | DEBUG | #9 0.488   git switch -c <new-branch-name>
+14:24:22 | DEBUG | #9 0.488 
+14:24:22 | DEBUG | #9 0.488 Or undo this operation with:
+14:24:22 | DEBUG | #9 0.488 
+14:24:22 | DEBUG | #9 0.488   git switch -
+14:24:22 | DEBUG | #9 0.488 
+14:24:22 | DEBUG | #9 0.488 Turn off this advice by setting config variable advice.detachedHead to false
+14:24:22 | DEBUG | #9 0.488 
+14:24:22 | DEBUG | #9 0.488 HEAD is now at 831dc54 🔧 Final fix for Telegram WebApp API compatibility
+14:24:22 | DEBUG | #9 DONE 0.5s
+14:24:22 | DEBUG | 
+14:24:22 | DEBUG | #10 exporting to image
+14:24:22 | DEBUG | #10 exporting layers 0.1s done
+14:24:22 | DEBUG | #10 writing image sha256:e5e521e18f6aef7a663ae94c1a92cac384867d8666f0254df08c2415fa35d78b done
+14:24:22 | DEBUG | #10 naming to docker.io/library/final-image-0e4f056f-e4c2-44ef-b20b-d5eef17f0876-code done
+14:24:22 | DEBUG | #10 DONE 0.1s
+14:24:22 | Layer final-image-0e4f056f-e4c2-44ef-b20b-d5eef17f0876-code built successfully
+14:24:22 | Switching to commit 831dc545ba456206483bd4c0439fc8187d30de7b
+14:24:23 | Checking if there any system dependencies
+14:24:23 | DEBUG | [".", "..", ".git", ".gitignore", "README.md", "docs", "env.example", "eslint.config.mjs", "next.config.js", "next.config.ts", "package-lock.json", "package.json", "playwright.config.ts", "postcss.config.mjs", "prisma", "public", "scripts", "src", "tailwind.config.ts", "test-miniapp.html", "tsconfig.json", "vitest.config.ts"]
+14:24:23 | Installing dependencies
+14:24:23 | Building dependencies layer
+14:24:24 | DEBUG | 2025/10/19 14:24:24 in: []string{}
+14:24:24 | DEBUG | 2025/10/19 14:24:24 Parsed entitlements: []
+14:24:24 | DEBUG | #0 building with "default" instance using docker driver
+14:24:24 | DEBUG | 
+14:24:24 | DEBUG | #1 [internal] load build definition from Dockerfile
+14:24:24 | DEBUG | #1 transferring dockerfile: 152B done
+14:24:24 | DEBUG | #1 DONE 0.0s
+14:24:24 | DEBUG | 
+14:24:24 | DEBUG | #2 [internal] load metadata for docker.io/library/final-image-0e4f056f-e4c2-44ef-b20b-d5eef17f0876-code:latest
+14:24:24 | DEBUG | #2 DONE 0.0s
+14:24:24 | DEBUG | 
+14:24:24 | DEBUG | #3 [internal] load .dockerignore
+14:24:24 | DEBUG | #3 transferring context: 2B done
+14:24:24 | DEBUG | #3 DONE 0.0s
+14:24:24 | DEBUG | 
+14:24:24 | DEBUG | #4 [1/3] FROM docker.io/library/final-image-0e4f056f-e4c2-44ef-b20b-d5eef17f0876-code:latest
+14:24:24 | DEBUG | #4 DONE 0.1s
+14:24:24 | DEBUG | 
+14:24:24 | DEBUG | #5 [2/3] WORKDIR /opt/build
+14:24:24 | DEBUG | #5 DONE 0.0s
+14:24:24 | DEBUG | 
+14:24:24 | DEBUG | #6 [3/3] RUN cd /opt/build && npm i --verbose
+14:24:24 | DEBUG | #6 0.529 npm verbose cli /usr/bin/node /usr/bin/npm
+14:24:25 | DEBUG | #6 0.529 npm info using npm@10.8.2
+14:24:25 | DEBUG | #6 0.529 npm info using node@v20.19.5
+14:24:25 | DEBUG | #6 0.532 npm verbose title npm i
+14:24:25 | DEBUG | #6 0.532 npm verbose argv "i" "--loglevel" "verbose"
+14:24:25 | DEBUG | #6 0.533 npm verbose logfile logs-max:10 dir:/root/.npm/_logs/2025-10-19T11_24_24_832Z-
+14:24:25 | DEBUG | #6 0.535 npm verbose logfile /root/.npm/_logs/2025-10-19T11_24_24_832Z-debug-0.log
+14:24:26 | DEBUG | #6 1.677 npm verbose reify failed optional dependency /opt/build/node_modules/@tailwindcss/oxide-wasm32-wasi
+14:24:26 | DEBUG | #6 1.872 npm verbose reify failed optional dependency /opt/build/node_modules/playwright/node_modules/fsevents
+14:24:26 | DEBUG | #6 1.882 npm verbose reify failed optional dependency /opt/build/node_modules/lightningcss-win32-x64-msvc
+14:24:26 | DEBUG | #6 1.883 npm verbose reify failed optional dependency /opt/build/node_modules/lightningcss-win32-arm64-msvc
+14:24:26 | DEBUG | #6 1.883 npm verbose reify failed optional dependency /opt/build/node_modules/lightningcss-linux-arm64-musl
+14:24:26 | DEBUG | #6 1.884 npm verbose reify failed optional dependency /opt/build/node_modules/lightningcss-linux-arm64-gnu
+14:24:26 | DEBUG | #6 1.884 npm verbose reify failed optional dependency /opt/build/node_modules/lightningcss-linux-arm-gnueabihf
+14:24:26 | DEBUG | #6 1.884 npm verbose reify failed optional dependency /opt/build/node_modules/lightningcss-freebsd-x64
+14:24:26 | DEBUG | #6 1.884 npm verbose reify failed optional dependency /opt/build/node_modules/lightningcss-darwin-x64
+14:24:26 | DEBUG | #6 1.884 npm verbose reify failed optional dependency /opt/build/node_modules/lightningcss-darwin-arm64
+14:24:26 | DEBUG | #6 1.904 npm verbose reify failed optional dependency /opt/build/node_modules/fsevents
+14:24:26 | DEBUG | #6 1.936 npm verbose reify failed optional dependency /opt/build/node_modules/@unrs/resolver-binding-win32-x64-msvc
+14:24:26 | DEBUG | #6 1.937 npm verbose reify failed optional dependency /opt/build/node_modules/@unrs/resolver-binding-win32-ia32-msvc
+14:24:26 | DEBUG | #6 1.937 npm verbose reify failed optional dependency /opt/build/node_modules/@unrs/resolver-binding-win32-arm64-msvc
+14:24:26 | DEBUG | #6 1.937 npm verbose reify failed optional dependency /opt/build/node_modules/@unrs/resolver-binding-wasm32-wasi
+14:24:26 | DEBUG | #6 1.937 npm verbose reify failed optional dependency /opt/build/node_modules/@unrs/resolver-binding-linux-s390x-gnu
+14:24:26 | DEBUG | #6 1.938 npm verbose reify failed optional dependency /opt/build/node_modules/@unrs/resolver-binding-linux-riscv64-musl
+14:24:26 | DEBUG | #6 1.938 npm verbose reify failed optional dependency /opt/build/node_modules/@unrs/resolver-binding-linux-riscv64-gnu
+14:24:26 | DEBUG | #6 1.938 npm verbose reify failed optional dependency /opt/build/node_modules/@unrs/resolver-binding-linux-ppc64-gnu
+14:24:26 | DEBUG | #6 1.938 npm verbose reify failed optional dependency /opt/build/node_modules/@unrs/resolver-binding-linux-arm64-musl
+14:24:26 | DEBUG | #6 1.938 npm verbose reify failed optional dependency /opt/build/node_modules/@unrs/resolver-binding-linux-arm64-gnu
+14:24:26 | DEBUG | #6 1.938 npm verbose reify failed optional dependency /opt/build/node_modules/@unrs/resolver-binding-linux-arm-musleabihf
+14:24:26 | DEBUG | #6 1.939 npm verbose reify failed optional dependency /opt/build/node_modules/@unrs/resolver-binding-linux-arm-gnueabihf
+14:24:26 | DEBUG | #6 1.939 npm verbose reify failed optional dependency /opt/build/node_modules/@unrs/resolver-binding-freebsd-x64
+14:24:26 | DEBUG | #6 1.939 npm verbose reify failed optional dependency /opt/build/node_modules/@unrs/resolver-binding-darwin-x64
+14:24:26 | DEBUG | #6 1.939 npm verbose reify failed optional dependency /opt/build/node_modules/@unrs/resolver-binding-darwin-arm64
+14:24:26 | DEBUG | #6 1.939 npm verbose reify failed optional dependency /opt/build/node_modules/@unrs/resolver-binding-android-arm64
+14:24:26 | DEBUG | #6 1.940 npm verbose reify failed optional dependency /opt/build/node_modules/@unrs/resolver-binding-android-arm-eabi
+14:24:26 | DEBUG | #6 1.945 npm verbose reify failed optional dependency /opt/build/node_modules/@tailwindcss/oxide-win32-x64-msvc
+14:24:26 | DEBUG | #6 1.945 npm verbose reify failed optional dependency /opt/build/node_modules/@tailwindcss/oxide-win32-arm64-msvc
+14:24:26 | DEBUG | #6 1.945 npm verbose reify failed optional dependency /opt/build/node_modules/@tailwindcss/oxide-linux-arm64-musl
+14:24:26 | DEBUG | #6 1.946 npm verbose reify failed optional dependency /opt/build/node_modules/@tailwindcss/oxide-linux-arm64-gnu
+14:24:26 | DEBUG | #6 1.946 npm verbose reify failed optional dependency /opt/build/node_modules/@tailwindcss/oxide-linux-arm-gnueabihf
+14:24:26 | DEBUG | #6 1.946 npm verbose reify failed optional dependency /opt/build/node_modules/@tailwindcss/oxide-freebsd-x64
+14:24:26 | DEBUG | #6 1.946 npm verbose reify failed optional dependency /opt/build/node_modules/@tailwindcss/oxide-darwin-x64
+14:24:26 | DEBUG | #6 1.946 npm verbose reify failed optional dependency /opt/build/node_modules/@tailwindcss/oxide-darwin-arm64
+14:24:26 | DEBUG | #6 1.946 npm verbose reify failed optional dependency /opt/build/node_modules/@tailwindcss/oxide-android-arm64
+14:24:26 | DEBUG | #6 1.954 npm verbose reify failed optional dependency /opt/build/node_modules/@rollup/rollup-win32-x64-msvc
+14:24:26 | DEBUG | #6 1.954 npm verbose reify failed optional dependency /opt/build/node_modules/@rollup/rollup-win32-x64-gnu
+14:24:26 | DEBUG | #6 1.954 npm verbose reify failed optional dependency /opt/build/node_modules/@rollup/rollup-win32-ia32-msvc
+14:24:26 | DEBUG | #6 1.954 npm verbose reify failed optional dependency /opt/build/node_modules/@rollup/rollup-win32-arm64-msvc
+14:24:26 | DEBUG | #6 1.955 npm verbose reify failed optional dependency /opt/build/node_modules/@rollup/rollup-openharmony-arm64
+14:24:26 | DEBUG | #6 1.955 npm verbose reify failed optional dependency /opt/build/node_modules/@rollup/rollup-linux-s390x-gnu
+14:24:26 | DEBUG | #6 1.955 npm verbose reify failed optional dependency /opt/build/node_modules/@rollup/rollup-linux-riscv64-musl
+14:24:26 | DEBUG | #6 1.955 npm verbose reify failed optional dependency /opt/build/node_modules/@rollup/rollup-linux-riscv64-gnu
+14:24:26 | DEBUG | #6 1.956 npm verbose reify failed optional dependency /opt/build/node_modules/@rollup/rollup-linux-ppc64-gnu
+14:24:26 | DEBUG | #6 1.956 npm verbose reify failed optional dependency /opt/build/node_modules/@rollup/rollup-linux-loong64-gnu
+14:24:26 | DEBUG | #6 1.956 npm verbose reify failed optional dependency /opt/build/node_modules/@rollup/rollup-linux-arm64-musl
+14:24:26 | DEBUG | #6 1.956 npm verbose reify failed optional dependency /opt/build/node_modules/@rollup/rollup-linux-arm64-gnu
+14:24:26 | DEBUG | #6 1.956 npm verbose reify failed optional dependency /opt/build/node_modules/@rollup/rollup-linux-arm-musleabihf
+14:24:26 | DEBUG | #6 1.956 npm verbose reify failed optional dependency /opt/build/node_modules/@rollup/rollup-linux-arm-gnueabihf
+14:24:26 | DEBUG | #6 1.956 npm verbose reify failed optional dependency /opt/build/node_modules/@rollup/rollup-freebsd-x64
+14:24:26 | DEBUG | #6 1.956 npm verbose reify failed optional dependency /opt/build/node_modules/@rollup/rollup-freebsd-arm64
+14:24:26 | DEBUG | #6 1.956 npm verbose reify failed optional dependency /opt/build/node_modules/@rollup/rollup-darwin-x64
+14:24:26 | DEBUG | #6 1.957 npm verbose reify failed optional dependency /opt/build/node_modules/@rollup/rollup-darwin-arm64
+14:24:26 | DEBUG | #6 1.957 npm verbose reify failed optional dependency /opt/build/node_modules/@rollup/rollup-android-arm64
+14:24:26 | DEBUG | #6 1.957 npm verbose reify failed optional dependency /opt/build/node_modules/@rollup/rollup-android-arm-eabi
+14:24:26 | DEBUG | #6 1.961 npm verbose reify failed optional dependency /opt/build/node_modules/@next/swc-win32-x64-msvc
+14:24:26 | DEBUG | #6 1.961 npm verbose reify failed optional dependency /opt/build/node_modules/@next/swc-win32-arm64-msvc
+14:24:26 | DEBUG | #6 1.962 npm verbose reify failed optional dependency /opt/build/node_modules/@next/swc-linux-arm64-musl
+14:24:26 | DEBUG | #6 1.962 npm verbose reify failed optional dependency /opt/build/node_modules/@next/swc-linux-arm64-gnu
+14:24:26 | DEBUG | #6 1.962 npm verbose reify failed optional dependency /opt/build/node_modules/@next/swc-darwin-x64
+14:24:26 | DEBUG | #6 1.962 npm verbose reify failed optional dependency /opt/build/node_modules/@next/swc-darwin-arm64
+14:24:26 | DEBUG | #6 1.976 npm verbose reify failed optional dependency /opt/build/node_modules/@img/sharp-win32-x64
+14:24:26 | DEBUG | #6 1.976 npm verbose reify failed optional dependency /opt/build/node_modules/@img/sharp-win32-ia32
+14:24:26 | DEBUG | #6 1.977 npm verbose reify failed optional dependency /opt/build/node_modules/@img/sharp-win32-arm64
+14:24:26 | DEBUG | #6 1.977 npm verbose reify failed optional dependency /opt/build/node_modules/@img/sharp-wasm32
+14:24:26 | DEBUG | #6 1.977 npm verbose reify failed optional dependency /opt/build/node_modules/@img/sharp-linuxmusl-arm64
+14:24:26 | DEBUG | #6 1.980 npm verbose reify failed optional dependency /opt/build/node_modules/@img/sharp-linux-s390x
+14:24:26 | DEBUG | #6 1.980 npm verbose reify failed optional dependency /opt/build/node_modules/@img/sharp-linux-ppc64
+14:24:26 | DEBUG | #6 1.980 npm verbose reify failed optional dependency /opt/build/node_modules/@img/sharp-linux-arm64
+14:24:26 | DEBUG | #6 1.980 npm verbose reify failed optional dependency /opt/build/node_modules/@img/sharp-linux-arm
+14:24:26 | DEBUG | #6 1.980 npm verbose reify failed optional dependency /opt/build/node_modules/@img/sharp-libvips-linuxmusl-arm64
+14:24:26 | DEBUG | #6 1.980 npm verbose reify failed optional dependency /opt/build/node_modules/@img/sharp-libvips-linux-s390x
+14:24:26 | DEBUG | #6 1.980 npm verbose reify failed optional dependency /opt/build/node_modules/@img/sharp-libvips-linux-ppc64
+14:24:26 | DEBUG | #6 1.980 npm verbose reify failed optional dependency /opt/build/node_modules/@img/sharp-libvips-linux-arm64
+14:24:26 | DEBUG | #6 1.980 npm verbose reify failed optional dependency /opt/build/node_modules/@img/sharp-libvips-linux-arm
+14:24:26 | DEBUG | #6 1.980 npm verbose reify failed optional dependency /opt/build/node_modules/@img/sharp-libvips-darwin-x64
+14:24:26 | DEBUG | #6 1.980 npm verbose reify failed optional dependency /opt/build/node_modules/@img/sharp-libvips-darwin-arm64
+14:24:26 | DEBUG | #6 1.980 npm verbose reify failed optional dependency /opt/build/node_modules/@img/sharp-darwin-x64
+14:24:26 | DEBUG | #6 1.980 npm verbose reify failed optional dependency /opt/build/node_modules/@img/sharp-darwin-arm64
+14:24:26 | DEBUG | #6 1.986 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/win32-x64
+14:24:26 | DEBUG | #6 1.987 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/win32-ia32
+14:24:26 | DEBUG | #6 1.987 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/win32-arm64
+14:24:26 | DEBUG | #6 1.987 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/sunos-x64
+14:24:26 | DEBUG | #6 1.987 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/openharmony-arm64
+14:24:26 | DEBUG | #6 1.987 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/openbsd-x64
+14:24:26 | DEBUG | #6 1.987 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/openbsd-arm64
+14:24:26 | DEBUG | #6 1.987 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/netbsd-x64
+14:24:26 | DEBUG | #6 1.987 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/netbsd-arm64
+14:24:26 | DEBUG | #6 1.988 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/linux-s390x
+14:24:26 | DEBUG | #6 1.988 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/linux-riscv64
+14:24:26 | DEBUG | #6 1.988 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/linux-ppc64
+14:24:26 | DEBUG | #6 1.988 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/linux-mips64el
+14:24:26 | DEBUG | #6 1.988 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/linux-loong64
+14:24:26 | DEBUG | #6 1.988 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/linux-ia32
+14:24:26 | DEBUG | #6 1.989 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/linux-arm64
+14:24:26 | DEBUG | #6 1.989 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/linux-arm
+14:24:26 | DEBUG | #6 1.989 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/freebsd-x64
+14:24:26 | DEBUG | #6 1.989 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/freebsd-arm64
+14:24:26 | DEBUG | #6 1.990 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/darwin-x64
+14:24:26 | DEBUG | #6 1.990 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/darwin-arm64
+14:24:26 | DEBUG | #6 1.990 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/android-x64
+14:24:26 | DEBUG | #6 1.990 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/android-arm64
+14:24:26 | DEBUG | #6 1.990 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/android-arm
+14:24:26 | DEBUG | #6 1.990 npm verbose reify failed optional dependency /opt/build/node_modules/@esbuild/aix-ppc64
+14:24:28 | DEBUG | #6 4.583 npm http fetch POST 200 https://registry.npmjs.org/-/npm/v1/security/advisories/bulk 2873ms
+14:24:29 | DEBUG | #6 5.599 npm http fetch GET 200 https://registry.npmjs.org/whatwg-mimetype/-/whatwg-mimetype-4.0.0.tgz 3302ms (cache miss)
+14:24:30 | DEBUG | #6 5.752 npm http fetch GET 200 https://registry.npmjs.org/word-wrap/-/word-wrap-1.2.5.tgz 3480ms (cache miss)
+14:24:30 | DEBUG | #6 5.754 npm http fetch GET 200 https://registry.npmjs.org/yocto-queue/-/yocto-queue-0.1.0.tgz 3490ms (cache miss)
+14:24:30 | DEBUG | #6 5.755 npm http fetch GET 200 https://registry.npmjs.org/why-is-node-running/-/why-is-node-running-2.3.0.tgz 3477ms (cache miss)
+14:24:30 | DEBUG | #6 5.888 npm http fetch GET 200 https://registry.npmjs.org/xml-name-validator/-/xml-name-validator-5.0.0.tgz 3621ms (cache miss)
+14:24:30 | DEBUG | #6 5.893 npm http fetch GET 200 https://registry.npmjs.org/whatwg-encoding/-/whatwg-encoding-3.1.1.tgz 3614ms (cache miss)
+14:24:30 | DEBUG | #6 6.060 npm http fetch GET 200 https://registry.npmjs.org/unrs-resolver/-/unrs-resolver-1.11.1.tgz 3769ms (cache miss)
+14:24:30 | DEBUG | #6 6.066 npm http fetch GET 200 https://registry.npmjs.org/tree-kill/-/tree-kill-1.2.2.tgz 3758ms (cache miss)
+14:24:30 | DEBUG | #6 6.148 npm http fetch GET 200 https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-8.0.0.tgz 3866ms (cache miss)
+14:24:30 | DEBUG | #6 6.154 npm http fetch GET 200 https://registry.npmjs.org/typed-array-length/-/typed-array-length-1.0.7.tgz 3858ms (cache miss)
+14:24:30 | DEBUG | #6 6.159 npm http fetch GET 200 https://registry.npmjs.org/tinyrainbow/-/tinyrainbow-2.0.0.tgz 3828ms (cache miss)
+14:24:30 | DEBUG | #6 6.163 npm http fetch GET 200 https://registry.npmjs.org/symbol-tree/-/symbol-tree-3.2.4.tgz 3823ms (cache miss)
+14:24:30 | DEBUG | #6 6.294 npm http fetch GET 200 https://registry.npmjs.org/w3c-xmlserializer/-/w3c-xmlserializer-5.0.0.tgz 4014ms (cache miss)
+14:24:30 | DEBUG | #6 6.300 npm http fetch GET 200 https://registry.npmjs.org/to-regex-range/-/to-regex-range-5.0.1.tgz 3988ms (cache miss)
+14:24:30 | DEBUG | #6 6.301 npm http fetch GET 200 https://registry.npmjs.org/strip-literal/-/strip-literal-3.1.0.tgz 3956ms (cache miss)
+14:24:30 | DEBUG | #6 6.302 npm http fetch GET 200 https://registry.npmjs.org/strnum/-/strnum-2.1.1.tgz 3957ms (cache miss)
+14:24:30 | DEBUG | #6 6.369 npm http fetch GET 200 https://registry.npmjs.org/strip-indent/-/strip-indent-3.0.0.tgz 4020ms (cache miss)
+14:24:30 | DEBUG | #6 6.369 npm http fetch GET 200 https://registry.npmjs.org/string.prototype.trimstart/-/string.prototype.trimstart-1.0.8.tgz 4018ms (cache miss)
+14:24:30 | DEBUG | #6 6.371 npm http fetch GET 200 https://registry.npmjs.org/stop-iteration-iterator/-/stop-iteration-iterator-1.1.0.tgz 4012ms (cache miss)
+14:24:30 | DEBUG | #6 6.448 npm http fetch GET 200 https://registry.npmjs.org/which-boxed-primitive/-/which-boxed-primitive-1.1.1.tgz 4172ms (cache miss)
+14:24:30 | DEBUG | #6 6.453 npm http fetch GET 200 https://registry.npmjs.org/tinyspy/-/tinyspy-4.0.4.tgz 4124ms (cache miss)
+14:24:30 | DEBUG | #6 6.454 npm http fetch GET 200 https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-3.1.1.tgz 4106ms (cache miss)
+14:24:30 | DEBUG | #6 6.455 npm http fetch GET 200 https://registry.npmjs.org/strip-bom/-/strip-bom-3.0.0.tgz 4104ms (cache miss)
+14:24:30 | DEBUG | #6 6.456 npm http fetch GET 200 https://registry.npmjs.org/stable-hash/-/stable-hash-0.0.5.tgz 4092ms (cache miss)
+14:24:30 | DEBUG | #6 6.456 npm http fetch GET 200 https://registry.npmjs.org/stackback/-/stackback-0.0.2.tgz 4095ms (cache miss)
+14:24:30 | DEBUG | #6 6.529 npm http fetch GET 200 https://registry.npmjs.org/string.prototype.includes/-/string.prototype.includes-2.0.1.tgz 4167ms (cache miss)
+14:24:30 | DEBUG | #6 6.530 npm http fetch GET 200 https://registry.npmjs.org/siginfo/-/siginfo-2.0.0.tgz 4164ms (cache miss)
+14:24:30 | DEBUG | #6 6.589 npm http fetch GET 200 https://registry.npmjs.org/string.prototype.repeat/-/string.prototype.repeat-1.0.0.tgz 4233ms (cache miss)
+14:24:31 | DEBUG | #6 6.590 npm http fetch GET 200 https://registry.npmjs.org/std-env/-/std-env-3.10.0.tgz 4230ms (cache miss)
+14:24:31 | DEBUG | #6 6.592 npm http fetch GET 200 https://registry.npmjs.org/safe-push-apply/-/safe-push-apply-1.0.0.tgz 4203ms (cache miss)
+14:24:31 | DEBUG | #6 6.645 npm http fetch GET 200 https://registry.npmjs.org/which-collection/-/which-collection-1.0.2.tgz 4370ms (cache miss)
+14:24:31 | DEBUG | #6 6.646 npm http fetch GET 200 https://registry.npmjs.org/type-check/-/type-check-0.4.0.tgz 4343ms (cache miss)
+14:24:31 | DEBUG | #6 6.649 npm http fetch GET 200 https://registry.npmjs.org/shell-quote/-/shell-quote-1.8.3.tgz 4282ms (cache miss)
+14:24:31 | DEBUG | #6 6.651 npm http fetch GET 200 https://registry.npmjs.org/run-parallel/-/run-parallel-1.2.0.tgz 4261ms (cache miss)
+14:24:31 | DEBUG | #6 6.692 npm http fetch GET 200 https://registry.npmjs.org/safe-array-concat/-/safe-array-concat-1.1.3.tgz 4303ms (cache miss)
+14:24:31 | DEBUG | #6 6.693 npm http fetch GET 200 https://registry.npmjs.org/resolve-pkg-maps/-/resolve-pkg-maps-1.0.0.tgz 4300ms (cache miss)
+14:24:31 | DEBUG | #6 6.694 npm http fetch GET 200 https://registry.npmjs.org/regexp.prototype.flags/-/regexp.prototype.flags-1.5.4.tgz 4299ms (cache miss)
+14:24:31 | DEBUG | #6 6.694 npm http fetch GET 200 https://registry.npmjs.org/reflect.getprototypeof/-/reflect.getprototypeof-1.0.10.tgz 4298ms (cache miss)
+14:24:31 | DEBUG | #6 6.699 npm http fetch GET 200 https://registry.npmjs.org/resolve-from/-/resolve-from-4.0.0.tgz 4298ms (cache miss)
+14:24:31 | DEBUG | #6 6.699 npm http fetch GET 200 https://registry.npmjs.org/redent/-/redent-3.0.0.tgz 4296ms (cache miss)
+14:24:31 | DEBUG | #6 6.740 npm http fetch GET 200 https://registry.npmjs.org/unbox-primitive/-/unbox-primitive-1.1.0.tgz 4446ms (cache miss)
+14:24:31 | DEBUG | #6 6.740 npm http fetch GET 200 https://registry.npmjs.org/typed-array-buffer/-/typed-array-buffer-1.0.3.tgz 4441ms (cache miss)
+14:24:31 | DEBUG | #6 6.741 npm http fetch GET 200 https://registry.npmjs.org/typed-array-byte-offset/-/typed-array-byte-offset-1.0.4.tgz 4442ms (cache miss)
+14:24:31 | DEBUG | #6 6.741 npm http fetch GET 200 https://registry.npmjs.org/typed-array-byte-length/-/typed-array-byte-length-1.0.3.tgz 4444ms (cache miss)
+14:24:31 | DEBUG | #6 6.747 npm http fetch GET 200 https://registry.npmjs.org/safe-regex-test/-/safe-regex-test-1.1.0.tgz 4358ms (cache miss)
+14:24:31 | DEBUG | #6 6.747 npm http fetch GET 200 https://registry.npmjs.org/redirect-form-builder/-/redirect-form-builder-1.0.0.tgz 4349ms (cache miss)
+14:24:31 | DEBUG | #6 6.790 npm http fetch GET 200 https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz 4383ms (cache miss)
+14:24:31 | DEBUG | #6 6.791 npm http fetch GET 200 https://registry.npmjs.org/proxy-from-env/-/proxy-from-env-1.1.0.tgz 4366ms (cache miss)
+14:24:31 | DEBUG | #6 6.791 npm http fetch GET 200 https://registry.npmjs.org/queue-microtask/-/queue-microtask-1.2.3.tgz 4364ms (cache miss)
+14:24:31 | DEBUG | #6 6.819 npm http fetch GET 200 https://registry.npmjs.org/which-typed-array/-/which-typed-array-1.1.19.tgz 4546ms (cache miss)
+14:24:31 | DEBUG | #6 6.824 npm http fetch GET 200 https://registry.npmjs.org/set-proto/-/set-proto-1.0.0.tgz 4443ms (cache miss)
+14:24:31 | DEBUG | #6 6.826 npm http fetch GET 200 https://registry.npmjs.org/react-refresh/-/react-refresh-0.17.0.tgz 4421ms (cache miss)
+14:24:31 | DEBUG | #6 6.827 npm http fetch GET 200 https://registry.npmjs.org/rc9/-/rc9-2.1.2.tgz 4416ms (cache miss)
+14:24:31 | DEBUG | #6 6.829 npm http fetch GET 200 https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.2.1.tgz 4397ms (cache miss)
+14:24:31 | DEBUG | #6 6.855 npm http fetch GET 200 https://registry.npmjs.org/which-builtin-type/-/which-builtin-type-1.2.1.tgz 4578ms (cache miss)
+14:24:31 | DEBUG | #6 6.855 npm http fetch GET 200 https://registry.npmjs.org/tinyexec/-/tinyexec-1.0.1.tgz 4520ms (cache miss)
+14:24:31 | DEBUG | #6 6.859 npm http fetch GET 200 https://registry.npmjs.org/set-function-length/-/set-function-length-1.2.2.tgz 4473ms (cache miss)
+14:24:31 | DEBUG | #6 6.863 npm http fetch GET 200 https://registry.npmjs.org/p-locate/-/p-locate-5.0.0.tgz 4411ms (cache miss)
+14:24:31 | DEBUG | #6 6.863 npm http fetch GET 200 https://registry.npmjs.org/own-keys/-/own-keys-1.0.1.tgz 4411ms (cache miss)
+14:24:31 | DEBUG | #6 6.863 npm http fetch GET 200 https://registry.npmjs.org/pathval/-/pathval-2.0.1.tgz 4419ms (cache miss)
+14:24:31 | DEBUG | #6 6.863 npm http fetch GET 200 https://registry.npmjs.org/perfect-debounce/-/perfect-debounce-1.0.0.tgz 4422ms (cache miss)
+14:24:31 | DEBUG | #6 6.863 npm http fetch GET 200 https://registry.npmjs.org/pkg-types/-/pkg-types-2.3.0.tgz 4424ms (cache miss)
+14:24:31 | DEBUG | #6 6.863 npm http fetch GET 200 https://registry.npmjs.org/p-limit/-/p-limit-3.1.0.tgz 4415ms (cache miss)
+14:24:31 | DEBUG | #6 6.864 npm http fetch GET 200 https://registry.npmjs.org/parent-module/-/parent-module-1.0.1.tgz 4418ms (cache miss)
+14:24:31 | DEBUG | #6 6.905 npm http fetch GET 200 https://registry.npmjs.org/readdirp/-/readdirp-4.1.2.tgz 4505ms (cache miss)
+14:24:31 | DEBUG | #6 6.909 npm http fetch GET 200 https://registry.npmjs.org/promise-coalesce/-/promise-coalesce-1.1.2.tgz 4477ms (cache miss)
+14:24:31 | DEBUG | #6 6.933 npm http fetch GET 200 https://registry.npmjs.org/tapable/-/tapable-2.3.0.tgz 4596ms (cache miss)
+14:24:31 | DEBUG | #6 6.948 npm http fetch GET 200 https://registry.npmjs.org/possible-typed-array-names/-/possible-typed-array-names-1.1.0.tgz 4514ms (cache miss)
+14:24:31 | DEBUG | #6 6.949 npm http fetch GET 200 https://registry.npmjs.org/ohash/-/ohash-2.0.11.tgz 4496ms (cache miss)
+14:24:31 | DEBUG | #6 6.949 npm http fetch GET 200 https://registry.npmjs.org/object.groupby/-/object.groupby-1.0.3.tgz 4494ms (cache miss)
+14:24:31 | DEBUG | #6 6.950 npm http fetch GET 200 https://registry.npmjs.org/object.values/-/object.values-1.2.1.tgz 4496ms (cache miss)
+14:24:31 | DEBUG | #6 6.950 npm http fetch GET 200 https://registry.npmjs.org/object.entries/-/object.entries-1.1.9.tgz 4493ms (cache miss)
+14:24:31 | DEBUG | #6 6.951 npm http fetch GET 200 https://registry.npmjs.org/natural-compare/-/natural-compare-1.4.0.tgz 4475ms (cache miss)
+14:24:31 | DEBUG | #6 6.982 npm http fetch GET 200 https://registry.npmjs.org/object-keys/-/object-keys-1.1.1.tgz 4522ms (cache miss)
+14:24:31 | DEBUG | #6 6.983 npm http fetch GET 200 https://registry.npmjs.org/nypm/-/nypm-0.6.2.tgz 4508ms (cache miss)
+14:24:31 | DEBUG | #6 6.984 npm http fetch GET 200 https://registry.npmjs.org/minimist/-/minimist-1.2.8.tgz 4497ms (cache miss)
+14:24:31 | DEBUG | #6 7.022 npm http fetch GET 200 https://registry.npmjs.org/set-function-name/-/set-function-name-2.0.2.tgz 4640ms (cache miss)
+14:24:31 | DEBUG | #6 7.024 npm http fetch GET 200 https://registry.npmjs.org/optionator/-/optionator-0.9.4.tgz 4574ms (cache miss)
+14:24:31 | DEBUG | #6 7.026 npm http fetch GET 200 https://registry.npmjs.org/minimatch/-/minimatch-3.1.2.tgz 4534ms (cache miss)
+14:24:31 | DEBUG | #6 7.026 npm http fetch GET 200 https://registry.npmjs.org/min-indent/-/min-indent-1.0.1.tgz 4537ms (cache miss)
+14:24:31 | DEBUG | #6 7.026 npm http fetch GET 200 https://registry.npmjs.org/micromatch/-/micromatch-4.0.8.tgz 4527ms (cache miss)
+14:24:31 | DEBUG | #6 7.027 npm http fetch GET 200 https://registry.npmjs.org/merge2/-/merge2-1.4.1.tgz 4529ms (cache miss)
+14:24:31 | DEBUG | #6 7.085 npm http fetch GET 200 https://registry.npmjs.org/mime-types/-/mime-types-2.1.35.tgz 4592ms (cache miss)
+14:24:31 | DEBUG | #6 7.086 npm http fetch GET 200 https://registry.npmjs.org/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz 4572ms (cache miss)
+14:24:31 | DEBUG | #6 7.092 npm http fetch GET 200 https://registry.npmjs.org/locate-path/-/locate-path-6.0.0.tgz 4575ms (cache miss)
+14:24:31 | DEBUG | #6 7.093 npm http fetch GET 200 https://registry.npmjs.org/loose-envify/-/loose-envify-1.4.0.tgz 4579ms (cache miss)
+14:24:31 | DEBUG | #6 7.166 npm http fetch GET 200 https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.2.tgz 4650ms (cache miss)
+14:24:31 | DEBUG | #6 7.166 npm http fetch GET 200 https://registry.npmjs.org/levn/-/levn-0.4.1.tgz 4646ms (cache miss)
+14:24:31 | DEBUG | #6 7.192 npm http fetch GET 200 https://registry.npmjs.org/object.fromentries/-/object.fromentries-2.0.8.tgz 4732ms (cache miss)
+14:24:31 | DEBUG | #6 7.194 npm http fetch GET 200 https://registry.npmjs.org/language-tags/-/language-tags-1.0.9.tgz 4669ms (cache miss)
+14:24:31 | DEBUG | #6 7.219 npm http fetch GET 200 https://registry.npmjs.org/tinybench/-/tinybench-2.9.0.tgz 4882ms (cache miss)
+14:24:31 | DEBUG | #6 7.221 npm http fetch GET 200 https://registry.npmjs.org/scheduler/-/scheduler-0.27.0.tgz 4836ms (cache miss)
+14:24:31 | DEBUG | #6 7.229 npm http fetch GET 200 https://registry.npmjs.org/iterator.prototype/-/iterator.prototype-1.1.5.tgz 4689ms (cache miss)
+14:24:31 | DEBUG | #6 7.229 npm http fetch GET 200 https://registry.npmjs.org/isarray/-/isarray-2.0.5.tgz 4688ms (cache miss)
+14:24:31 | DEBUG | #6 7.229 npm http fetch GET 200 https://registry.npmjs.org/is-weakset/-/is-weakset-2.0.4.tgz 4688ms (cache miss)
+14:24:31 | DEBUG | #6 7.283 npm http fetch GET 200 https://registry.npmjs.org/is-typed-array/-/is-typed-array-1.1.15.tgz 4739ms (cache miss)
+14:24:31 | DEBUG | #6 7.287 npm http fetch GET 200 https://registry.npmjs.org/is-weakmap/-/is-weakmap-2.0.2.tgz 4740ms (cache miss)
+14:24:31 | DEBUG | #6 7.287 npm http fetch GET 200 https://registry.npmjs.org/is-string/-/is-string-1.1.1.tgz 4738ms (cache miss)
+14:24:31 | DEBUG | #6 7.287 npm http fetch GET 200 https://registry.npmjs.org/is-shared-array-buffer/-/is-shared-array-buffer-1.0.4.tgz 4737ms (cache miss)
+14:24:31 | DEBUG | #6 7.287 npm http fetch GET 200 https://registry.npmjs.org/is-set/-/is-set-2.0.3.tgz 4736ms (cache miss)
+14:24:31 | DEBUG | #6 7.287 npm http fetch GET 200 https://registry.npmjs.org/is-symbol/-/is-symbol-1.1.1.tgz 4740ms (cache miss)
+14:24:31 | DEBUG | #6 7.314 npm http fetch GET 200 https://registry.npmjs.org/tinypool/-/tinypool-1.1.1.tgz 4980ms (cache miss)
+14:24:31 | DEBUG | #6 7.316 npm http fetch GET 200 https://registry.npmjs.org/pathe/-/pathe-2.0.3.tgz 4874ms (cache miss)
+14:24:31 | DEBUG | #6 7.317 npm http fetch GET 200 https://registry.npmjs.org/mime-db/-/mime-db-1.52.0.tgz 4822ms (cache miss)
+14:24:31 | DEBUG | #6 7.319 npm http fetch GET 200 https://registry.npmjs.org/is-weakref/-/is-weakref-1.1.1.tgz 4777ms (cache miss)
+14:24:31 | DEBUG | #6 7.320 npm http fetch GET 200 https://registry.npmjs.org/is-regex/-/is-regex-1.2.1.tgz 4768ms (cache miss)
+14:24:31 | DEBUG | #6 7.320 npm http fetch GET 200 https://registry.npmjs.org/is-potential-custom-element-name/-/is-potential-custom-element-name-1.0.1.tgz 4768ms (cache miss)
+14:24:31 | DEBUG | #6 7.321 npm http fetch GET 200 https://registry.npmjs.org/is-number/-/is-number-7.0.0.tgz 4766ms (cache miss)
+14:24:31 | DEBUG | #6 7.321 npm http fetch GET 200 https://registry.npmjs.org/is-number-object/-/is-number-object-1.1.1.tgz 4766ms (cache miss)
+14:24:31 | DEBUG | #6 7.353 npm http fetch GET 200 https://registry.npmjs.org/source-map-js/-/source-map-js-1.2.1.tgz 4989ms (cache miss)
+14:24:31 | DEBUG | #6 7.355 npm http fetch GET 200 https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz 4927ms (cache miss)
+14:24:31 | DEBUG | #6 7.359 npm http fetch GET 200 https://registry.npmjs.org/is-data-view/-/is-data-view-1.0.2.tgz 4796ms (cache miss)
+14:24:31 | DEBUG | #6 7.390 npm http fetch GET 200 https://registry.npmjs.org/xmlchars/-/xmlchars-2.2.0.tgz 5120ms (cache miss)
+14:24:31 | DEBUG | #6 7.394 npm http fetch GET 200 https://registry.npmjs.org/string.prototype.trim/-/string.prototype.trim-1.2.10.tgz 5041ms (cache miss)
+14:24:31 | DEBUG | #6 7.394 npm http fetch GET 200 https://registry.npmjs.org/string.prototype.trimend/-/string.prototype.trimend-1.0.9.tgz 5040ms (cache miss)
+14:24:31 | DEBUG | #6 7.395 npm http fetch GET 200 https://registry.npmjs.org/saxes/-/saxes-6.0.0.tgz 5009ms (cache miss)
+14:24:31 | DEBUG | #6 7.401 npm http fetch GET 200 https://registry.npmjs.org/is-glob/-/is-glob-4.0.3.tgz 4842ms (cache miss)
+14:24:31 | DEBUG | #6 7.402 npm http fetch GET 200 https://registry.npmjs.org/is-retry-allowed/-/is-retry-allowed-2.2.0.tgz 4851ms (cache miss)
+14:24:31 | DEBUG | #6 7.402 npm http fetch GET 200 https://registry.npmjs.org/is-finalizationregistry/-/is-finalizationregistry-1.1.1.tgz 4841ms (cache miss)
+14:24:31 | DEBUG | #6 7.402 npm http fetch GET 200 https://registry.npmjs.org/is-date-object/-/is-date-object-1.1.0.tgz 4839ms (cache miss)
+14:24:31 | DEBUG | #6 7.402 npm http fetch GET 200 https://registry.npmjs.org/is-bun-module/-/is-bun-module-2.0.0.tgz 4837ms (cache miss)
+14:24:31 | DEBUG | #6 7.403 npm http fetch GET 200 https://registry.npmjs.org/is-callable/-/is-callable-1.2.7.tgz 4838ms (cache miss)
+14:24:31 | DEBUG | #6 7.403 npm http fetch GET 200 https://registry.npmjs.org/is-boolean-object/-/is-boolean-object-1.2.2.tgz 4836ms (cache miss)
+14:24:31 | DEBUG | #6 7.426 npm http fetch GET 200 https://registry.npmjs.org/yargs-parser/-/yargs-parser-21.1.1.tgz 5162ms (cache miss)
+14:24:31 | DEBUG | #6 7.435 npm http fetch GET 200 https://registry.npmjs.org/is-extglob/-/is-extglob-2.1.1.tgz 4873ms (cache miss)
+14:24:31 | DEBUG | #6 7.436 npm http fetch GET 200 https://registry.npmjs.org/is-bigint/-/is-bigint-1.1.0.tgz 4867ms (cache miss)
+14:24:31 | DEBUG | #6 7.478 npm http fetch GET 200 https://registry.npmjs.org/is-map/-/is-map-2.0.3.tgz 4921ms (cache miss)
+14:24:31 | DEBUG | #6 7.478 npm http fetch GET 200 https://registry.npmjs.org/is-generator-function/-/is-generator-function-1.1.2.tgz 4921ms (cache miss)
+14:24:31 | DEBUG | #6 7.479 npm http fetch GET 200 https://registry.npmjs.org/indent-string/-/indent-string-4.0.0.tgz 4907ms (cache miss)
+14:24:31 | DEBUG | #6 7.480 npm http fetch GET 200 https://registry.npmjs.org/is-array-buffer/-/is-array-buffer-3.0.5.tgz 4909ms (cache miss)
+14:24:31 | DEBUG | #6 7.513 npm http fetch GET 200 https://registry.npmjs.org/json-stable-stringify-without-jsonify/-/json-stable-stringify-without-jsonify-1.0.1.tgz 4979ms (cache miss)
+14:24:31 | DEBUG | #6 7.514 npm http fetch GET 200 https://registry.npmjs.org/is-negative-zero/-/is-negative-zero-2.0.3.tgz 4958ms (cache miss)
+14:24:31 | DEBUG | #6 7.515 npm http fetch GET 200 https://registry.npmjs.org/import-fresh/-/import-fresh-3.3.1.tgz 4938ms (cache miss)
+14:24:31 | DEBUG | #6 7.515 npm http fetch GET 200 https://registry.npmjs.org/has-property-descriptors/-/has-property-descriptors-1.0.2.tgz 4914ms (cache miss)
+14:24:31 | DEBUG | #6 7.515 npm http fetch GET 200 https://registry.npmjs.org/has-proto/-/has-proto-1.2.0.tgz 4917ms (cache miss)
+14:24:31 | DEBUG | #6 7.516 npm http fetch GET 200 https://registry.npmjs.org/has-bigints/-/has-bigints-1.1.0.tgz 4913ms (cache miss)
+14:24:31 | DEBUG | #6 7.535 npm http fetch GET 200 https://registry.npmjs.org/whatwg-url/-/whatwg-url-15.1.0.tgz 5259ms (cache miss)
+14:24:32 | DEBUG | #6 7.539 npm http fetch GET 200 https://registry.npmjs.org/object.assign/-/object.assign-4.1.7.tgz 5083ms (cache miss)
+14:24:32 | DEBUG | #6 7.544 npm http fetch GET 200 https://registry.npmjs.org/html-encoding-sniffer/-/html-encoding-sniffer-4.0.0.tgz 4949ms (cache miss)
+14:24:32 | DEBUG | #6 7.574 npm http fetch GET 200 https://registry.npmjs.org/json5/-/json5-1.0.2.tgz 5041ms (cache miss)
+14:24:32 | DEBUG | #6 7.575 npm http fetch GET 200 https://registry.npmjs.org/is-async-function/-/is-async-function-2.1.1.tgz 5005ms (cache miss)
+14:24:32 | DEBUG | #6 7.575 npm http fetch GET 200 https://registry.npmjs.org/globalthis/-/globalthis-1.0.4.tgz 4968ms (cache miss)
+14:24:32 | DEBUG | #6 7.576 npm http fetch GET 200 https://registry.npmjs.org/glob-parent/-/glob-parent-6.0.2.tgz 4966ms (cache miss)
+14:24:32 | DEBUG | #6 7.603 npm http fetch GET 200 https://registry.npmjs.org/picomatch/-/picomatch-2.3.1.tgz 5165ms (cache miss)
+14:24:32 | DEBUG | #6 7.605 npm http fetch GET 200 https://registry.npmjs.org/napi-postinstall/-/napi-postinstall-0.3.4.tgz 5121ms (cache miss)
+14:24:32 | DEBUG | #6 7.607 npm http fetch GET 200 https://registry.npmjs.org/internal-slot/-/internal-slot-1.1.0.tgz 5035ms (cache miss)
+14:24:32 | DEBUG | #6 7.608 npm http fetch GET 200 https://registry.npmjs.org/globals/-/globals-14.0.0.tgz 5000ms (cache miss)
+14:24:32 | DEBUG | #6 7.609 npm http fetch GET 200 https://registry.npmjs.org/get-nonce/-/get-nonce-1.0.1.tgz 4984ms (cache miss)
+14:24:32 | DEBUG | #6 7.609 npm http fetch GET 200 https://registry.npmjs.org/get-symbol-description/-/get-symbol-description-1.1.0.tgz 4996ms (cache miss)
+14:24:32 | DEBUG | #6 7.610 npm http fetch GET 200 https://registry.npmjs.org/generator-function/-/generator-function-2.0.1.tgz 4981ms (cache miss)
+14:24:32 | DEBUG | #6 7.610 npm http fetch GET 200 https://registry.npmjs.org/functions-have-names/-/functions-have-names-1.2.3.tgz 4981ms (cache miss)
+14:24:32 | DEBUG | #6 7.611 npm http fetch GET 200 https://registry.npmjs.org/for-each/-/for-each-0.3.5.tgz 4977ms (cache miss)
+14:24:32 | DEBUG | #6 7.611 npm http fetch GET 200 https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.11.tgz 4977ms (cache miss)
+14:24:32 | DEBUG | #6 7.632 npm http fetch GET 200 https://registry.npmjs.org/string.prototype.matchall/-/string.prototype.matchall-4.0.12.tgz 5274ms (cache miss)
+14:24:32 | DEBUG | #6 7.634 npm http fetch GET 200 https://registry.npmjs.org/nanoid/-/nanoid-3.3.11.tgz 5155ms (cache miss)
+14:24:32 | DEBUG | #6 7.636 npm http fetch GET 200 https://registry.npmjs.org/ignore/-/ignore-5.3.2.tgz 5045ms (cache miss)
+14:24:32 | DEBUG | #6 7.638 npm http fetch GET 200 https://registry.npmjs.org/flat-cache/-/flat-cache-4.0.1.tgz 5001ms (cache miss)
+14:24:32 | DEBUG | #6 7.667 npm http fetch GET 200 https://registry.npmjs.org/react-remove-scroll-bar/-/react-remove-scroll-bar-2.3.8.tgz 5265ms (cache miss)
+14:24:32 | DEBUG | #6 7.671 npm http fetch GET 200 https://registry.npmjs.org/find-up/-/find-up-5.0.0.tgz 5031ms (cache miss)
+14:24:32 | DEBUG | #6 7.672 npm http fetch GET 200 https://registry.npmjs.org/file-entry-cache/-/file-entry-cache-8.0.0.tgz 5029ms (cache miss)
+14:24:32 | DEBUG | #6 7.672 npm http fetch GET 200 https://registry.npmjs.org/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz 5026ms (cache miss)
+14:24:32 | DEBUG | #6 7.699 npm http fetch GET 200 https://registry.npmjs.org/giget/-/giget-2.0.0.tgz 5087ms (cache miss)
+14:24:32 | DEBUG | #6 7.699 npm http fetch GET 200 https://registry.npmjs.org/fill-range/-/fill-range-7.1.1.tgz 5058ms (cache miss)
+14:24:32 | DEBUG | #6 7.700 npm http fetch GET 200 https://registry.npmjs.org/exsolve/-/exsolve-1.0.7.tgz 5045ms (cache miss)
+14:24:32 | DEBUG | #6 7.701 npm http fetch GET 200 https://registry.npmjs.org/estraverse/-/estraverse-5.3.0.tgz 5041ms (cache miss)
+14:24:32 | DEBUG | #6 7.701 npm http fetch GET 200 https://registry.npmjs.org/estree-walker/-/estree-walker-3.0.3.tgz 5043ms (cache miss)
+14:24:32 | DEBUG | #6 7.702 npm http fetch GET 200 https://registry.npmjs.org/esrecurse/-/esrecurse-4.3.0.tgz 5041ms (cache miss)
+14:24:32 | DEBUG | #6 7.721 npm http fetch GET 200 https://registry.npmjs.org/pretty-format/-/pretty-format-27.5.1.tgz 5291ms (cache miss)
+14:24:32 | DEBUG | #6 7.726 npm http fetch GET 200 https://registry.npmjs.org/esutils/-/esutils-2.0.3.tgz 5070ms (cache miss)
+14:24:32 | DEBUG | #6 7.759 npm http fetch GET 200 https://registry.npmjs.org/eslint-import-resolver-node/-/eslint-import-resolver-node-0.3.9.tgz 5082ms (cache miss)
+14:24:32 | DEBUG | #6 7.760 npm http fetch GET 200 https://registry.npmjs.org/eslint-visitor-keys/-/eslint-visitor-keys-4.2.1.tgz 5094ms (cache miss)
+14:24:32 | DEBUG | #6 7.797 npm http fetch GET 200 https://registry.npmjs.org/react-style-singleton/-/react-style-singleton-2.2.3.tgz 5395ms (cache miss)
+14:24:32 | DEBUG | #6 7.800 npm http fetch GET 200 https://registry.npmjs.org/has-tostringtag/-/has-tostringtag-1.0.2.tgz 5203ms (cache miss)
+14:24:32 | DEBUG | #6 7.802 npm http fetch GET 200 https://registry.npmjs.org/eslint-config-next/-/eslint-config-next-15.5.6.tgz 5124ms (cache miss)
+14:24:32 | DEBUG | #6 7.803 npm http fetch GET 200 https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz 5122ms (cache miss)
+14:24:32 | DEBUG | #6 7.803 npm http fetch GET 200 https://registry.npmjs.org/eslint-import-resolver-typescript/-/eslint-import-resolver-typescript-3.10.1.tgz 5128ms (cache miss)
+14:24:32 | DEBUG | #6 7.803 npm http fetch GET 200 https://registry.npmjs.org/es-to-primitive/-/es-to-primitive-1.3.0.tgz 5119ms (cache miss)
+14:24:32 | DEBUG | #6 7.826 npm http fetch GET 200 https://registry.npmjs.org/rrweb-cssom/-/rrweb-cssom-0.8.0.tgz 5434ms (cache miss)
+14:24:32 | DEBUG | #6 7.830 npm http fetch GET 200 https://registry.npmjs.org/get-tsconfig/-/get-tsconfig-4.12.0.tgz 5209ms (cache miss)
+14:24:32 | DEBUG | #6 7.865 npm http fetch GET 200 https://registry.npmjs.org/es-set-tostringtag/-/es-set-tostringtag-2.1.0.tgz 5178ms (cache miss)
+14:24:32 | DEBUG | #6 7.888 npm http fetch GET 200 https://registry.npmjs.org/ws/-/ws-8.18.3.tgz 5618ms (cache miss)
+14:24:32 | DEBUG | #6 7.891 npm http fetch GET 200 https://registry.npmjs.org/ts-api-utils/-/ts-api-utils-2.1.0.tgz 5586ms (cache miss)
+14:24:32 | DEBUG | #6 7.898 npm http fetch GET 200 https://registry.npmjs.org/es-shim-unscopables/-/es-shim-unscopables-1.1.0.tgz 5213ms (cache miss)
+14:24:32 | DEBUG | #6 7.899 npm http fetch GET 200 https://registry.npmjs.org/detect-node-es/-/detect-node-es-1.1.0.tgz 5192ms (cache miss)
+14:24:32 | DEBUG | #6 7.900 npm http fetch GET 200 https://registry.npmjs.org/destr/-/destr-2.0.5.tgz 5191ms (cache miss)
+14:24:32 | DEBUG | #6 7.924 npm http fetch GET 200 https://registry.npmjs.org/flatted/-/flatted-3.3.3.tgz 5289ms (cache miss)
+14:24:32 | DEBUG | #6 7.925 npm http fetch GET 200 https://registry.npmjs.org/espree/-/espree-10.4.0.tgz 5260ms (cache miss)
+14:24:32 | DEBUG | #6 7.927 npm http fetch GET 200 https://registry.npmjs.org/delayed-stream/-/delayed-stream-1.0.0.tgz 5216ms (cache miss)
+14:24:32 | DEBUG | #6 7.927 npm http fetch GET 200 https://registry.npmjs.org/dequal/-/dequal-2.0.3.tgz 5217ms (cache miss)
+14:24:32 | DEBUG | #6 7.928 npm http fetch GET 200 https://registry.npmjs.org/empathic/-/empathic-2.0.0.tgz 5227ms (cache miss)
+14:24:32 | DEBUG | #6 7.928 npm http fetch GET 200 https://registry.npmjs.org/defu/-/defu-6.1.4.tgz 5215ms (cache miss)
+14:24:32 | DEBUG | #6 7.948 npm http fetch GET 200 https://registry.npmjs.org/tr46/-/tr46-6.0.0.tgz 5640ms (cache miss)
+14:24:32 | DEBUG | #6 7.952 npm http fetch GET 200 https://registry.npmjs.org/form-data/-/form-data-4.0.4.tgz 5321ms (cache miss)
+14:24:32 | DEBUG | #6 7.954 npm http fetch GET 200 https://registry.npmjs.org/esbuild/-/esbuild-0.25.11.tgz 5272ms (cache miss)
+14:24:32 | DEBUG | #6 7.955 npm http fetch GET 200 https://registry.npmjs.org/define-data-property/-/define-data-property-1.1.4.tgz 5241ms (cache miss)
+14:24:32 | DEBUG | #6 7.955 npm http fetch GET 200 https://registry.npmjs.org/deep-is/-/deep-is-0.1.4.tgz 5238ms (cache miss)
+14:24:32 | DEBUG | #6 7.956 npm http fetch GET 200 https://registry.npmjs.org/deep-eql/-/deep-eql-5.0.2.tgz 5237ms (cache miss)
+14:24:32 | DEBUG | #6 7.975 npm http fetch GET 200 https://registry.npmjs.org/react/-/react-19.2.0.tgz 5564ms (cache miss)
+14:24:32 | DEBUG | #6 7.980 npm http fetch GET 200 https://registry.npmjs.org/function.prototype.name/-/function.prototype.name-1.1.8.tgz 5350ms (cache miss)
+14:24:32 | DEBUG | #6 7.983 npm http fetch GET 200 https://registry.npmjs.org/define-properties/-/define-properties-1.2.1.tgz 5268ms (cache miss)
+14:24:32 | DEBUG | #6 7.983 npm http fetch GET 200 https://registry.npmjs.org/dateformat/-/dateformat-3.0.3.tgz 5262ms (cache miss)
+14:24:32 | DEBUG | #6 7.984 npm http fetch GET 200 https://registry.npmjs.org/data-view-byte-length/-/data-view-byte-length-1.0.2.tgz 5255ms (cache miss)
+14:24:32 | DEBUG | #6 8.008 npm http fetch GET 200 https://registry.npmjs.org/data-view-buffer/-/data-view-buffer-1.0.2.tgz 5276ms (cache miss)
+14:24:32 | DEBUG | #6 8.008 npm http fetch GET 200 https://registry.npmjs.org/data-urls/-/data-urls-6.0.0.tgz 5276ms (cache miss)
+14:24:32 | DEBUG | #6 8.034 npm http fetch GET 200 https://registry.npmjs.org/es-module-lexer/-/es-module-lexer-1.7.0.tgz 5346ms (cache miss)
+14:24:32 | DEBUG | #6 8.035 npm http fetch GET 200 https://registry.npmjs.org/data-view-byte-offset/-/data-view-byte-offset-1.0.1.tgz 5305ms (cache miss)
+14:24:32 | DEBUG | #6 8.036 npm http fetch GET 200 https://registry.npmjs.org/css.escape/-/css.escape-1.5.1.tgz 5297ms (cache miss)
+14:24:32 | DEBUG | #6 8.056 npm http fetch GET 200 https://registry.npmjs.org/lz-string/-/lz-string-1.5.0.tgz 5545ms (cache miss)
+14:24:32 | DEBUG | #6 8.060 npm http fetch GET 200 https://registry.npmjs.org/combined-stream/-/combined-stream-1.0.8.tgz 5315ms (cache miss)
+14:24:32 | DEBUG | #6 8.061 npm http fetch GET 200 https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz 5316ms (cache miss)
+14:24:32 | DEBUG | #6 8.090 npm http fetch GET 200 https://registry.npmjs.org/damerau-levenshtein/-/damerau-levenshtein-1.0.8.tgz 5356ms (cache miss)
+14:24:32 | DEBUG | #6 8.090 npm http fetch GET 200 https://registry.npmjs.org/class-variance-authority/-/class-variance-authority-0.7.1.tgz 5339ms (cache miss)
+14:24:32 | DEBUG | #6 8.091 npm http fetch GET 200 https://registry.npmjs.org/clsx/-/clsx-2.1.1.tgz 5344ms (cache miss)
+14:24:32 | DEBUG | #6 8.091 npm http fetch GET 200 https://registry.npmjs.org/client-only/-/client-only-0.0.1.tgz 5341ms (cache miss)
+14:24:32 | DEBUG | #6 8.119 npm http fetch GET 200 https://registry.npmjs.org/expect-type/-/expect-type-1.2.2.tgz 5465ms (cache miss)
+14:24:32 | DEBUG | #6 8.121 npm http fetch GET 200 https://registry.npmjs.org/dotenv/-/dotenv-17.2.3.tgz 5416ms (cache miss)
+14:24:32 | DEBUG | #6 8.122 npm http fetch GET 200 https://registry.npmjs.org/cliui/-/cliui-8.0.1.tgz 5374ms (cache miss)
+14:24:32 | DEBUG | #6 8.122 npm http fetch GET 200 https://registry.npmjs.org/citty/-/citty-0.1.6.tgz 5370ms (cache miss)
+14:24:32 | DEBUG | #6 8.123 npm http fetch GET 200 https://registry.npmjs.org/check-error/-/check-error-2.1.1.tgz 5367ms (cache miss)
+14:24:32 | DEBUG | #6 8.123 npm http fetch GET 200 https://registry.npmjs.org/callsites/-/callsites-3.1.0.tgz 5365ms (cache miss)
+14:24:32 | DEBUG | #6 8.156 npm http fetch GET 200 https://registry.npmjs.org/deepmerge-ts/-/deepmerge-ts-7.1.5.tgz 5440ms (cache miss)
+14:24:32 | DEBUG | #6 8.156 npm http fetch GET 200 https://registry.npmjs.org/doctrine/-/doctrine-2.1.0.tgz 5450ms (cache miss)
+14:24:32 | DEBUG | #6 8.185 npm http fetch GET 200 https://registry.npmjs.org/call-bind/-/call-bind-1.0.8.tgz 5425ms (cache miss)
+14:24:32 | DEBUG | #6 8.186 npm http fetch GET 200 https://registry.npmjs.org/braces/-/braces-3.0.3.tgz 5420ms (cache miss)
+14:24:32 | DEBUG | #6 8.201 npm http fetch GET 200 https://registry.npmjs.org/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-5.2.0.tgz 5532ms (cache miss)
+14:24:32 | DEBUG | #6 8.204 npm http fetch GET 200 https://registry.npmjs.org/axios-retry/-/axios-retry-4.5.0.tgz 5431ms (cache miss)
+14:24:32 | DEBUG | #6 8.205 npm http fetch GET 200 https://registry.npmjs.org/axios-rate-limit/-/axios-rate-limit-1.4.0.tgz 5429ms (cache miss)
+14:24:32 | DEBUG | #6 8.205 npm http fetch GET 200 https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.12.tgz 5439ms (cache miss)
+14:24:32 | DEBUG | #6 8.226 npm http fetch GET 200 https://registry.npmjs.org/eslint-scope/-/eslint-scope-8.4.0.tgz 5558ms (cache miss)
+14:24:32 | DEBUG | #6 8.234 npm http fetch GET 200 https://registry.npmjs.org/available-typed-arrays/-/available-typed-arrays-1.0.7.tgz 5440ms (cache miss)
+14:24:32 | DEBUG | #6 8.234 npm http fetch GET 200 https://registry.npmjs.org/async-function/-/async-function-1.0.0.tgz 5438ms (cache miss)
+14:24:32 | DEBUG | #6 8.235 npm http fetch GET 200 https://registry.npmjs.org/asynckit/-/asynckit-0.4.0.tgz 5439ms (cache miss)
+14:24:32 | DEBUG | #6 8.236 npm http fetch GET 200 https://registry.npmjs.org/ast-types-flow/-/ast-types-flow-0.0.8.tgz 5439ms (cache miss)
+14:24:32 | DEBUG | #6 8.255 npm http fetch GET 200 https://registry.npmjs.org/undici-types/-/undici-types-6.21.0.tgz 5963ms (cache miss)
+14:24:32 | DEBUG | #6 8.265 npm http fetch GET 200 https://registry.npmjs.org/c12/-/c12-3.1.0.tgz 5501ms (cache miss)
+14:24:32 | DEBUG | #6 8.267 npm http fetch GET 200 https://registry.npmjs.org/assertion-error/-/assertion-error-2.0.1.tgz 5468ms (cache miss)
+14:24:32 | DEBUG | #6 8.268 npm http fetch GET 200 https://registry.npmjs.org/array.prototype.tosorted/-/array.prototype.tosorted-1.1.4.tgz 5466ms (cache miss)
+14:24:32 | DEBUG | #6 8.297 npm http fetch GET 200 https://registry.npmjs.org/use-sidecar/-/use-sidecar-1.1.3.tgz 6008ms (cache miss)
+14:24:32 | DEBUG | #6 8.307 npm http fetch GET 200 https://registry.npmjs.org/array-includes/-/array-includes-3.1.9.tgz 5500ms (cache miss)
+14:24:32 | DEBUG | #6 8.308 npm http fetch GET 200 https://registry.npmjs.org/array.prototype.findlast/-/array.prototype.findlast-1.2.5.tgz 5502ms (cache miss)
+14:24:32 | DEBUG | #6 8.308 npm http fetch GET 200 https://registry.npmjs.org/aria-hidden/-/aria-hidden-1.2.6.tgz 5499ms (cache miss)
+14:24:32 | DEBUG | #6 8.309 npm http fetch GET 200 https://registry.npmjs.org/array.prototype.flatmap/-/array.prototype.flatmap-1.3.3.tgz 5506ms (cache miss)
+14:24:32 | DEBUG | #6 8.335 npm http fetch GET 200 https://registry.npmjs.org/magic-string/-/magic-string-0.30.19.tgz 5825ms (cache miss)
+14:24:32 | DEBUG | #6 8.342 npm http fetch GET 200 https://registry.npmjs.org/array-buffer-byte-length/-/array-buffer-byte-length-1.0.2.tgz 5534ms (cache miss)
+14:24:32 | DEBUG | #6 8.343 npm http fetch GET 200 https://registry.npmjs.org/array.prototype.findlastindex/-/array.prototype.findlastindex-1.2.6.tgz 5538ms (cache miss)
+14:24:32 | DEBUG | #6 8.376 npm http fetch GET 200 https://registry.npmjs.org/lightningcss/-/lightningcss-1.30.1.tgz 5854ms (cache miss)
+14:24:32 | DEBUG | #6 8.379 npm http fetch GET 200 https://registry.npmjs.org/cache-manager/-/cache-manager-5.7.6.tgz 5618ms (cache miss)
+14:24:32 | DEBUG | #6 8.381 npm http fetch GET 200 https://registry.npmjs.org/arraybuffer.prototype.slice/-/arraybuffer.prototype.slice-1.0.4.tgz 5580ms (cache miss)
+14:24:32 | DEBUG | #6 8.382 npm http fetch GET 200 https://registry.npmjs.org/acorn-jsx/-/acorn-jsx-5.3.2.tgz 5570ms (cache miss)
+14:24:32 | DEBUG | #6 8.442 npm http fetch GET 200 https://registry.npmjs.org/cac/-/cac-6.7.14.tgz 5679ms (cache miss)
+14:24:32 | DEBUG | #6 8.444 npm http fetch GET 200 https://registry.npmjs.org/@vitest/pretty-format/-/pretty-format-3.2.4.tgz 5627ms (cache miss)
+14:24:32 | DEBUG | #6 8.445 npm http fetch GET 200 https://registry.npmjs.org/@vitest/spy/-/spy-3.2.4.tgz 5631ms (cache miss)
+14:24:32 | DEBUG | #6 8.482 npm http fetch GET 200 https://registry.npmjs.org/decimal.js/-/decimal.js-10.6.0.tgz 5754ms (cache miss)
+14:24:32 | DEBUG | #6 8.482 npm http fetch GET 200 https://registry.npmjs.org/@typescript-eslint/visitor-keys/-/visitor-keys-8.46.1.tgz 5633ms (cache miss)
+14:24:32 | DEBUG | #6 8.505 npm http fetch GET 200 https://registry.npmjs.org/eslint-module-utils/-/eslint-module-utils-2.12.1.tgz 5832ms (cache miss)
+14:24:32 | DEBUG | #6 8.510 npm http fetch GET 200 https://registry.npmjs.org/@vitejs/plugin-react/-/plugin-react-5.0.4.tgz 5666ms (cache miss)
+14:24:32 | DEBUG | #6 8.526 npm http fetch GET 200 https://registry.npmjs.org/zustand/-/zustand-5.0.8.tgz 6265ms (cache miss)
+14:24:32 | DEBUG | #6 8.538 npm http fetch GET 200 https://registry.npmjs.org/chokidar/-/chokidar-4.0.3.tgz 5784ms (cache miss)
+14:24:32 | DEBUG | #6 8.539 npm http fetch GET 200 https://registry.npmjs.org/array.prototype.flat/-/array.prototype.flat-1.3.3.tgz 5736ms (cache miss)
+14:24:32 | DEBUG | #6 8.540 npm http fetch GET 200 https://registry.npmjs.org/argparse/-/argparse-2.0.1.tgz 5729ms (cache miss)
+14:24:32 | DEBUG | #6 8.542 npm http fetch GET 200 https://registry.npmjs.org/@typescript-eslint/tsconfig-utils/-/tsconfig-utils-8.46.1.tgz 5685ms (cache miss)
+14:24:32 | DEBUG | #6 8.542 npm http fetch GET 200 https://registry.npmjs.org/@typescript-eslint/project-service/-/project-service-8.46.1.tgz 5685ms (cache miss)
+14:24:32 | DEBUG | #6 8.543 npm http fetch GET 200 https://registry.npmjs.org/@typescript-eslint/parser/-/parser-8.46.1.tgz 5683ms (cache miss)
+14:24:33 | DEBUG | #6 8.569 npm http fetch GET 200 https://registry.npmjs.org/@vitest/expect/-/expect-3.2.4.tgz 5728ms (cache miss)
+14:24:33 | DEBUG | #6 8.570 npm http fetch GET 200 https://registry.npmjs.org/@types/react-dom/-/react-dom-19.2.2.tgz 5707ms (cache miss)
+14:24:33 | DEBUG | #6 8.598 npm http fetch GET 200 https://registry.npmjs.org/@types/estree/-/estree-1.0.8.tgz 5728ms (cache miss)
+14:24:33 | DEBUG | #6 8.598 npm http fetch GET 200 https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.15.tgz 5731ms (cache miss)
+14:24:33 | DEBUG | #6 8.599 npm http fetch GET 200 https://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz 5732ms (cache miss)
+14:24:33 | DEBUG | #6 8.599 npm http fetch GET 200 https://registry.npmjs.org/@types/chai/-/chai-5.2.2.tgz 5728ms (cache miss)
+14:24:33 | DEBUG | #6 8.616 npm http fetch GET 200 https://registry.npmjs.org/use-callback-ref/-/use-callback-ref-1.3.3.tgz 6330ms (cache miss)
+14:24:33 | DEBUG | #6 8.628 npm http fetch GET 200 https://registry.npmjs.org/@types/babel__generator/-/babel__generator-7.27.0.tgz 5753ms (cache miss)
+14:24:33 | DEBUG | #6 8.628 npm http fetch GET 200 https://registry.npmjs.org/@types/aria-query/-/aria-query-5.0.4.tgz 5750ms (cache miss)
+14:24:33 | DEBUG | #6 8.629 npm http fetch GET 200 https://registry.npmjs.org/@types/babel__template/-/babel__template-7.4.4.tgz 5752ms (cache miss)
+14:24:33 | DEBUG | #6 8.647 npm http fetch GET 200 https://registry.npmjs.org/tough-cookie/-/tough-cookie-6.0.0.tgz 6337ms (cache miss)
+14:24:33 | DEBUG | #6 8.654 npm http fetch GET 200 https://registry.npmjs.org/confbox/-/confbox-0.2.2.tgz 5910ms (cache miss)
+14:24:33 | DEBUG | #6 8.655 npm http fetch GET 200 https://registry.npmjs.org/baseline-browser-mapping/-/baseline-browser-mapping-2.8.17.tgz 5883ms (cache miss)
+14:24:33 | DEBUG | #6 8.656 npm http fetch GET 200 https://registry.npmjs.org/@vitest/snapshot/-/snapshot-3.2.4.tgz 5840ms (cache miss)
+14:24:33 | DEBUG | #6 8.657 npm http fetch GET 200 https://registry.npmjs.org/@types/babel__traverse/-/babel__traverse-7.28.0.tgz 5784ms (cache miss)
+14:24:33 | DEBUG | #6 8.658 npm http fetch GET 200 https://registry.npmjs.org/@types/babel__core/-/babel__core-7.20.5.tgz 5780ms (cache miss)
+14:24:33 | DEBUG | #6 8.658 npm http fetch GET 200 https://registry.npmjs.org/@types/deep-eql/-/deep-eql-4.0.2.tgz 5787ms (cache miss)
+14:24:33 | DEBUG | #6 8.763 npm http fetch GET 200 https://registry.npmjs.org/bowser/-/bowser-2.12.1.tgz 5995ms (cache miss)
+14:24:33 | DEBUG | #6 8.765 npm http fetch GET 200 https://registry.npmjs.org/@vitest/runner/-/runner-3.2.4.tgz 5947ms (cache miss)
+14:24:33 | DEBUG | #6 8.768 npm http fetch GET 200 https://registry.npmjs.org/@tailwindcss/oxide/-/oxide-4.1.14.tgz 5867ms (cache miss)
+14:24:33 | DEBUG | #6 8.768 npm http fetch GET 200 https://registry.npmjs.org/@smithy/uuid/-/uuid-1.1.0.tgz 5860ms (cache miss)
+14:24:33 | DEBUG | #6 8.785 npm http fetch GET 200 https://registry.npmjs.org/vite-node/-/vite-node-3.2.4.tgz 6501ms (cache miss)
+14:24:33 | DEBUG | #6 8.793 npm http fetch GET 200 https://registry.npmjs.org/@typescript-eslint/types/-/types-8.46.1.tgz 5941ms (cache miss)
+14:24:33 | DEBUG | #6 8.796 npm http fetch GET 200 https://registry.npmjs.org/@standard-schema/spec/-/spec-1.0.0.tgz 5890ms (cache miss)
+14:24:33 | DEBUG | #6 8.821 npm http fetch GET 200 https://registry.npmjs.org/bidi-js/-/bidi-js-1.0.3.tgz 6052ms (cache miss)
+14:24:33 | DEBUG | #6 8.822 npm http fetch GET 200 https://registry.npmjs.org/axios-logger/-/axios-logger-2.8.1.tgz 6045ms (cache miss)
+14:24:33 | DEBUG | #6 8.826 npm http fetch GET 200 https://registry.npmjs.org/@standard-schema/utils/-/utils-0.3.0.tgz 5919ms (cache miss)
+14:24:33 | DEBUG | #6 8.826 npm http fetch GET 200 https://registry.npmjs.org/@smithy/util-utf8/-/util-utf8-4.2.0.tgz 5914ms (cache miss)
+14:24:33 | DEBUG | #6 8.827 npm http fetch GET 200 https://registry.npmjs.org/@smithy/util-middleware/-/util-middleware-4.2.3.tgz 5910ms (cache miss)
+14:24:33 | DEBUG | #6 8.843 npm http fetch GET 200 https://registry.npmjs.org/sharp/-/sharp-0.34.4.tgz 6465ms (cache miss)
+14:24:33 | DEBUG | #6 8.853 npm http fetch GET 200 https://registry.npmjs.org/@smithy/util-retry/-/util-retry-4.2.3.tgz 5937ms (cache miss)
+14:24:33 | DEBUG | #6 8.853 npm http fetch GET 200 https://registry.npmjs.org/@smithy/util-defaults-mode-node/-/util-defaults-mode-node-4.2.4.tgz 5933ms (cache miss)
+14:24:33 | DEBUG | #6 8.854 npm http fetch GET 200 https://registry.npmjs.org/@smithy/util-hex-encoding/-/util-hex-encoding-4.2.0.tgz 5935ms (cache miss)
+14:24:33 | DEBUG | #6 8.911 npm http fetch GET 200 https://registry.npmjs.org/@smithy/util-uri-escape/-/util-uri-escape-4.2.0.tgz 5999ms (cache miss)
+14:24:33 | DEBUG | #6 8.926 npm http fetch GET 200 https://registry.npmjs.org/@smithy/util-defaults-mode-browser/-/util-defaults-mode-browser-4.3.3.tgz 6003ms (cache miss)
+14:24:33 | DEBUG | #6 8.958 npm http fetch GET 200 https://registry.npmjs.org/@tailwindcss/node/-/node-4.1.14.tgz 6056ms (cache miss)
+14:24:33 | DEBUG | #6 8.960 npm http fetch GET 200 https://registry.npmjs.org/@tailwindcss/postcss/-/postcss-4.1.14.tgz 6063ms (cache miss)
+14:24:33 | DEBUG | #6 8.960 npm http fetch GET 200 https://registry.npmjs.org/@smithy/util-body-length-node/-/util-body-length-node-4.2.1.tgz 6034ms (cache miss)
+14:24:33 | DEBUG | #6 8.961 npm http fetch GET 200 https://registry.npmjs.org/@smithy/util-base64/-/util-base64-4.3.0.tgz 6033ms (cache miss)
+14:24:33 | DEBUG | #6 8.985 npm http fetch GET 200 https://registry.npmjs.org/loupe/-/loupe-3.2.1.tgz 6472ms (cache miss)
+14:24:33 | DEBUG | #6 8.995 npm http fetch GET 200 https://registry.npmjs.org/@smithy/util-buffer-from/-/util-buffer-from-4.2.0.tgz 6071ms (cache miss)
+14:24:33 | DEBUG | #6 8.996 npm http fetch GET 200 https://registry.npmjs.org/@smithy/url-parser/-/url-parser-4.2.3.tgz 6066ms (cache miss)
+14:24:33 | DEBUG | #6 8.996 npm http fetch GET 200 https://registry.npmjs.org/@smithy/shared-ini-file-loader/-/shared-ini-file-loader-4.3.3.tgz 6045ms (cache miss)
+14:24:33 | DEBUG | #6 9.022 npm http fetch GET 200 https://registry.npmjs.org/@smithy/util-body-length-browser/-/util-body-length-browser-4.2.0.tgz 6091ms (cache miss)
+14:24:33 | DEBUG | #6 9.049 npm http fetch GET 200 https://registry.npmjs.org/@vitest/utils/-/utils-3.2.4.tgz 6234ms (cache miss)
+14:24:33 | DEBUG | #6 9.054 npm http fetch GET 200 https://registry.npmjs.org/@smithy/querystring-parser/-/querystring-parser-4.2.3.tgz 6102ms (cache miss)
+14:24:33 | DEBUG | #6 9.055 npm http fetch GET 200 https://registry.npmjs.org/@smithy/querystring-builder/-/querystring-builder-4.2.3.tgz 6100ms (cache miss)
+14:24:33 | DEBUG | #6 9.074 npm http fetch GET 200 https://registry.npmjs.org/react-remove-scroll/-/react-remove-scroll-2.7.1.tgz 6670ms (cache miss)
+14:24:33 | DEBUG | #6 9.083 npm http fetch GET 200 https://registry.npmjs.org/@smithy/node-config-provider/-/node-config-provider-4.3.3.tgz 6122ms (cache miss)
+14:24:33 | DEBUG | #6 9.083 npm http fetch GET 200 https://registry.npmjs.org/@smithy/middleware-serde/-/middleware-serde-4.2.3.tgz 6120ms (cache miss)
+14:24:33 | DEBUG | #6 9.084 npm http fetch GET 200 https://registry.npmjs.org/@smithy/service-error-classification/-/service-error-classification-4.2.3.tgz 6134ms (cache miss)
+14:24:33 | DEBUG | #6 9.104 npm http fetch GET 200 https://registry.npmjs.org/mdn-data/-/mdn-data-2.12.2.tgz 6597ms (cache miss)
+14:24:33 | DEBUG | #6 9.114 npm http fetch GET 200 https://registry.npmjs.org/@smithy/middleware-endpoint/-/middleware-endpoint-4.3.4.tgz 6149ms (cache miss)
+14:24:33 | DEBUG | #6 9.114 npm http fetch GET 200 https://registry.npmjs.org/@smithy/middleware-stack/-/middleware-stack-4.2.3.tgz 6153ms (cache miss)
+14:24:33 | DEBUG | #6 9.114 npm http fetch GET 200 https://registry.npmjs.org/@smithy/middleware-retry/-/middleware-retry-4.4.4.tgz 6148ms (cache miss)
+14:24:33 | DEBUG | #6 9.133 npm http fetch GET 200 https://registry.npmjs.org/postcss/-/postcss-8.5.6.tgz 6700ms (cache miss)
+14:24:33 | DEBUG | #6 9.141 npm http fetch GET 200 https://registry.npmjs.org/@smithy/util-config-provider/-/util-config-provider-4.2.0.tgz 6217ms (cache miss)
+14:24:33 | DEBUG | #6 9.176 npm http fetch GET 200 https://registry.npmjs.org/@vitest/mocker/-/mocker-3.2.4.tgz 6356ms (cache miss)
+14:24:33 | DEBUG | #6 9.190 npm http fetch GET 200 https://registry.npmjs.org/@smithy/is-array-buffer/-/is-array-buffer-4.2.0.tgz 6219ms (cache miss)
+14:24:33 | DEBUG | #6 9.190 npm http fetch GET 200 https://registry.npmjs.org/@smithy/invalid-dependency/-/invalid-dependency-4.2.3.tgz 6218ms (cache miss)
+14:24:33 | DEBUG | #6 9.191 npm http fetch GET 200 https://registry.npmjs.org/@smithy/hash-stream-node/-/hash-stream-node-4.2.3.tgz 6217ms (cache miss)
+14:24:33 | DEBUG | #6 9.227 npm http fetch GET 200 https://registry.npmjs.org/@smithy/fetch-http-handler/-/fetch-http-handler-5.3.4.tgz 6249ms (cache miss)
+14:24:33 | DEBUG | #6 9.227 npm http fetch GET 200 https://registry.npmjs.org/@smithy/hash-node/-/hash-node-4.2.3.tgz 6253ms (cache miss)
+14:24:33 | DEBUG | #6 9.228 npm http fetch GET 200 https://registry.npmjs.org/@smithy/protocol-http/-/protocol-http-5.3.3.tgz 6272ms (cache miss)
+14:24:33 | DEBUG | #6 9.228 npm http fetch GET 200 https://registry.npmjs.org/@smithy/middleware-content-length/-/middleware-content-length-4.2.3.tgz 6261ms (cache miss)
+14:24:33 | DEBUG | #6 9.258 npm http fetch GET 200 https://registry.npmjs.org/@smithy/eventstream-serde-universal/-/eventstream-serde-universal-4.2.3.tgz 6280ms (cache miss)
+14:24:33 | DEBUG | #6 9.280 npm http fetch GET 200 https://registry.npmjs.org/tailwindcss/-/tailwindcss-4.1.14.tgz 6939ms (cache miss)
+14:24:33 | DEBUG | #6 9.292 npm http fetch GET 200 https://registry.npmjs.org/@smithy/eventstream-serde-config-resolver/-/eventstream-serde-config-resolver-4.3.3.tgz 6311ms (cache miss)
+14:24:33 | DEBUG | #6 9.337 npm http fetch GET 200 https://registry.npmjs.org/@smithy/eventstream-codec/-/eventstream-codec-4.2.3.tgz 6353ms (cache miss)
+14:24:33 | DEBUG | #6 9.338 npm http fetch GET 200 https://registry.npmjs.org/@smithy/credential-provider-imds/-/credential-provider-imds-4.2.3.tgz 6353ms (cache miss)
+14:24:33 | DEBUG | #6 9.369 npm http fetch GET 200 https://registry.npmjs.org/graphemer/-/graphemer-1.4.0.tgz 6764ms (cache miss)
+14:24:33 | DEBUG | #6 9.377 npm http fetch GET 200 https://registry.npmjs.org/@smithy/chunked-blob-reader-native/-/chunked-blob-reader-native-4.2.1.tgz 6389ms (cache miss)
+14:24:33 | DEBUG | #6 9.377 npm http fetch GET 200 https://registry.npmjs.org/@smithy/eventstream-serde-node/-/eventstream-serde-node-4.2.3.tgz 6397ms (cache miss)
+14:24:33 | DEBUG | #6 9.378 npm http fetch GET 200 https://registry.npmjs.org/@smithy/abort-controller/-/abort-controller-4.2.3.tgz 6388ms (cache miss)
+14:24:33 | DEBUG | #6 9.420 npm http fetch GET 200 https://registry.npmjs.org/@smithy/md5-js/-/md5-js-4.2.3.tgz 6451ms (cache miss)
+14:24:33 | DEBUG | #6 9.421 npm http fetch GET 200 https://registry.npmjs.org/@smithy/eventstream-serde-browser/-/eventstream-serde-browser-4.2.3.tgz 6438ms (cache miss)
+14:24:33 | DEBUG | #6 9.468 npm http fetch GET 200 https://registry.npmjs.org/js-yaml/-/js-yaml-4.1.0.tgz 6931ms (cache miss)
+14:24:33 | DEBUG | #6 9.478 npm http fetch GET 200 https://registry.npmjs.org/@rtsao/scc/-/scc-1.1.0.tgz 6476ms (cache miss)
+14:24:33 | DEBUG | #6 9.478 npm http fetch GET 200 https://registry.npmjs.org/@rolldown/pluginutils/-/pluginutils-1.0.0-beta.38.tgz 6474ms (cache miss)
+14:24:33 | DEBUG | #6 9.531 npm http fetch GET 200 https://registry.npmjs.org/@radix-ui/react-use-layout-effect/-/react-use-layout-effect-1.1.1.tgz 6527ms (cache miss)
+14:24:33 | DEBUG | #6 9.532 npm http fetch GET 200 https://registry.npmjs.org/@twa-dev/types/-/types-8.0.2.tgz 6651ms (cache miss)
+14:24:33 | DEBUG | #6 9.532 npm http fetch GET 200 https://registry.npmjs.org/@radix-ui/react-use-escape-keydown/-/react-use-escape-keydown-1.1.1.tgz 6525ms (cache miss)
+14:24:33 | DEBUG | #6 9.532 npm http fetch GET 200 https://registry.npmjs.org/@smithy/hash-blob-browser/-/hash-blob-browser-4.2.4.tgz 6557ms (cache miss)
+14:24:33 | DEBUG | #6 9.533 npm http fetch GET 200 https://registry.npmjs.org/@radix-ui/react-use-effect-event/-/react-use-effect-event-0.0.2.tgz 6525ms (cache miss)
+14:24:33 | DEBUG | #6 9.533 npm http fetch GET 200 https://registry.npmjs.org/@smithy/chunked-blob-reader/-/chunked-blob-reader-5.2.0.tgz 6544ms (cache miss)
+14:24:33 | DEBUG | #6 9.578 npm http fetch GET 200 https://registry.npmjs.org/@radix-ui/react-use-callback-ref/-/react-use-callback-ref-1.1.1.tgz 6568ms (cache miss)
+14:24:34 | DEBUG | #6 9.633 npm http fetch GET 200 https://registry.npmjs.org/@smithy/util-waiter/-/util-waiter-4.2.3.tgz 6723ms (cache miss)
+14:24:34 | DEBUG | #6 9.637 npm http fetch GET 200 https://registry.npmjs.org/@radix-ui/react-slot/-/react-slot-1.2.3.tgz 6627ms (cache miss)
+14:24:34 | DEBUG | #6 9.638 npm http fetch GET 200 https://registry.npmjs.org/@radix-ui/react-use-controllable-state/-/react-use-controllable-state-1.2.2.tgz 6629ms (cache miss)
+14:24:34 | DEBUG | #6 9.638 npm http fetch GET 200 https://registry.npmjs.org/@radix-ui/react-id/-/react-id-1.1.1.tgz 6625ms (cache miss)
+14:24:34 | DEBUG | #6 9.639 npm http fetch GET 200 https://registry.npmjs.org/@radix-ui/react-focus-scope/-/react-focus-scope-1.1.7.tgz 6623ms (cache miss)
+14:24:34 | DEBUG | #6 9.756 npm http fetch GET 200 https://registry.npmjs.org/@radix-ui/react-portal/-/react-portal-1.1.9.tgz 6744ms (cache miss)
+14:24:34 | DEBUG | #6 9.757 npm http fetch GET 200 https://registry.npmjs.org/@radix-ui/react-primitive/-/react-primitive-2.1.3.tgz 6745ms (cache miss)
+14:24:34 | DEBUG | #6 9.804 npm http fetch GET 200 https://registry.npmjs.org/@radix-ui/react-compose-refs/-/react-compose-refs-1.1.2.tgz 6783ms (cache miss)
+14:24:34 | DEBUG | #6 9.804 npm http fetch GET 200 https://registry.npmjs.org/@radix-ui/react-presence/-/react-presence-1.1.5.tgz 6792ms (cache miss)
+14:24:34 | DEBUG | #6 9.804 npm http fetch GET 200 https://registry.npmjs.org/@radix-ui/react-dismissable-layer/-/react-dismissable-layer-1.1.11.tgz 6788ms (cache miss)
+14:24:34 | DEBUG | #6 9.836 npm http fetch GET 200 https://registry.npmjs.org/tsconfig-paths/-/tsconfig-paths-3.15.0.tgz 7530ms (cache miss)
+14:24:34 | DEBUG | #6 9.848 npm http fetch GET 200 https://registry.npmjs.org/@radix-ui/react-focus-guards/-/react-focus-guards-1.1.3.tgz 6830ms (cache miss)
+14:24:34 | DEBUG | #6 9.848 npm http fetch GET 200 https://registry.npmjs.org/@radix-ui/react-dialog/-/react-dialog-1.1.15.tgz 6830ms (cache miss)
+14:24:34 | DEBUG | #6 9.903 npm http fetch GET 200 https://registry.npmjs.org/@radix-ui/react-context/-/react-context-1.1.2.tgz 6877ms (cache miss)
+14:24:34 | DEBUG | #6 9.903 npm http fetch GET 200 https://registry.npmjs.org/@nolyfill/is-core-module/-/is-core-module-1.0.39.tgz 6857ms (cache miss)
+14:24:34 | DEBUG | #6 9.903 npm http fetch GET 200 https://registry.npmjs.org/@prisma/debug/-/debug-6.17.1.tgz 6870ms (cache miss)
+14:24:34 | DEBUG | #6 9.936 npm http fetch GET 200 https://registry.npmjs.org/enhanced-resolve/-/enhanced-resolve-5.18.3.tgz 7238ms (cache miss)
+14:24:34 | DEBUG | #6 9.942 npm http fetch GET 200 https://registry.npmjs.org/@prisma/engines-version/-/engines-version-6.17.1-1.272a37d34178c2894197e17273bf937f25acdeac.tgz 6917ms (cache miss)
+14:24:34 | DEBUG | #6 9.943 npm http fetch GET 200 https://registry.npmjs.org/@playwright/test/-/test-1.56.1.tgz 6903ms (cache miss)
+14:24:34 | DEBUG | #6 9.943 npm http fetch GET 200 https://registry.npmjs.org/@nodelib/fs.stat/-/fs.stat-2.0.5.tgz 6898ms (cache miss)
+14:24:34 | DEBUG | #6 9.943 npm http fetch GET 200 https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz 6897ms (cache miss)
+14:24:34 | DEBUG | #6 9.944 npm http fetch GET 200 https://registry.npmjs.org/@nodelib/fs.walk/-/fs.walk-1.2.8.tgz 6900ms (cache miss)
+14:24:34 | DEBUG | #6 9.976 npm http fetch GET 200 https://registry.npmjs.org/@typescript-eslint/type-utils/-/type-utils-8.46.1.tgz 7122ms (cache miss)
+14:24:34 | DEBUG | #6 9.977 npm http fetch GET 200 https://registry.npmjs.org/@types/react/-/react-19.2.2.tgz 7113ms (cache miss)
+14:24:34 | DEBUG | #6 9.982 npm http fetch GET 200 https://registry.npmjs.org/@smithy/property-provider/-/property-provider-4.2.3.tgz 7023ms (cache miss)
+14:24:34 | DEBUG | #6 9.982 npm http fetch GET 200 https://registry.npmjs.org/@prisma/config/-/config-6.17.1.tgz 6953ms (cache miss)
+14:24:34 | DEBUG | #6 9.984 npm http fetch GET 200 https://registry.npmjs.org/@radix-ui/primitive/-/primitive-1.1.3.tgz 6963ms (cache miss)
+14:24:34 | DEBUG | #6 10.01 npm http fetch GET 200 https://registry.npmjs.org/acorn/-/acorn-8.15.0.tgz 7200ms (cache miss)
+14:24:34 | DEBUG | #6 10.02 npm http fetch GET 200 https://registry.npmjs.org/node-fetch-native/-/node-fetch-native-1.6.7.tgz 7544ms (cache miss)
+14:24:34 | DEBUG | #6 10.07 npm http fetch GET 200 https://registry.npmjs.org/fast-glob/-/fast-glob-3.3.1.tgz 7420ms (cache miss)
+14:24:34 | DEBUG | #6 10.08 npm http fetch GET 200 https://registry.npmjs.org/@img/colour/-/colour-1.0.0.tgz 7017ms (cache miss)
+14:24:34 | DEBUG | #6 10.10 npm http fetch GET 200 https://registry.npmjs.org/styled-jsx/-/styled-jsx-5.1.6.tgz 7758ms (cache miss)
+14:24:34 | DEBUG | #6 10.11 npm http fetch GET 200 https://registry.npmjs.org/@humanfs/node/-/node-0.16.7.tgz 7046ms (cache miss)
+14:24:34 | DEBUG | #6 10.11 npm http fetch GET 200 https://registry.npmjs.org/@humanwhocodes/module-importer/-/module-importer-1.0.1.tgz 7048ms (cache miss)
+14:24:34 | DEBUG | #6 10.11 npm http fetch GET 200 https://registry.npmjs.org/@next/env/-/env-15.5.6.tgz 7063ms (cache miss)
+14:24:34 | DEBUG | #6 10.16 npm http fetch GET 200 https://registry.npmjs.org/@prisma/engines/-/engines-6.17.1.tgz 7135ms (cache miss)
+14:24:34 | DEBUG | #6 10.20 npm http fetch GET 200 https://registry.npmjs.org/yargs/-/yargs-17.7.2.tgz 7934ms (cache miss)
+14:24:34 | DEBUG | #6 10.20 npm http fetch GET 200 https://registry.npmjs.org/tailwind-merge/-/tailwind-merge-3.3.1.tgz 7859ms (cache miss)
+14:24:34 | DEBUG | #6 10.21 npm http fetch GET 200 https://registry.npmjs.org/@eslint/js/-/js-9.37.0.tgz 7143ms (cache miss)
+14:24:34 | DEBUG | #6 10.26 npm http fetch GET 200 https://registry.npmjs.org/@eslint/config-helpers/-/config-helpers-0.4.0.tgz 7181ms (cache miss)
+14:24:34 | DEBUG | #6 10.26 npm http fetch GET 200 https://registry.npmjs.org/@eslint/object-schema/-/object-schema-2.1.6.tgz 7185ms (cache miss)
+14:24:34 | DEBUG | #6 10.34 npm http fetch GET 200 https://registry.npmjs.org/consola/-/consola-3.4.2.tgz 7602ms (cache miss)
+14:24:34 | DEBUG | #6 10.35 npm http fetch GET 200 https://registry.npmjs.org/@humanwhocodes/retry/-/retry-0.4.3.tgz 7288ms (cache miss)
+14:24:34 | DEBUG | #6 10.39 npm http fetch GET 200 https://registry.npmjs.org/esquery/-/esquery-1.6.0.tgz 7725ms (cache miss)
+14:24:34 | DEBUG | #6 10.44 npm http fetch GET 200 https://registry.npmjs.org/@csstools/css-tokenizer/-/css-tokenizer-3.0.4.tgz 7344ms (cache miss)
+14:24:34 | DEBUG | #6 10.48 npm http fetch GET 200 https://registry.npmjs.org/@csstools/css-syntax-patches-for-csstree/-/css-syntax-patches-for-csstree-1.0.14.tgz 7387ms (cache miss)
+14:24:34 | DEBUG | #6 10.53 npm http fetch GET 200 https://registry.npmjs.org/@eslint/core/-/core-0.16.0.tgz 7452ms (cache miss)
+14:24:35 | DEBUG | #6 10.53 npm http fetch GET 200 https://registry.npmjs.org/@csstools/color-helpers/-/color-helpers-5.1.0.tgz 7434ms (cache miss)
+14:24:35 | DEBUG | #6 10.53 npm http fetch GET 200 https://registry.npmjs.org/@babel/plugin-transform-react-jsx-source/-/plugin-transform-react-jsx-source-7.27.1.tgz 7433ms (cache miss)
+14:24:35 | DEBUG | #6 10.56 npm http fetch GET 200 https://registry.npmjs.org/@testing-library/react/-/react-16.3.0.tgz 7672ms (cache miss)
+14:24:35 | DEBUG | #6 10.56 npm http fetch GET 200 https://registry.npmjs.org/@csstools/css-color-parser/-/css-color-parser-3.1.0.tgz 7473ms (cache miss)
+14:24:35 | DEBUG | #6 10.56 npm http fetch GET 200 https://registry.npmjs.org/@csstools/css-parser-algorithms/-/css-parser-algorithms-3.0.5.tgz 7474ms (cache miss)
+14:24:35 | DEBUG | #6 10.57 npm http fetch GET 200 https://registry.npmjs.org/@babel/plugin-transform-react-jsx-self/-/plugin-transform-react-jsx-self-7.27.1.tgz 7470ms (cache miss)
+14:24:35 | DEBUG | #6 10.57 npm http fetch GET 200 https://registry.npmjs.org/@aws/lambda-invoke-store/-/lambda-invoke-store-0.0.1.tgz 7464ms (cache miss)
+14:24:35 | DEBUG | #6 10.57 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/util-endpoints/-/util-endpoints-3.910.0.tgz 7460ms (cache miss)
+14:24:35 | DEBUG | #6 10.60 npm http fetch GET 200 https://registry.npmjs.org/@humanfs/core/-/core-0.19.1.tgz 7535ms (cache miss)
+14:24:35 | DEBUG | #6 10.61 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/util-user-agent-node/-/util-user-agent-node-3.911.0.tgz 7501ms (cache miss)
+14:24:35 | DEBUG | #6 10.61 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/util-locate-window/-/util-locate-window-3.893.0.tgz 7501ms (cache miss)
+14:24:35 | DEBUG | #6 10.61 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/util-arn-parser/-/util-arn-parser-3.893.0.tgz 7499ms (cache miss)
+14:24:35 | DEBUG | #6 10.66 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/util-user-agent-browser/-/util-user-agent-browser-3.910.0.tgz 7559ms (cache miss)
+14:24:35 | DEBUG | #6 10.66 npm http fetch GET 200 https://registry.npmjs.org/@csstools/css-calc/-/css-calc-2.1.4.tgz 7571ms (cache miss)
+14:24:35 | DEBUG | #6 10.70 npm http fetch GET 200 https://registry.npmjs.org/yoomoney-sdk/-/yoomoney-sdk-2.2.0.tgz 8441ms (cache miss)
+14:24:35 | DEBUG | #6 10.72 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/token-providers/-/token-providers-3.911.0.tgz 7612ms (cache miss)
+14:24:35 | DEBUG | #6 10.72 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/signature-v4-multi-region/-/signature-v4-multi-region-3.911.0.tgz 7611ms (cache miss)
+14:24:35 | DEBUG | #6 10.72 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/middleware-user-agent/-/middleware-user-agent-3.911.0.tgz 7609ms (cache miss)
+14:24:35 | DEBUG | #6 10.78 npm http fetch GET 200 https://registry.npmjs.org/@eslint/plugin-kit/-/plugin-kit-0.4.0.tgz 7707ms (cache miss)
+14:24:35 | DEBUG | #6 10.78 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/s3-request-presigner/-/s3-request-presigner-3.913.0.tgz 7667ms (cache miss)
+14:24:35 | DEBUG | #6 10.82 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/util-format-url/-/util-format-url-3.910.0.tgz 7715ms (cache miss)
+14:24:35 | DEBUG | #6 10.82 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/middleware-recursion-detection/-/middleware-recursion-detection-3.910.0.tgz 7706ms (cache miss)
+14:24:35 | DEBUG | #6 10.82 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/middleware-ssec/-/middleware-ssec-3.910.0.tgz 7708ms (cache miss)
+14:24:35 | DEBUG | #6 10.85 npm http fetch GET 200 https://registry.npmjs.org/tsx/-/tsx-4.20.6.tgz 8551ms (cache miss)
+14:24:35 | DEBUG | #6 10.87 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/middleware-logger/-/middleware-logger-3.910.0.tgz 7737ms (cache miss)
+14:24:35 | DEBUG | #6 10.87 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/middleware-location-constraint/-/middleware-location-constraint-3.913.0.tgz 7737ms (cache miss)
+14:24:35 | DEBUG | #6 10.87 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/middleware-host-header/-/middleware-host-header-3.910.0.tgz 7737ms (cache miss)
+14:24:35 | DEBUG | #6 10.92 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/credential-provider-sso/-/credential-provider-sso-3.911.0.tgz 7772ms (cache miss)
+14:24:35 | DEBUG | #6 10.92 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/middleware-expect-continue/-/middleware-expect-continue-3.910.0.tgz 7778ms (cache miss)
+14:24:35 | DEBUG | #6 10.95 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/credential-provider-web-identity/-/credential-provider-web-identity-3.911.0.tgz 7811ms (cache miss)
+14:24:35 | DEBUG | #6 10.95 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/credential-provider-process/-/credential-provider-process-3.911.0.tgz 7809ms (cache miss)
+14:24:35 | DEBUG | #6 10.97 npm http fetch GET 200 https://registry.npmjs.org/dom-accessibility-api/-/dom-accessibility-api-0.5.16.tgz 8267ms (cache miss)
+14:24:35 | DEBUG | #6 10.99 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/credential-provider-node/-/credential-provider-node-3.913.0.tgz 7848ms (cache miss)
+14:24:35 | DEBUG | #6 11.07 npm http fetch GET 200 https://registry.npmjs.org/@aws-crypto/util/-/util-5.2.0.tgz 7921ms (cache miss)
+14:24:35 | DEBUG | #6 11.07 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/credential-provider-http/-/credential-provider-http-3.911.0.tgz 7927ms (cache miss)
+14:24:35 | DEBUG | #6 11.07 npm http fetch GET 200 https://registry.npmjs.org/@aws-crypto/supports-web-crypto/-/supports-web-crypto-5.2.0.tgz 7920ms (cache miss)
+14:24:35 | DEBUG | #6 11.10 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/credential-provider-env/-/credential-provider-env-3.911.0.tgz 7956ms (cache miss)
+14:24:35 | DEBUG | #6 11.10 npm http fetch GET 200 https://registry.npmjs.org/@aws-crypto/sha256-browser/-/sha256-browser-5.2.0.tgz 7951ms (cache miss)
+14:24:35 | DEBUG | #6 11.13 npm http fetch GET 200 https://registry.npmjs.org/@aws-crypto/crc32/-/crc32-5.2.0.tgz 7979ms (cache miss)
+14:24:35 | DEBUG | #6 11.16 npm http fetch GET 200 https://registry.npmjs.org/@img/sharp-linuxmusl-x64/-/sharp-linuxmusl-x64-0.34.4.tgz 8099ms (cache miss)
+14:24:35 | DEBUG | #6 11.16 npm http fetch GET 200 https://registry.npmjs.org/js-tokens/-/js-tokens-9.0.1.tgz 8002ms (cache miss)
+14:24:35 | DEBUG | #6 11.17 npm http fetch GET 200 https://registry.npmjs.org/tinyexec/-/tinyexec-0.3.2.tgz 8005ms (cache miss)
+14:24:35 | DEBUG | #6 11.17 npm http fetch GET 200 https://registry.npmjs.org/@alloc/quick-lru/-/quick-lru-5.2.0.tgz 8008ms (cache miss)
+14:24:35 | DEBUG | #6 11.17 npm http fetch GET 200 https://registry.npmjs.org/language-subtag-registry/-/language-subtag-registry-0.3.23.tgz 8649ms (cache miss)
+14:24:35 | DEBUG | #6 11.18 npm http fetch GET 200 https://registry.npmjs.org/csstype/-/csstype-3.1.3.tgz 8442ms (cache miss)
+14:24:35 | DEBUG | #6 11.18 npm http fetch GET 200 https://registry.npmjs.org/chai/-/chai-5.3.3.tgz 8423ms (cache miss)
+14:24:35 | DEBUG | #6 11.19 npm http fetch GET 200 https://registry.npmjs.org/ansi-styles/-/ansi-styles-5.2.0.tgz 8028ms (cache miss)
+14:24:35 | DEBUG | #6 11.19 npm http fetch GET 200 https://registry.npmjs.org/@aws-crypto/crc32c/-/crc32c-5.2.0.tgz 8039ms (cache miss)
+14:24:35 | DEBUG | #6 11.19 npm http fetch GET 200 https://registry.npmjs.org/@aws-crypto/sha1-browser/-/sha1-browser-5.2.0.tgz 8041ms (cache miss)
+14:24:35 | DEBUG | #6 11.22 npm http fetch GET 200 https://registry.npmjs.org/react-is/-/react-is-17.0.2.tgz 8045ms (cache miss)
+14:24:35 | DEBUG | #6 11.24 npm http fetch GET 200 https://registry.npmjs.org/@asamuzakjp/nwsapi/-/nwsapi-2.3.9.tgz 8084ms (cache miss)
+14:24:35 | DEBUG | #6 11.24 npm http fetch GET 200 https://registry.npmjs.org/glob-parent/-/glob-parent-5.1.2.tgz 8067ms (cache miss)
+14:24:35 | DEBUG | #6 11.25 npm http fetch GET 200 https://registry.npmjs.org/@smithy/signature-v4/-/signature-v4-5.3.3.tgz 8304ms (cache miss)
+14:24:35 | DEBUG | #6 11.26 npm http fetch GET 200 https://registry.npmjs.org/debug/-/debug-3.2.7.tgz 8079ms (cache miss)
+14:24:35 | DEBUG | #6 11.26 npm http fetch GET 200 https://registry.npmjs.org/supports-color/-/supports-color-8.1.1.tgz 8079ms (cache miss)
+14:24:35 | DEBUG | #6 11.29 npm http fetch GET 200 https://registry.npmjs.org/ignore/-/ignore-7.0.5.tgz 8099ms (cache miss)
+14:24:35 | DEBUG | #6 11.30 npm http fetch GET 200 https://registry.npmjs.org/@emnapi/wasi-threads/-/wasi-threads-1.1.0.tgz 8221ms (cache miss)
+14:24:35 | DEBUG | #6 11.31 npm http fetch GET 200 https://registry.npmjs.org/eslint-visitor-keys/-/eslint-visitor-keys-3.4.3.tgz 8116ms (cache miss)
+14:24:35 | DEBUG | #6 11.31 npm http fetch GET 200 https://registry.npmjs.org/@smithy/is-array-buffer/-/is-array-buffer-2.2.0.tgz 8114ms (cache miss)
+14:24:35 | DEBUG | #6 11.31 npm http fetch GET 200 https://registry.npmjs.org/@smithy/util-buffer-from/-/util-buffer-from-2.2.0.tgz 8115ms (cache miss)
+14:24:35 | DEBUG | #6 11.33 npm http fetch GET 200 https://registry.npmjs.org/glob-parent/-/glob-parent-5.1.2.tgz 8144ms (cache miss)
+14:24:35 | DEBUG | #6 11.33 npm http fetch GET 200 https://registry.npmjs.org/pure-rand/-/pure-rand-6.1.0.tgz 8909ms (cache miss)
+14:24:35 | DEBUG | #6 11.34 npm http fetch GET 200 https://registry.npmjs.org/@img/sharp-linux-x64/-/sharp-linux-x64-0.34.4.tgz 8275ms (cache miss)
+14:24:35 | DEBUG | #6 11.34 npm http fetch GET 200 https://registry.npmjs.org/debug/-/debug-3.2.7.tgz 8164ms (cache miss)
+14:24:35 | DEBUG | #6 11.34 npm http fetch GET 200 https://registry.npmjs.org/debug/-/debug-3.2.7.tgz 8162ms (cache miss)
+14:24:35 | DEBUG | #6 11.37 npm http fetch GET 200 https://registry.npmjs.org/dotenv/-/dotenv-16.6.1.tgz 8190ms (cache miss)
+14:24:35 | DEBUG | #6 11.37 npm http fetch GET 200 https://registry.npmjs.org/@smithy/util-utf8/-/util-utf8-2.3.0.tgz 8177ms (cache miss)
+14:24:35 | DEBUG | #6 11.37 npm http fetch GET 200 https://registry.npmjs.org/@smithy/util-utf8/-/util-utf8-2.3.0.tgz 8180ms (cache miss)
+14:24:35 | DEBUG | #6 11.37 npm http fetch GET 200 https://registry.npmjs.org/@smithy/is-array-buffer/-/is-array-buffer-2.2.0.tgz 8179ms (cache miss)
+14:24:35 | DEBUG | #6 11.37 npm http fetch GET 200 https://registry.npmjs.org/@smithy/is-array-buffer/-/is-array-buffer-2.2.0.tgz 8176ms (cache miss)
+14:24:35 | DEBUG | #6 11.38 npm http fetch GET 200 https://registry.npmjs.org/@smithy/util-buffer-from/-/util-buffer-from-2.2.0.tgz 8181ms (cache miss)
+14:24:35 | DEBUG | #6 11.38 npm http fetch GET 200 https://registry.npmjs.org/@smithy/util-buffer-from/-/util-buffer-from-2.2.0.tgz 8178ms (cache miss)
+14:24:35 | DEBUG | #6 11.39 npm http fetch GET 200 https://registry.npmjs.org/@eslint-community/regexpp/-/regexpp-4.12.1.tgz 8311ms (cache miss)
+14:24:35 | DEBUG | #6 11.40 npm http fetch GET 200 https://registry.npmjs.org/@eslint-community/eslint-utils/-/eslint-utils-4.9.0.tgz 8322ms (cache miss)
+14:24:35 | DEBUG | #6 11.40 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/xml-builder/-/xml-builder-3.911.0.tgz 8299ms (cache miss)
+14:24:35 | DEBUG | #6 11.44 npm http fetch GET 200 https://registry.npmjs.org/@testing-library/jest-dom/-/jest-dom-6.9.1.tgz 8548ms (cache miss)
+14:24:35 | DEBUG | #6 11.48 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/middleware-bucket-endpoint/-/middleware-bucket-endpoint-3.910.0.tgz 8345ms (cache miss)
+14:24:35 | DEBUG | #6 11.49 npm http fetch GET 200 https://registry.npmjs.org/tldts-core/-/tldts-core-7.0.17.tgz 9156ms (cache miss)
+14:24:35 | DEBUG | #6 11.50 npm http fetch GET 200 https://registry.npmjs.org/jiti/-/jiti-2.6.1.tgz 8962ms (cache miss)
+14:24:35 | DEBUG | #6 11.51 npm http fetch GET 200 https://registry.npmjs.org/@grammyjs/types/-/types-3.22.2.tgz 8440ms (cache miss)
+14:24:35 | DEBUG | #6 11.56 npm http fetch GET 200 https://registry.npmjs.org/@eslint/config-array/-/config-array-0.21.0.tgz 8486ms (cache miss)
+14:24:35 | DEBUG | #6 11.57 npm http fetch GET 200 https://registry.npmjs.org/@smithy/node-http-handler/-/node-http-handler-4.4.2.tgz 8616ms (cache miss)
+14:24:35 | DEBUG | #6 11.58 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/credential-provider-ini/-/credential-provider-ini-3.913.0.tgz 8438ms (cache miss)
+14:24:35 | DEBUG | #6 11.60 npm http fetch GET 200 https://registry.npmjs.org/@emnapi/runtime/-/runtime-1.5.0.tgz 8510ms (cache miss)
+14:24:36 | DEBUG | #6 11.60 npm http fetch GET 200 https://registry.npmjs.org/@smithy/util-utf8/-/util-utf8-2.3.0.tgz 8410ms (cache miss)
+14:24:36 | DEBUG | #6 11.65 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/region-config-resolver/-/region-config-resolver-3.910.0.tgz 8541ms (cache miss)
+14:24:36 | DEBUG | #6 11.67 npm http fetch GET 200 https://registry.npmjs.org/grammy/-/grammy-1.38.3.tgz 9059ms (cache miss)
+14:24:36 | DEBUG | #6 11.67 npm http fetch GET 200 https://registry.npmjs.org/fast-xml-parser/-/fast-xml-parser-5.2.5.tgz 9021ms (cache miss)
+14:24:36 | DEBUG | #6 11.68 npm http fetch GET 200 https://registry.npmjs.org/@smithy/util-stream/-/util-stream-4.5.3.tgz 8769ms (cache miss)
+14:24:36 | DEBUG | #6 11.69 npm http fetch GET 200 https://registry.npmjs.org/@adobe/css-tools/-/css-tools-4.4.4.tgz 8528ms (cache miss)
+14:24:36 | DEBUG | #6 11.69 npm http fetch GET 200 https://registry.npmjs.org/jsx-ast-utils/-/jsx-ast-utils-3.3.5.tgz 9163ms (cache miss)
+14:24:36 | DEBUG | #6 11.76 npm http fetch GET 200 https://registry.npmjs.org/@next/eslint-plugin-next/-/eslint-plugin-next-15.5.6.tgz 8713ms (cache miss)
+14:24:36 | DEBUG | #6 11.82 npm http fetch GET 200 https://registry.npmjs.org/@tybys/wasm-util/-/wasm-util-0.10.1.tgz 8937ms (cache miss)
+14:24:36 | DEBUG | #6 11.85 npm http fetch GET 200 https://registry.npmjs.org/@smithy/smithy-client/-/smithy-client-4.9.0.tgz 8919ms (cache miss)
+14:24:36 | DEBUG | #6 11.91 npm http fetch GET 200 https://registry.npmjs.org/parse5/-/parse5-7.3.0.tgz 9462ms (cache miss)
+14:24:36 | DEBUG | #6 11.91 npm http fetch GET 200 https://registry.npmjs.org/@typescript-eslint/typescript-estree/-/typescript-estree-8.46.1.tgz 9058ms (cache miss)
+14:24:36 | DEBUG | #6 11.94 npm http fetch GET 200 https://registry.npmjs.org/@aws-crypto/sha256-js/-/sha256-js-5.2.0.tgz 8787ms (cache miss)
+14:24:36 | DEBUG | #6 11.94 npm http fetch GET 200 https://registry.npmjs.org/@typescript-eslint/utils/-/utils-8.46.1.tgz 9095ms (cache miss)
+14:24:36 | DEBUG | #6 11.95 npm http fetch GET 200 https://registry.npmjs.org/@twa-dev/sdk/-/sdk-8.0.2.tgz 9063ms (cache miss)
+14:24:36 | DEBUG | #6 12.01 npm http fetch GET 200 https://registry.npmjs.org/concurrently/-/concurrently-9.2.1.tgz 9264ms (cache miss)
+14:24:36 | DEBUG | #6 12.02 npm http fetch GET 200 https://registry.npmjs.org/@asamuzakjp/dom-selector/-/dom-selector-6.7.0.tgz 8856ms (cache miss)
+14:24:36 | DEBUG | #6 12.04 npm http fetch GET 200 https://registry.npmjs.org/yookassa-sdk/-/yookassa-sdk-0.0.13.tgz 9770ms (cache miss)
+14:24:36 | DEBUG | #6 12.04 npm http fetch GET 200 https://registry.npmjs.org/entities/-/entities-6.0.1.tgz 9341ms (cache miss)
+14:24:36 | DEBUG | #6 12.06 npm http fetch GET 200 https://registry.npmjs.org/@eslint/eslintrc/-/eslintrc-3.3.1.tgz 8984ms (cache miss)
+14:24:36 | DEBUG | #6 12.08 npm http fetch GET 200 https://registry.npmjs.org/cssstyle/-/cssstyle-5.3.1.tgz 9342ms (cache miss)
+14:24:36 | DEBUG | #6 12.08 npm http fetch GET 200 https://registry.npmjs.org/axobject-query/-/axobject-query-4.1.0.tgz 9308ms (cache miss)
+14:24:36 | DEBUG | #6 12.14 npm http fetch GET 200 https://registry.npmjs.org/@prisma/fetch-engine/-/fetch-engine-6.17.1.tgz 9117ms (cache miss)
+14:24:36 | DEBUG | #6 12.15 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/middleware-sdk-s3/-/middleware-sdk-s3-3.911.0.tgz 9033ms (cache miss)
+14:24:36 | DEBUG | #6 12.19 npm http fetch GET 200 https://registry.npmjs.org/postcss/-/postcss-8.4.31.tgz 9012ms (cache miss)
+14:24:36 | DEBUG | #6 12.20 npm http fetch GET 200 https://registry.npmjs.org/fast-glob/-/fast-glob-3.3.3.tgz 9013ms (cache miss)
+14:24:36 | DEBUG | #6 12.23 npm http fetch GET 200 https://registry.npmjs.org/@rushstack/eslint-patch/-/eslint-patch-1.14.0.tgz 9243ms (cache miss)
+14:24:36 | DEBUG | #6 12.24 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/middleware-flexible-checksums/-/middleware-flexible-checksums-3.911.0.tgz 9109ms (cache miss)
+14:24:36 | DEBUG | #6 12.25 npm http fetch GET 200 https://registry.npmjs.org/@smithy/config-resolver/-/config-resolver-4.3.3.tgz 9262ms (cache miss)
+14:24:36 | DEBUG | #6 12.33 npm http fetch GET 200 https://registry.npmjs.org/dom-accessibility-api/-/dom-accessibility-api-0.6.3.tgz 9145ms (cache miss)
+14:24:36 | DEBUG | #6 12.36 npm http fetch GET 200 https://registry.npmjs.org/@unrs/resolver-binding-linux-x64-musl/-/resolver-binding-linux-x64-musl-1.11.1.tgz 9520ms (cache miss)
+14:24:36 | DEBUG | #6 12.38 npm http fetch GET 200 https://registry.npmjs.org/es-iterator-helpers/-/es-iterator-helpers-1.2.1.tgz 9692ms (cache miss)
+14:24:36 | DEBUG | #6 12.39 npm http fetch GET 200 https://registry.npmjs.org/vitest/-/vitest-3.2.4.tgz 10104ms (cache miss)
+14:24:36 | DEBUG | #6 12.41 npm http fetch GET 200 https://registry.npmjs.org/@prisma/get-platform/-/get-platform-6.17.1.tgz 9389ms (cache miss)
+14:24:36 | DEBUG | #6 12.47 npm http fetch GET 200 https://registry.npmjs.org/@unrs/resolver-binding-linux-x64-gnu/-/resolver-binding-linux-x64-gnu-1.11.1.tgz 9619ms (cache miss)
+14:24:36 | DEBUG | #6 12.50 npm http fetch GET 200 https://registry.npmjs.org/vite/-/vite-7.1.10.tgz 10217ms (cache miss)
+14:24:36 | DEBUG | #6 12.50 npm http fetch GET 200 https://registry.npmjs.org/aria-query/-/aria-query-5.3.2.tgz 9697ms (cache miss)
+14:24:36 | DEBUG | #6 12.52 npm http fetch GET 200 https://registry.npmjs.org/rollup/-/rollup-4.52.4.tgz 10131ms (cache miss)
+14:24:36 | DEBUG | #6 12.58 npm http fetch GET 200 https://registry.npmjs.org/@emnapi/core/-/core-1.5.0.tgz 9495ms (cache miss)
+14:24:37 | DEBUG | #6 12.61 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/types/-/types-3.910.0.tgz 9502ms (cache miss)
+14:24:37 | DEBUG | #6 12.64 npm http fetch GET 200 https://registry.npmjs.org/@rollup/rollup-linux-x64-gnu/-/rollup-linux-x64-gnu-4.52.4.tgz 9639ms (cache miss)
+14:24:37 | DEBUG | #6 12.68 npm http fetch GET 200 https://registry.npmjs.org/@rollup/rollup-linux-x64-musl/-/rollup-linux-x64-musl-4.52.4.tgz 9676ms (cache miss)
+14:24:37 | DEBUG | #6 12.72 npm http fetch GET 200 https://registry.npmjs.org/@smithy/util-endpoints/-/util-endpoints-3.2.3.tgz 9803ms (cache miss)
+14:24:37 | DEBUG | #6 12.76 npm http fetch GET 200 https://registry.npmjs.org/tldts/-/tldts-7.0.17.tgz 10427ms (cache miss)
+14:24:37 | DEBUG | #6 12.77 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/client-sso/-/client-sso-3.911.0.tgz 9628ms (cache miss)
+14:24:37 | DEBUG | #6 12.88 npm http fetch GET 200 https://registry.npmjs.org/@tailwindcss/oxide-linux-x64-musl/-/oxide-linux-x64-musl-4.1.14.tgz 9982ms (cache miss)
+14:24:37 | DEBUG | #6 12.89 npm http fetch GET 200 https://registry.npmjs.org/@testing-library/dom/-/dom-10.4.1.tgz 10002ms (cache miss)
+14:24:37 | DEBUG | #6 12.90 npm http fetch GET 200 https://registry.npmjs.org/@tailwindcss/oxide-linux-x64-gnu/-/oxide-linux-x64-gnu-4.1.14.tgz 9998ms (cache miss)
+14:24:37 | DEBUG | #6 12.94 npm http fetch GET 200 https://registry.npmjs.org/axe-core/-/axe-core-4.11.0.tgz 10147ms (cache miss)
+14:24:37 | DEBUG | #6 12.98 npm http fetch GET 200 https://registry.npmjs.org/eslint-plugin-import/-/eslint-plugin-import-2.32.0.tgz 10304ms (cache miss)
+14:24:37 | DEBUG | #6 12.98 npm http fetch GET 200 https://registry.npmjs.org/@types/node/-/node-20.19.22.tgz 10112ms (cache miss)
+14:24:37 | DEBUG | #6 13.01 npm http fetch GET 200 https://registry.npmjs.org/aria-query/-/aria-query-5.3.0.tgz 9826ms (cache miss)
+14:24:37 | DEBUG | #6 13.04 npm http fetch GET 200 https://registry.npmjs.org/react-hook-form/-/react-hook-form-7.65.0.tgz 10629ms (cache miss)
+14:24:37 | DEBUG | #6 13.10 npm http fetch GET 200 https://registry.npmjs.org/axios/-/axios-1.12.2.tgz 10323ms (cache miss)
+14:24:37 | DEBUG | #6 13.15 npm http fetch GET 200 https://registry.npmjs.org/resolve/-/resolve-2.0.0-next.5.tgz 9973ms (cache miss)
+14:24:37 | DEBUG | #6 13.21 npm http fetch GET 200 https://registry.npmjs.org/@asamuzakjp/css-color/-/css-color-4.0.5.tgz 10051ms (cache miss)
+14:24:37 | DEBUG | #6 13.22 npm http fetch GET 200 https://registry.npmjs.org/@smithy/types/-/types-4.8.0.tgz 10293ms (cache miss)
+14:24:37 | DEBUG | #6 13.30 npm http fetch GET 200 https://registry.npmjs.org/eslint-plugin-jsx-a11y/-/eslint-plugin-jsx-a11y-6.10.2.tgz 10634ms (cache miss)
+14:24:37 | DEBUG | #6 13.52 npm http fetch GET 200 https://registry.npmjs.org/@typescript-eslint/scope-manager/-/scope-manager-8.46.1.tgz 10668ms (cache miss)
+14:24:38 | DEBUG | #6 13.74 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/core/-/core-3.911.0.tgz 10597ms (cache miss)
+14:24:38 | DEBUG | #6 14.01 npm http fetch GET 200 https://registry.npmjs.org/css-tree/-/css-tree-3.1.0.tgz 11272ms (cache miss)
+14:24:38 | DEBUG | #6 14.06 npm http fetch GET 200 https://registry.npmjs.org/playwright/-/playwright-1.56.1.tgz 11622ms (cache miss)
+14:24:38 | DEBUG | #6 14.08 npm http fetch GET 200 https://registry.npmjs.org/eslint-plugin-react/-/eslint-plugin-react-7.37.5.tgz 11412ms (cache miss)
+14:24:38 | DEBUG | #6 14.09 npm http fetch GET 200 https://registry.npmjs.org/react-dom/-/react-dom-19.2.0.tgz 11679ms (cache miss)
+14:24:38 | DEBUG | #6 14.16 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/nested-clients/-/nested-clients-3.911.0.tgz 11045ms (cache miss)
+14:24:38 | DEBUG | #6 14.23 npm http fetch GET 200 https://registry.npmjs.org/@smithy/core/-/core-3.17.0.tgz 11242ms (cache miss)
+14:24:38 | DEBUG | #6 14.31 npm http fetch GET 200 https://registry.npmjs.org/@napi-rs/wasm-runtime/-/wasm-runtime-0.2.12.tgz 11253ms (cache miss)
+14:24:38 | DEBUG | #6 14.62 npm http fetch GET 200 https://registry.npmjs.org/lightningcss-linux-x64-musl/-/lightningcss-linux-x64-musl-1.30.1.tgz 12106ms (cache miss)
+14:24:39 | DEBUG | #6 14.65 npm http fetch GET 200 https://registry.npmjs.org/lightningcss-linux-x64-gnu/-/lightningcss-linux-x64-gnu-1.30.1.tgz 12126ms (cache miss)
+14:24:39 | DEBUG | #6 14.71 npm http fetch GET 200 https://registry.npmjs.org/@typescript-eslint/eslint-plugin/-/eslint-plugin-8.46.1.tgz 11847ms (cache miss)
+14:24:39 | DEBUG | #6 14.74 npm http fetch GET 200 https://registry.npmjs.org/@testing-library/user-event/-/user-event-14.6.1.tgz 11851ms (cache miss)
+14:24:39 | DEBUG | #6 15.07 npm http fetch GET 200 https://registry.npmjs.org/eslint/-/eslint-9.37.0.tgz 12397ms (cache miss)
+14:24:39 | DEBUG | #6 15.15 npm http fetch GET 200 https://registry.npmjs.org/@swc/helpers/-/helpers-0.5.15.tgz 12247ms (cache miss)
+14:24:39 | DEBUG | #6 15.37 npm http fetch GET 200 https://registry.npmjs.org/@aws-sdk/client-s3/-/client-s3-3.913.0.tgz 12227ms (cache miss)
+14:24:39 | DEBUG | #6 15.42 npm http fetch GET 200 https://registry.npmjs.org/@hookform/resolvers/-/resolvers-5.2.2.tgz 12351ms (cache miss)
+14:24:39 | DEBUG | #6 15.43 npm http fetch GET 200 https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.25.11.tgz 12353ms (cache miss)
+14:24:40 | DEBUG | #6 15.71 npm http fetch GET 200 https://registry.npmjs.org/jsdom/-/jsdom-27.0.0.tgz 13168ms (cache miss)
+14:24:40 | DEBUG | #6 15.96 npm http fetch GET 200 https://registry.npmjs.org/playwright-core/-/playwright-core-1.56.1.tgz 13530ms (cache miss)
+14:24:40 | DEBUG | #6 16.02 npm http fetch GET 200 https://registry.npmjs.org/qiwi-sdk/-/qiwi-sdk-4.1.4.tgz 13611ms (cache miss)
+14:24:40 | DEBUG | #6 16.10 npm http fetch GET 200 https://registry.npmjs.org/zod/-/zod-4.1.12.tgz 13842ms (cache miss)
+14:24:40 | DEBUG | #6 16.36 npm http fetch GET 200 https://registry.npmjs.org/@img/sharp-libvips-linux-x64/-/sharp-libvips-linux-x64-1.2.3.tgz 13300ms (cache miss)
+14:24:40 | DEBUG | #6 16.41 npm http fetch GET 200 https://registry.npmjs.org/@img/sharp-libvips-linuxmusl-x64/-/sharp-libvips-linuxmusl-x64-1.2.3.tgz 13347ms (cache miss)
+14:24:41 | DEBUG | #6 16.79 npm http fetch GET 200 https://registry.npmjs.org/fast-check/-/fast-check-3.23.2.tgz 14133ms (cache miss)
+14:24:41 | DEBUG | #6 17.02 npm http fetch GET 200 https://registry.npmjs.org/typescript/-/typescript-5.9.3.tgz 14725ms (cache miss)
+14:24:43 | DEBUG | #6 18.78 npm http fetch GET 200 https://registry.npmjs.org/es-abstract/-/es-abstract-1.24.0.tgz 16080ms (cache miss)
+14:24:44 | DEBUG | #6 20.30 npm http fetch GET 200 https://registry.npmjs.org/prisma/-/prisma-6.17.1.tgz 17870ms (cache miss)
+14:24:46 | DEBUG | #6 21.92 npm http fetch GET 200 https://registry.npmjs.org/effect/-/effect-3.16.12.tgz 19215ms (cache miss)
+14:24:46 | DEBUG | #6 22.19 npm http fetch GET 200 https://registry.npmjs.org/@prisma/client/-/client-6.17.1.tgz 19156ms (cache miss)
+14:24:47 | DEBUG | #6 22.67 npm http fetch GET 200 https://registry.npmjs.org/lucide-react/-/lucide-react-0.546.0.tgz 20156ms (cache miss)
+14:24:49 | DEBUG | #6 24.88 npm http fetch GET 200 https://registry.npmjs.org/@next/swc-linux-x64-gnu/-/swc-linux-x64-gnu-15.5.6.tgz 21831ms (cache miss)
+14:24:49 | DEBUG | #6 24.92 npm http fetch GET 200 https://registry.npmjs.org/@next/swc-linux-x64-musl/-/swc-linux-x64-musl-15.5.6.tgz 21867ms (cache miss)
+14:24:53 | DEBUG | #6 28.83 npm http fetch GET 200 https://registry.npmjs.org/next/-/next-15.5.6.tgz 26351ms (cache miss)
+14:24:53 | DEBUG | #6 28.88 npm info run prisma@6.17.1 preinstall node_modules/prisma node scripts/preinstall-entry.js
+14:24:53 | DEBUG | #6 29.09 npm info run prisma@6.17.1 preinstall { code: 0, signal: null }
+14:24:53 | DEBUG | #6 29.10 npm info run sharp@0.34.4 install node_modules/sharp node install/check.js
+14:24:53 | DEBUG | #6 29.31 npm info run sharp@0.34.4 install { code: 0, signal: null }
+14:24:53 | DEBUG | #6 29.31 npm info run @prisma/client@6.17.1 postinstall node_modules/@prisma/client node scripts/postinstall.js
+14:24:53 | DEBUG | #6 29.33 npm info run @prisma/engines@6.17.1 postinstall node_modules/@prisma/engines node scripts/postinstall.js
+14:24:53 | DEBUG | #6 29.35 npm info run @tailwindcss/oxide@4.1.14 postinstall node_modules/@tailwindcss/oxide node ./scripts/install.js
+14:24:53 | DEBUG | #6 29.37 npm info run esbuild@0.25.11 postinstall node_modules/esbuild node install.js
+14:24:53 | DEBUG | #6 29.40 npm info run unrs-resolver@1.11.1 postinstall node_modules/unrs-resolver napi-postinstall unrs-resolver 1.11.1 check
+14:24:53 | DEBUG | #6 29.48 npm info run @tailwindcss/oxide@4.1.14 postinstall { code: 0, signal: null }
+14:24:54 | DEBUG | #6 29.65 npm info run esbuild@0.25.11 postinstall { code: 0, signal: null }
+14:24:54 | DEBUG | #6 29.69 npm info run unrs-resolver@1.11.1 postinstall { code: 0, signal: null }
+14:24:55 | DEBUG | #6 31.43 npm info run @prisma/engines@6.17.1 postinstall { code: 0, signal: null }
+14:25:00 | DEBUG | #6 36.10 npm info run @prisma/client@6.17.1 postinstall { code: 0, signal: null }
+14:25:01 | DEBUG | #6 36.79 
+14:25:01 | DEBUG | #6 36.79 added 708 packages, and audited 709 packages in 36s
+14:25:01 | DEBUG | #6 36.79 
+14:25:01 | DEBUG | #6 36.79 180 packages are looking for funding
+14:25:01 | DEBUG | #6 36.79   run `npm fund` for details
+14:25:01 | DEBUG | #6 36.79 
+14:25:01 | DEBUG | #6 36.79 found 0 vulnerabilities
+14:25:01 | DEBUG | #6 36.79 npm verbose cwd /opt/build
+14:25:01 | DEBUG | #6 36.79 npm verbose os Linux 5.15.0-91-generic
+14:25:01 | DEBUG | #6 36.79 npm verbose node v20.19.5
+14:25:01 | DEBUG | #6 36.79 npm verbose npm  v10.8.2
+14:25:01 | DEBUG | #6 36.79 npm verbose exit 0
+14:25:01 | DEBUG | #6 36.79 npm info ok
+14:25:06 | DEBUG | #6 DONE 41.8s
+14:25:06 | DEBUG | 
+14:25:06 | DEBUG | #7 exporting to image
+14:25:06 | DEBUG | #7 exporting layers
+14:25:21 | DEBUG | #7 exporting layers 14.9s done
+14:25:21 | DEBUG | #7 writing image sha256:a40018e501ce00f6e8bbc05bf53624b3f151468d7887ba9e79cf709adb74420a done
+14:25:21 | DEBUG | #7 naming to docker.io/library/final-image-0e4f056f-e4c2-44ef-b20b-d5eef17f0876-dependencies done
+14:25:21 | DEBUG | #7 DONE 15.0s
+14:25:21 | Layer final-image-0e4f056f-e4c2-44ef-b20b-d5eef17f0876-dependencies built successfully
+14:25:22 | Building final layer
+14:25:22 | DEBUG | 2025/10/19 14:25:22 in: []string{}
+14:25:22 | DEBUG | 2025/10/19 14:25:22 Parsed entitlements: []
+14:25:22 | DEBUG | #0 building with "default" instance using docker driver
+14:25:22 | DEBUG | 
+14:25:22 | DEBUG | #1 [internal] load build definition from Dockerfile
+14:25:22 | DEBUG | #1 transferring dockerfile: 828B done
+14:25:22 | DEBUG | #1 DONE 0.0s
+14:25:22 | DEBUG | 
+14:25:22 | DEBUG | #2 [internal] load metadata for docker.io/library/final-image-0e4f056f-e4c2-44ef-b20b-d5eef17f0876-dependencies:latest
+14:25:22 | DEBUG | #2 DONE 0.0s
+14:25:22 | DEBUG | 
+14:25:22 | DEBUG | #3 [internal] load .dockerignore
+14:25:22 | DEBUG | #3 transferring context: 2B done
+14:25:22 | DEBUG | #3 DONE 0.0s
+14:25:22 | DEBUG | 
+14:25:22 | DEBUG | #4 [1/4] FROM docker.io/library/final-image-0e4f056f-e4c2-44ef-b20b-d5eef17f0876-dependencies:latest
+14:25:22 | DEBUG | #4 DONE 0.1s
+14:25:22 | DEBUG | 
+14:25:22 | DEBUG | #5 [2/4] WORKDIR /opt/build
+14:25:22 | DEBUG | #5 DONE 0.0s
+14:25:22 | DEBUG | 
+14:25:22 | DEBUG | #6 [3/4] RUN cd /opt/build
+14:25:23 | DEBUG | #6 DONE 0.4s
+14:25:23 | DEBUG | 
+14:25:23 | DEBUG | #7 [4/4] RUN npm run build
+14:25:23 | DEBUG | #7 0.882 
+14:25:23 | DEBUG | #7 0.882 > lawerapp-telegram-mini-app@0.1.0 build
+14:25:23 | DEBUG | #7 0.882 > next build --turbopack
+14:25:23 | DEBUG | #7 0.882 
+14:25:24 | DEBUG | #7 1.835 Attention: Next.js now collects completely anonymous telemetry regarding usage.
+14:25:25 | DEBUG | #7 1.836 This information is used to shape Next.js' roadmap and prioritize features.
+14:25:25 | DEBUG | #7 1.836 You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+14:25:25 | DEBUG | #7 1.836 https://nextjs.org/telemetry
+14:25:25 | DEBUG | #7 1.836 
+14:25:25 | DEBUG | #7 1.987    ▲ Next.js 15.5.6 (Turbopack)
+14:25:25 | DEBUG | #7 1.987 
+14:25:25 | DEBUG | #7 2.111    Creating an optimized production build ...
+14:25:32 | DEBUG | #7 9.169  ✓ Finished writing to disk in 35ms
+14:25:32 | DEBUG | #7 9.204  ✓ Compiled successfully in 6.3s
+14:25:32 | DEBUG | #7 9.214    Linting and checking validity of types ...
+14:25:35 | DEBUG | #7 12.89 
+14:25:35 | DEBUG | #7 12.89 Failed to compile.
+14:25:35 | DEBUG | #7 12.89 
+14:25:35 | DEBUG | #7 12.89 ./src/app/api/health/route.ts
+14:25:35 | DEBUG | #7 12.89 38:12  Warning: 'error' is defined but never used.  @typescript-eslint/no-unused-vars
+14:25:35 | DEBUG | #7 12.89 51:12  Warning: 'error' is defined but never used.  @typescript-eslint/no-unused-vars
+14:25:35 | DEBUG | #7 12.89 63:12  Warning: 'error' is defined but never used.  @typescript-eslint/no-unused-vars
+14:25:35 | DEBUG | #7 12.89 
+14:25:35 | DEBUG | #7 12.89 ./src/app/api/telegram/webhook/route.ts
+14:25:35 | DEBUG | #7 12.89 40:27  Warning: 'request' is defined but never used.  @typescript-eslint/no-unused-vars
+14:25:35 | DEBUG | #7 12.89 
+14:25:35 | DEBUG | #7 12.89 ./src/app/layout.tsx
+14:25:35 | DEBUG | #7 12.89 34:9  Error: Synchronous scripts should not be used. See: https://nextjs.org/docs/messages/no-sync-scripts  @next/next/no-sync-scripts
+14:25:35 | DEBUG | #7 12.89 
+14:25:35 | DEBUG | #7 12.89 ./src/app/test/page.tsx
+14:25:35 | DEBUG | #7 12.89 6:52  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+14:25:35 | DEBUG | #7 12.89 
+14:25:35 | DEBUG | #7 12.89 ./src/bot/telegram-bot.ts
+14:25:35 | DEBUG | #7 12.89 6:15  Warning: 'webhookCallback' is defined but never used.  @typescript-eslint/no-unused-vars
+14:25:35 | DEBUG | #7 12.89 
+14:25:35 | DEBUG | #7 12.89 ./src/lib/storage/s3-service.ts
+14:25:35 | DEBUG | #7 12.89 67:52  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+14:25:35 | DEBUG | #7 12.89 
+14:25:35 | DEBUG | #7 12.89 ./src/lib/storage/swift-service.ts
+14:25:35 | DEBUG | #7 12.89 67:52  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+14:25:35 | DEBUG | #7 12.89 
+14:25:35 | DEBUG | #7 12.89 ./src/types/index.ts
+14:25:35 | DEBUG | #7 12.89 155:34  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+14:25:35 | DEBUG | #7 12.89 168:28  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+14:25:35 | DEBUG | #7 12.89 
+14:25:35 | DEBUG | #7 12.89 info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+14:25:36 | DEBUG | #7 ERROR: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
+14:25:36 | DEBUG | ------
+14:25:36 | DEBUG |  > [4/4] RUN npm run build:
+14:25:36 | DEBUG | 12.89 67:52  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+14:25:36 | DEBUG | 12.89 
+14:25:36 | DEBUG | 12.89 ./src/lib/storage/swift-service.ts
+14:25:36 | DEBUG | 12.89 67:52  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+14:25:36 | DEBUG | 12.89 
+14:25:36 | DEBUG | 12.89 ./src/types/index.ts
+14:25:36 | DEBUG | 12.89 155:34  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+14:25:36 | DEBUG | 12.89 168:28  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+14:25:36 | DEBUG | 12.89 
+14:25:36 | DEBUG | 12.89 info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+14:25:36 | DEBUG | ------
+14:25:36 | DEBUG | Dockerfile:16
+14:25:36 | DEBUG | --------------------
+14:25:36 | DEBUG |   14 |     ENV OPENAI_API_KEY="your_openai_api_key_here"
+14:25:36 | DEBUG |   15 |     RUN cd /opt/build
+14:25:36 | DEBUG |   16 | >>> RUN npm run build
+14:25:36 | DEBUG |   17 |     
+14:25:36 | DEBUG | --------------------
+14:25:36 | DEBUG | ERROR: failed to solve: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
+14:25:36 | Layer None built successfully
+14:25:36 | ERROR | Deploy error

@@ -1,0 +1,163 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  telegramId String  @unique
+  username  String?
+  firstName String?
+  lastName  String?
+  languageCode String?
+  isPremium Boolean  @default(false)
+  photoUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  disputes Dispute[]
+  subscriptions Subscription[]
+  payments Payment[]
+  consultations AIConsultation[]
+  
+  @@map("users")
+}
+
+model Dispute {
+  id          String      @id @default(cuid())
+  title       String
+  description String
+  type        DisputeType
+  status      DisputeStatus @default(ACTIVE)
+  amount      Float?
+  deadline    DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  documents   Document[]
+  
+  @@map("disputes")
+}
+
+model Document {
+  id        String       @id @default(cuid())
+  title     String
+  content   String
+  type      DocumentType
+  metadata  Json?
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  
+  disputeId String
+  dispute   Dispute      @relation(fields: [disputeId], references: [id], onDelete: Cascade)
+  
+  @@map("documents")
+}
+
+model Subscription {
+  id            String           @id @default(cuid())
+  plan          SubscriptionPlan
+  status        SubscriptionStatus @default(PENDING)
+  startDate     DateTime
+  endDate       DateTime
+  autoRenew     Boolean          @default(true)
+  paymentMethod PaymentMethod
+  transactionId String?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  
+  userId        String
+  user          User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("subscriptions")
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  amount        Float
+  currency      String        @default("rub")
+  description   String
+  method        PaymentMethod
+  status        PaymentStatus @default(PENDING)
+  transactionId String?
+  metadata      Json?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  
+  userId        String
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("payments")
+}
+
+model AIConsultation {
+  id          String   @id @default(cuid())
+  query       String
+  response    String
+  confidence  Float
+  sources     String[]
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  
+  @@map("ai_consultations")
+}
+
+enum DisputeType {
+  CONSUMER_RIGHTS
+  CONTRACT_DISPUTE
+  SERVICE_QUALITY
+  DELIVERY_ISSUE
+  OTHER
+}
+
+enum DisputeStatus {
+  ACTIVE
+  RESOLVED
+  CLOSED
+  ESCALATED
+}
+
+enum DocumentType {
+  CLAIM
+  COMPLAINT
+  CONTRACT
+  OTHER
+}
+
+enum SubscriptionPlan {
+  FREE
+  PREMIUM
+  BUSINESS
+  STUDENT
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+  PENDING
+}
+
+enum PaymentMethod {
+  TELEGRAM_STARS
+  STRIPE
+  BANK_TRANSFER
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
