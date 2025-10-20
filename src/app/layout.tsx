@@ -78,6 +78,14 @@ export default function RootLayout({
               text-align: center !important;
               margin: 8px 0 !important;
               font-size: 14px !important;
+              user-select: none !important;
+              -webkit-tap-highlight-color: transparent !important;
+              touch-action: manipulation !important;
+            }
+            
+            .btn:active {
+              transform: scale(0.98) !important;
+              opacity: 0.8 !important;
             }
             
             .btn:hover {

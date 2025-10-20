@@ -1,11 +1,8 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 
 export default function Home() {
-  const router = useRouter();
-  
   // One-time cache busting only on first load
   useEffect(() => {
     if (typeof window !== 'undefined' && !sessionStorage.getItem('cacheBusted')) {
@@ -17,6 +14,42 @@ export default function Home() {
       }
     }
   }, []);
+
+  // Navigation function that works in Telegram WebApp
+  const navigateTo = (path: string) => {
+    console.log('Navigating to:', path);
+    if (typeof window !== 'undefined') {
+      try {
+        // For Telegram WebApp, use window.location for navigation
+        const baseUrl = window.location.origin;
+        const fullUrl = `${baseUrl}${path}`;
+        console.log('Full URL:', fullUrl);
+        window.location.href = fullUrl;
+      } catch (error) {
+        console.error('Navigation error:', error);
+        // Fallback to window.location
+        window.location.href = path;
+      }
+    }
+  };
+
+  // Handle button clicks with haptic feedback
+  const handleButtonClick = (path: string) => {
+    console.log('Button clicked, navigating to:', path);
+    
+    // Add haptic feedback if available
+    if (typeof window !== 'undefined' && (window as unknown as { Telegram?: { WebApp?: { HapticFeedback?: { impactOccurred: (type: string) => void } } } }).Telegram?.WebApp?.HapticFeedback) {
+      try {
+        (window as unknown as { Telegram: { WebApp: { HapticFeedback: { impactOccurred: (type: string) => void } } } }).Telegram.WebApp.HapticFeedback.impactOccurred('light');
+        console.log('Haptic feedback triggered');
+      } catch {
+        console.log('Haptic feedback not available');
+      }
+    }
+    
+    // Navigate to the path
+    navigateTo(path);
+  };
 
   return (
     <div style={{ padding: '16px', maxWidth: '100%' }}>
@@ -35,7 +68,11 @@ export default function Home() {
           <div className="card">
             <h2>AI Консультации</h2>
             <p>Получите правовую консультацию с помощью искусственного интеллекта</p>
-            <button className="btn" onClick={() => router.push('/consultations')}>
+            <button 
+              className="btn" 
+              onClick={() => handleButtonClick('/consultations')}
+              style={{ cursor: 'pointer' }}
+            >
               Открыть консультации
             </button>
           </div>
@@ -43,7 +80,11 @@ export default function Home() {
           <div className="card">
             <h2>Документы</h2>
             <p>Генерация правовых документов и шаблонов</p>
-            <button className="btn" onClick={() => router.push('/documents')}>
+            <button 
+              className="btn" 
+              onClick={() => handleButtonClick('/documents')}
+              style={{ cursor: 'pointer' }}
+            >
               Создать документ
             </button>
           </div>
@@ -51,7 +92,11 @@ export default function Home() {
           <div className="card">
             <h2>Споры</h2>
             <p>Управление правовыми спорами и делами</p>
-            <button className="btn" onClick={() => router.push('/disputes')}>
+            <button 
+              className="btn" 
+              onClick={() => handleButtonClick('/disputes')}
+              style={{ cursor: 'pointer' }}
+            >
               Управлять спорами
             </button>
           </div>
@@ -59,7 +104,11 @@ export default function Home() {
           <div className="card">
             <h2>Платежи</h2>
             <p>Интеграция с российскими платежными системами</p>
-            <button className="btn" onClick={() => router.push('/payments')}>
+            <button 
+              className="btn" 
+              onClick={() => handleButtonClick('/payments')}
+              style={{ cursor: 'pointer' }}
+            >
               Оплатить услуги
             </button>
           </div>
