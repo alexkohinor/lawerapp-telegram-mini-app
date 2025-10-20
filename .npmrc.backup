@@ -1,6 +1,6 @@
 # TimeWeb Cloud оптимизация
-fetch-timeout=600000
-fetch-retry-maxtime=600000
+fetch-timeout=300000
+fetch-retry-maxtime=300000
 fetch-retry-mintime=10000
 fetch-retries=5
 registry=https://registry.npmjs.org/
@@ -17,7 +17,3 @@ cache-min=3600000
 # Безопасность
 audit=false
 fund=false
-
-# Дополнительные оптимизации для TimeWeb
-prefer-offline=true
-prefer-dedupe=true

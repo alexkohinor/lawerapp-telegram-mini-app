@@ -1,18 +1,25 @@
+import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import Script from 'next/script';
-import { UserProvider } from '@/contexts/UserContext';
-import { TelegramThemeProvider } from '@/components/telegram/TelegramThemeProvider';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'LawerApp - Правовая помощь',
-  description: 'AI-консультации и управление спорами в Telegram',
-  keywords: ['правовая помощь', 'юрист', 'споры', 'AI', 'Telegram'],
-  authors: [{ name: 'LawerApp Team' }],
-  viewport: 'width=device-width, initial-scale=1',
-  robots: 'noindex, nofollow', // Telegram Mini App не должен индексироваться
+  description: 'Telegram Mini App для правовой помощи и консультаций',
+  manifest: '/manifest.json',
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/favicon.ico',
+  },
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: '#0088cc',
 };
 
 export default function RootLayout({
@@ -21,19 +28,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ru">
+    <html lang="ru" suppressHydrationWarning>
       <head>
-        <Script
+        <script
           src="https://telegram.org/js/telegram-web-app.js"
           async
         />
       </head>
       <body className={inter.className}>
-        <UserProvider>
-          <TelegramThemeProvider>
+          <div className="min-h-screen bg-gray-50">
             {children}
-          </TelegramThemeProvider>
-        </UserProvider>
+          </div>
       </body>
     </html>
   );

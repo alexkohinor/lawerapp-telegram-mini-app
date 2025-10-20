@@ -1,58 +1,26 @@
-# TimeWeb Cloud оптимизированный Dockerfile
+# Используем официальный Node.js образ
 FROM node:18-alpine
 
-# Установка системных зависимостей
-RUN apk add --no-cache \
-    openssl \
-    ca-certificates \
-    && rm -rf /var/cache/apk/*
-
-# Рабочая директория
+# Устанавливаем рабочую директорию
 WORKDIR /app
 
-# Копирование файлов конфигурации
-COPY package*.json .npmrc ./
-COPY .nvmrc ./
+# Копируем package.json и package-lock.json
+COPY package*.json ./
 
-# Установка зависимостей с оптимизацией
-RUN npm ci --omit=dev --prefer-offline --no-audit --no-fund \
-    && npm cache clean --force
+# Устанавливаем зависимости
+RUN npm ci --only=production
 
-# Копирование исходного кода
+# Копируем исходный код
 COPY . .
 
-# Генерация Prisma клиента (если нужно)
-RUN npx prisma generate || true
+# Генерируем Prisma клиент
+RUN npx prisma generate
 
-# Сборка приложения
+# Собираем приложение
 RUN npm run build
 
-# Создание директории для статических файлов
-RUN mkdir -p /app/out
+# Открываем порт
+EXPOSE 3000
 
-# Копирование собранных файлов
-RUN cp -r .next/server/app/* /app/out/ 2>/dev/null || true \
-    && cp -r public/* /app/out/ 2>/dev/null || true
-
-# Установка nginx для статических файлов
-RUN apk add --no-cache nginx
-
-# Конфигурация nginx
-RUN echo 'server { \
-    listen 80; \
-    root /app/out; \
-    index index.html; \
-    location / { \
-        try_files $uri $uri/ /index.html; \
-    } \
-    location /_next/static/ { \
-        expires 1y; \
-        add_header Cache-Control "public, immutable"; \
-    } \
-}' > /etc/nginx/http.d/default.conf
-
-# Открытие порта
-EXPOSE 80
-
-# Запуск nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Запускаем приложение
+CMD ["npm", "start"]
