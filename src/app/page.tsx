@@ -231,6 +231,9 @@ ${new Date().toLocaleDateString('ru-RU')}
         fontSize: '12px', 
         color: 'var(--tg-theme-hint-color, #6b7280)'
       }}>
+        <p style={{ margin: '0 0 5px 0' }}>
+          Бесплатно можно загрузить и проанализировать только один документ.
+        </p>
         <p style={{ margin: '0 0 10px 0' }}>
           Не является юридической услугой.
         </p>
