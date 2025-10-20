@@ -7,13 +7,13 @@ import { StickyBottomBar } from '@/components/ui/StickyBottomBar';
 export default function Home() {
   const router = useRouter();
   
-  // Force refresh for cache busting
+  // One-time cache busting only on first load
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      // Force reload with cache busting
+    if (typeof window !== 'undefined' && !sessionStorage.getItem('cacheBusted')) {
+      sessionStorage.setItem('cacheBusted', 'true');
       const currentUrl = new URL(window.location.href);
-      currentUrl.searchParams.set('v', Date.now().toString());
-      if (window.location.href !== currentUrl.toString()) {
+      if (!currentUrl.searchParams.has('v')) {
+        currentUrl.searchParams.set('v', Date.now().toString());
         window.location.href = currentUrl.toString();
       }
     }

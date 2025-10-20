@@ -31,13 +31,8 @@ export default function RootLayout({
   return (
     <html lang="ru" suppressHydrationWarning>
       <head>
-        <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0" />
-        <meta httpEquiv="Pragma" content="no-cache" />
-        <meta httpEquiv="Expires" content="0" />
-        <meta name="cache-control" content="no-cache" />
-        <meta name="expires" content="0" />
-        <meta name="pragma" content="no-cache" />
-        <meta name="version" content={`${Date.now()}`} />
+        <meta httpEquiv="Cache-Control" content="public, max-age=300" />
+        <meta name="version" content="1.0.0" />
         <script
           src="https://telegram.org/js/telegram-web-app.js"
           async
