@@ -236,9 +236,25 @@ ${new Date().toLocaleDateString('ru-RU')}
           fontSize: '12px', 
           color: 'var(--tg-theme-hint-color, #6b7280)'
         }}>
-          <p style={{ margin: '0 0 5px 0' }}>
-            Бесплатно можно загрузить и проанализировать только один документ.
-          </p>
+          {/* Ограничение на бесплатный анализ */}
+          <div style={{
+            padding: '12px',
+            background: '#fef3c7',
+            border: '1px solid #f59e0b',
+            borderRadius: '8px',
+            marginBottom: '20px',
+            fontSize: '13px',
+            color: '#92400e'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+              <span style={{ fontSize: '16px' }}>⚠️</span>
+              <strong>Бесплатно можно загрузить и проанализировать только один документ</strong>
+            </div>
+            <p style={{ margin: 0, fontSize: '12px' }}>
+              Для анализа дополнительных документов обратитесь к адвокату.
+            </p>
+          </div>
+          
           <p style={{ margin: '0 0 10px 0' }}>
             Не является юридической услугой.
           </p>

@@ -254,24 +254,6 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
         Сфотографируйте документ или загрузите файл. ИИ-ассистент проанализирует его и предложит решение.
       </p>
 
-      {/* Ограничение на бесплатный анализ */}
-      <div style={{
-        padding: '12px',
-        background: '#fef3c7',
-        border: '1px solid #f59e0b',
-        borderRadius: '8px',
-        marginBottom: '20px',
-        fontSize: '13px',
-        color: '#92400e'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-          <span style={{ fontSize: '16px' }}>⚠️</span>
-          <strong>Бесплатно можно загрузить и проанализировать только один документ</strong>
-        </div>
-        <p style={{ margin: 0, fontSize: '12px' }}>
-          Для анализа дополнительных документов обратитесь к адвокату.
-        </p>
-      </div>
       
       {/* Переключатель для многостраничных документов */}
       <div style={{ marginBottom: '20px' }}>
