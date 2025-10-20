@@ -175,7 +175,7 @@ export default function ConsultationsPage() {
       </Card>
 
       {/* Preset chips */}
-      <div className="section" style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      <div className="section wrap-chips">
         {presets.map((p) => (
           <button key={p} className="chip" onClick={() => setInputText(p)}>{p}</button>
         ))}
@@ -204,7 +204,7 @@ export default function ConsultationsPage() {
             className="btn-primary"
             onClick={handleSendMessage}
             disabled={!inputText.trim() || isLoading}
-            style={{ minWidth: 120 }}
+            style={{ minWidth: 120, maxWidth: '40%' }}
           >
             {isLoading ? 'Отправка…' : 'Отправить'}
           </button>
