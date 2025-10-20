@@ -37,7 +37,6 @@ export interface DocumentUploadProps {
 
 export interface ExtractedDataProps {
   data: ExtractedData;
-  onEdit: (field: string, value: string) => void;
   onConfirm: () => void;
 }
 

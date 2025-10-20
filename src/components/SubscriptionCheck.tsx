@@ -92,7 +92,7 @@ export const SubscriptionCheck: React.FC<SubscriptionCheckProps> = ({
       setIsChecking(true);
       
       const isSubscribed = await checkTelegramSubscription();
-      const hasLimit = checkDocumentLimit();
+      checkDocumentLimit();
       
       if (!isSubscribed) {
         setShowSubscriptionModal(true);
@@ -380,10 +380,7 @@ interface DocumentLimitManagerProps {
   subscriptionStatus: SubscriptionStatus;
 }
 
-const DocumentLimitManager: React.FC<DocumentLimitManagerProps> = ({
-  onDocumentUsed,
-  subscriptionStatus
-}) => {
+const DocumentLimitManager: React.FC<DocumentLimitManagerProps> = () => {
   // Этот компонент будет использоваться для отслеживания использования документов
   return null;
 };

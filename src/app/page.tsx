@@ -17,14 +17,13 @@ export default function Home() {
   const [selectedSolution, setSelectedSolution] = useState<Solution | null>(null);
   const [generatedDocument, setGeneratedDocument] = useState<string>('');
 
-  const handleDocumentUploaded = (file: File, type: 'camera' | 'file') => {
-    console.log('Document uploaded:', file.name, type);
+  const handleDocumentUploaded = (_file: File, _type: 'camera' | 'file') => {
+    // Document uploaded successfully
   };
 
   const handleAnalysisComplete = (data: ExtractedDataType) => {
     setExtractedData(data);
     setCurrentStep('extracted');
-    console.log('Analysis complete:', data);
   };
 
   const handleDataConfirmed = () => {
@@ -33,7 +32,6 @@ export default function Home() {
 
   const handleSolutionSelected = (solution: Solution) => {
     setSelectedSolution(solution);
-    console.log('Solution selected:', solution);
   };
 
   const handleGenerateDocument = (solution: Solution) => {
@@ -41,7 +39,6 @@ export default function Home() {
     const document = generateDocument(extractedData!, solution);
     setGeneratedDocument(document);
     setCurrentStep('export');
-    console.log('Document generated:', document);
   };
 
   const generateDocument = (data: ExtractedDataType, solution: Solution) => {
@@ -81,8 +78,7 @@ ${new Date().toLocaleDateString('ru-RU')}
     `.trim();
   };
 
-  const handleExport = (format: 'docx' | 'pdf') => {
-    console.log('Exporting document in format:', format);
+  const handleExport = (_format: 'docx' | 'pdf') => {
     // В реальном приложении здесь был бы вызов API для экспорта
   };
 
@@ -107,10 +103,6 @@ ${new Date().toLocaleDateString('ru-RU')}
         return extractedData ? (
           <ExtractedData
             data={extractedData}
-            onEdit={(field, value) => {
-              // В реальном приложении здесь была бы логика редактирования
-              console.log('Edit field:', field, value);
-            }}
             onConfirm={handleDataConfirmed}
           />
         ) : null;
@@ -140,11 +132,11 @@ ${new Date().toLocaleDateString('ru-RU')}
 
   return (
     <SubscriptionCheck
-      onSubscriptionVerified={(isSubscribed) => {
-        console.log('Subscription verified:', isSubscribed);
+      onSubscriptionVerified={(_isSubscribed) => {
+        // Subscription verified
       }}
       onLimitExceeded={() => {
-        console.log('Document limit exceeded');
+        // Document limit exceeded
       }}
     >
       <div style={{ padding: '20px', maxWidth: '100%' }}>

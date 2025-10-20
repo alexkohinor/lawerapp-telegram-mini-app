@@ -145,7 +145,6 @@ export default function DisputesPage() {
 
   const handleCreateDispute = () => {
     // TODO: Navigate to create dispute page
-    console.log('Create new dispute');
   };
 
   const formatDate = (date: Date | string) => {

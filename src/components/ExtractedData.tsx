@@ -5,7 +5,6 @@ import { ExtractedDataProps } from '@/types/document';
 
 export const ExtractedData: React.FC<ExtractedDataProps> = ({
   data,
-  onEdit,
   onConfirm
 }) => {
   const getConfidenceColor = (confidence: number) => {
