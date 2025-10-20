@@ -80,26 +80,44 @@ ${new Date().toLocaleDateString('ru-RU')}
     switch (currentStep) {
       case 0:
         return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Выберите тип документа</h3>
-            <div className="radio-group">
+          <div className="spacing-responsive">
+            <h3>Выберите тип документа</h3>
+            <div className="grid-responsive">
               {documentTypes.map((type) => (
                 <div
                   key={type.id}
-                  className={`radio-item ${form.type === type.id ? 'selected' : ''}`}
+                  className={`card-responsive ${form.type === type.id ? 'selected' : ''}`}
                   onClick={() => setForm(prev => ({ ...prev, type: type.id }))}
+                  style={{
+                    cursor: 'pointer',
+                    border: form.type === type.id ? '2px solid var(--tg-theme-button-color, #2563eb)' : '1px solid #e5e7eb',
+                    background: form.type === type.id ? 'rgba(37, 99, 235, 0.05)' : 'var(--tg-theme-bg-color, #ffffff)'
+                  }}
                 >
-                  <input
-                    type="radio"
-                    name="documentType"
-                    value={type.id}
-                    checked={form.type === type.id}
-                    onChange={() => setForm(prev => ({ ...prev, type: type.id }))}
-                    className="radio-input"
-                  />
-                  <div className="radio-content">
-                    <div className="radio-title">{type.name}</div>
-                    <div className="radio-description">{type.description}</div>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                    <input
+                      type="radio"
+                      name="documentType"
+                      value={type.id}
+                      checked={form.type === type.id}
+                      onChange={() => setForm(prev => ({ ...prev, type: type.id }))}
+                      style={{
+                        margin: 0,
+                        width: '16px',
+                        height: '16px',
+                        accentColor: 'var(--tg-theme-button-color, #2563eb)',
+                        flexShrink: 0,
+                        marginTop: '2px'
+                      }}
+                    />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div className="text-responsive" style={{ fontWeight: 600, marginBottom: '4px' }}>
+                        {type.name}
+                      </div>
+                      <div className="text-small-responsive" style={{ color: 'var(--tg-theme-hint-color, #6b7280)' }}>
+                        {type.description}
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -109,118 +127,138 @@ ${new Date().toLocaleDateString('ru-RU')}
 
       case 1:
         return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Основная информация</h3>
-            <div>
-              <label className="label">Название документа</label>
-              <input
-                type="text"
-                className="input"
-                value={form.title}
-                onChange={(e) => setForm(prev => ({ ...prev, title: e.target.value }))}
-                placeholder="Введите название"
-              />
-            </div>
-            <div>
-              <label className="label">Описание ситуации</label>
-              <textarea
-                className="textarea"
-                rows={4}
-                value={form.description}
-                onChange={(e) => setForm(prev => ({ ...prev, description: e.target.value }))}
-                placeholder="Опишите ситуацию подробно"
-              />
+          <div className="spacing-responsive">
+            <h3>Основная информация</h3>
+            <div className="grid-responsive">
+              <div>
+                <label className="text-responsive" style={{ display: 'block', marginBottom: '8px', fontWeight: 500 }}>
+                  Название документа
+                </label>
+                <input
+                  type="text"
+                  className="input"
+                  value={form.title}
+                  onChange={(e) => setForm(prev => ({ ...prev, title: e.target.value }))}
+                  placeholder="Введите название"
+                />
+              </div>
+              <div>
+                <label className="text-responsive" style={{ display: 'block', marginBottom: '8px', fontWeight: 500 }}>
+                  Описание ситуации
+                </label>
+                <textarea
+                  className="textarea"
+                  rows={4}
+                  value={form.description}
+                  onChange={(e) => setForm(prev => ({ ...prev, description: e.target.value }))}
+                  placeholder="Опишите ситуацию подробно"
+                />
+              </div>
             </div>
           </div>
         );
 
       case 2:
         return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Стороны договора</h3>
-            {form.parties.map((party, index) => (
-              <div key={index} className="p-4 border rounded-lg">
-                <h4 className="font-medium mb-3">
-                  {index === 0 ? 'Продавец/Исполнитель' : 'Покупатель/Заказчик'}
-                </h4>
-                <div className="space-y-3">
-                  <div>
-                    <label className="label">ФИО/Название</label>
-                    <input
-                      type="text"
-                      className="input"
-                      value={party.name}
-                      onChange={(e) => {
-                        const newParties = [...form.parties];
-                        newParties[index] = { ...party, name: e.target.value };
-                        setForm(prev => ({ ...prev, parties: newParties }));
-                      }}
-                      placeholder="Введите ФИО или название организации"
-                    />
-                  </div>
-                  <div>
-                    <label className="label">Адрес</label>
-                    <input
-                      type="text"
-                      className="input"
-                      value={party.address}
-                      onChange={(e) => {
-                        const newParties = [...form.parties];
-                        newParties[index] = { ...party, address: e.target.value };
-                        setForm(prev => ({ ...prev, parties: newParties }));
-                      }}
-                      placeholder="Введите адрес"
-                    />
-                  </div>
-                  <div>
-                    <label className="label">Телефон</label>
-                    <input
-                      type="text"
-                      className="input"
-                      value={party.phone}
-                      onChange={(e) => {
-                        const newParties = [...form.parties];
-                        newParties[index] = { ...party, phone: e.target.value };
-                        setForm(prev => ({ ...prev, parties: newParties }));
-                      }}
-                      placeholder="Введите телефон"
-                    />
+          <div className="spacing-responsive">
+            <h3>Стороны договора</h3>
+            <div className="grid-responsive">
+              {form.parties.map((party, index) => (
+                <div key={index} className="card-responsive">
+                  <h4 className="text-responsive" style={{ fontWeight: 600, marginBottom: '12px' }}>
+                    {index === 0 ? 'Продавец/Исполнитель' : 'Покупатель/Заказчик'}
+                  </h4>
+                  <div className="spacing-responsive">
+                    <div>
+                      <label className="text-responsive" style={{ display: 'block', marginBottom: '8px', fontWeight: 500 }}>
+                        ФИО/Название
+                      </label>
+                      <input
+                        type="text"
+                        className="input"
+                        value={party.name}
+                        onChange={(e) => {
+                          const newParties = [...form.parties];
+                          newParties[index] = { ...party, name: e.target.value };
+                          setForm(prev => ({ ...prev, parties: newParties }));
+                        }}
+                        placeholder="Введите ФИО или название организации"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-responsive" style={{ display: 'block', marginBottom: '8px', fontWeight: 500 }}>
+                        Адрес
+                      </label>
+                      <input
+                        type="text"
+                        className="input"
+                        value={party.address}
+                        onChange={(e) => {
+                          const newParties = [...form.parties];
+                          newParties[index] = { ...party, address: e.target.value };
+                          setForm(prev => ({ ...prev, parties: newParties }));
+                        }}
+                        placeholder="Введите адрес"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-responsive" style={{ display: 'block', marginBottom: '8px', fontWeight: 500 }}>
+                        Телефон
+                      </label>
+                      <input
+                        type="text"
+                        className="input"
+                        value={party.phone}
+                        onChange={(e) => {
+                          const newParties = [...form.parties];
+                          newParties[index] = { ...party, phone: e.target.value };
+                          setForm(prev => ({ ...prev, parties: newParties }));
+                        }}
+                        placeholder="Введите телефон"
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         );
 
       case 3:
         return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Дополнительные детали</h3>
-            <div>
-              <label className="label">Ваше требование</label>
-              <input
-                type="text"
-                className="input"
-                value={form.details.demand || ''}
-                onChange={(e) => setForm(prev => ({ 
-                  ...prev, 
-                  details: { ...prev.details, demand: e.target.value }
-                }))}
-                placeholder="Что именно вы требуете?"
-              />
-            </div>
-            <div>
-              <label className="label">Сумма (если применимо)</label>
-              <input
-                type="text"
-                className="input"
-                value={form.details.amount || ''}
-                onChange={(e) => setForm(prev => ({ 
-                  ...prev, 
-                  details: { ...prev.details, amount: e.target.value }
-                }))}
-                placeholder="Введите сумму в рублях"
-              />
+          <div className="spacing-responsive">
+            <h3>Дополнительные детали</h3>
+            <div className="grid-responsive">
+              <div>
+                <label className="text-responsive" style={{ display: 'block', marginBottom: '8px', fontWeight: 500 }}>
+                  Ваше требование
+                </label>
+                <input
+                  type="text"
+                  className="input"
+                  value={form.details.demand || ''}
+                  onChange={(e) => setForm(prev => ({ 
+                    ...prev, 
+                    details: { ...prev.details, demand: e.target.value }
+                  }))}
+                  placeholder="Что именно вы требуете?"
+                />
+              </div>
+              <div>
+                <label className="text-responsive" style={{ display: 'block', marginBottom: '8px', fontWeight: 500 }}>
+                  Сумма (если применимо)
+                </label>
+                <input
+                  type="text"
+                  className="input"
+                  value={form.details.amount || ''}
+                  onChange={(e) => setForm(prev => ({ 
+                    ...prev, 
+                    details: { ...prev.details, amount: e.target.value }
+                  }))}
+                  placeholder="Введите сумму в рублях"
+                />
+              </div>
             </div>
           </div>
         );
@@ -248,23 +286,46 @@ ${new Date().toLocaleDateString('ru-RU')}
         </Card>
       </div>
 
-      <div className="section">
-        <div className="flex justify-between">
+      <div className="spacing-responsive">
+        <div className="nav-responsive">
           <button
-            className="btn-outline"
+            className="nav-item"
             onClick={handlePrev}
             disabled={currentStep === 0}
+            style={{ 
+              flex: '0 0 auto',
+              minWidth: '80px',
+              maxWidth: '120px'
+            }}
           >
-            Назад
+            ← Назад
           </button>
           
+          <div style={{ flex: '1 1 auto', minWidth: 0 }}></div>
+          
           {currentStep === steps.length - 1 ? (
-            <button className="btn" onClick={handleGenerate}>
-              Сгенерировать документ
+            <button 
+              className="nav-item active" 
+              onClick={handleGenerate}
+              style={{ 
+                flex: '0 0 auto',
+                minWidth: '120px',
+                maxWidth: '160px'
+              }}
+            >
+              Сгенерировать
             </button>
           ) : (
-            <button className="btn" onClick={handleNext}>
-              Далее
+            <button 
+              className="nav-item active" 
+              onClick={handleNext}
+              style={{ 
+                flex: '0 0 auto',
+                minWidth: '80px',
+                maxWidth: '120px'
+              }}
+            >
+              Далее →
             </button>
           )}
         </div>

@@ -53,6 +53,168 @@ export default function RootLayout({
               background: var(--tg-theme-bg-color, #ffffff) !important;
               color: var(--tg-theme-text-color, #111827) !important;
               font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+              font-size: 14px !important;
+              line-height: 1.5 !important;
+              -webkit-text-size-adjust: 100% !important;
+              -ms-text-size-adjust: 100% !important;
+              text-rendering: optimizeLegibility !important;
+              -webkit-font-smoothing: antialiased !important;
+              -moz-osx-font-smoothing: grayscale !important;
+            }
+            
+            /* Адаптивная типографика */
+            h1 {
+              font-size: clamp(20px, 4vw, 28px) !important;
+              font-weight: 700 !important;
+              line-height: 1.2 !important;
+              margin: 0 0 16px 0 !important;
+              word-wrap: break-word !important;
+              overflow-wrap: break-word !important;
+              hyphens: auto !important;
+            }
+            
+            h2 {
+              font-size: clamp(16px, 3.5vw, 20px) !important;
+              font-weight: 600 !important;
+              line-height: 1.3 !important;
+              margin: 0 0 12px 0 !important;
+              word-wrap: break-word !important;
+              overflow-wrap: break-word !important;
+            }
+            
+            h3 {
+              font-size: clamp(14px, 3vw, 18px) !important;
+              font-weight: 600 !important;
+              line-height: 1.4 !important;
+              margin: 0 0 8px 0 !important;
+              word-wrap: break-word !important;
+              overflow-wrap: break-word !important;
+            }
+            
+            p {
+              font-size: clamp(12px, 2.5vw, 14px) !important;
+              line-height: 1.5 !important;
+              margin: 0 0 12px 0 !important;
+              word-wrap: break-word !important;
+              overflow-wrap: break-word !important;
+            }
+            
+            /* Адаптивные контейнеры */
+            .container {
+              width: 100% !important;
+              max-width: 100% !important;
+              margin: 0 auto !important;
+              padding: 0 16px !important;
+              box-sizing: border-box !important;
+            }
+            
+            .container-narrow {
+              width: 100% !important;
+              max-width: 100% !important;
+              margin: 0 auto !important;
+              padding: 16px !important;
+              box-sizing: border-box !important;
+            }
+            
+            /* Адаптивная сетка */
+            .grid-responsive {
+              display: grid !important;
+              grid-template-columns: 1fr !important;
+              gap: 16px !important;
+              width: 100% !important;
+            }
+            
+            @media (min-width: 480px) {
+              .grid-responsive {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+              }
+            }
+            
+            /* Адаптивные кнопки */
+            .btn-responsive {
+              width: 100% !important;
+              min-width: 0 !important;
+              padding: 12px 16px !important;
+              font-size: clamp(12px, 2.5vw, 14px) !important;
+              white-space: nowrap !important;
+              overflow: hidden !important;
+              text-overflow: ellipsis !important;
+              box-sizing: border-box !important;
+            }
+            
+            /* Адаптивная навигация */
+            .nav-responsive {
+              display: flex !important;
+              width: 100% !important;
+              gap: 8px !important;
+              overflow-x: auto !important;
+              -webkit-overflow-scrolling: touch !important;
+              scrollbar-width: none !important;
+              -ms-overflow-style: none !important;
+            }
+            
+            .nav-responsive::-webkit-scrollbar {
+              display: none !important;
+            }
+            
+            .nav-item {
+              flex: 1 !important;
+              min-width: 0 !important;
+              padding: 8px 12px !important;
+              font-size: clamp(11px, 2.2vw, 13px) !important;
+              white-space: nowrap !important;
+              overflow: hidden !important;
+              text-overflow: ellipsis !important;
+              text-align: center !important;
+              border-radius: 8px !important;
+              transition: all 0.2s ease !important;
+              box-sizing: border-box !important;
+            }
+            
+            .nav-item.active {
+              background: var(--tg-theme-button-color, #2563eb) !important;
+              color: var(--tg-theme-button-text-color, #ffffff) !important;
+            }
+            
+            .nav-item:not(.active) {
+              background: var(--tg-theme-secondary-bg-color, #f3f4f6) !important;
+              color: var(--tg-theme-text-color, #111827) !important;
+            }
+            
+            /* Адаптивные карточки */
+            .card-responsive {
+              width: 100% !important;
+              padding: 16px !important;
+              margin: 8px 0 !important;
+              border-radius: 12px !important;
+              box-sizing: border-box !important;
+              word-wrap: break-word !important;
+              overflow-wrap: break-word !important;
+            }
+            
+            /* Адаптивный текст */
+            .text-responsive {
+              font-size: clamp(12px, 2.5vw, 14px) !important;
+              line-height: 1.5 !important;
+              word-wrap: break-word !important;
+              overflow-wrap: break-word !important;
+              hyphens: auto !important;
+            }
+            
+            .text-small-responsive {
+              font-size: clamp(10px, 2vw, 12px) !important;
+              line-height: 1.4 !important;
+              word-wrap: break-word !important;
+              overflow-wrap: break-word !important;
+            }
+            
+            /* Адаптивные отступы */
+            .spacing-responsive {
+              margin: clamp(8px, 2vw, 16px) 0 !important;
+            }
+            
+            .padding-responsive {
+              padding: clamp(12px, 3vw, 16px) !important;
             }
             
             .card {

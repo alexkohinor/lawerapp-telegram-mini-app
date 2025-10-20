@@ -38,92 +38,74 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ title, showBack = false, o
       padding: '8px 16px', 
       position: 'sticky', 
       top: 0, 
-      background: 'var(--telegram-bg)', 
+      background: 'var(--tg-theme-bg-color, #ffffff)', 
       zIndex: 10, 
-      borderBottom: '1px solid var(--telegram-border)',
-      minHeight: '44px'
+      borderBottom: '1px solid #e5e7eb',
+      minHeight: '44px',
+      boxSizing: 'border-box'
     }}>
-      <div className="container-narrow" style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        gap: 4, 
-        justifyContent: 'space-between',
-        minWidth: 0
-      }}>
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: 4,
-          flex: 1,
-          minWidth: 0
+      <div className="nav-responsive">
+        {showBack && (
+          <button
+            onClick={onBack}
+            className="nav-item"
+            style={{ 
+              flex: '0 0 auto',
+              minWidth: '60px',
+              maxWidth: '80px'
+            }}
+            aria-label="Назад"
+          >
+            ← Назад
+          </button>
+        )}
+        
+        <div className="nav-item active" style={{ 
+          flex: '1 1 auto',
+          minWidth: 0,
+          maxWidth: 'none'
         }}>
-          {showBack && (
-            <button
-              onClick={onBack}
-              className="btn-outline hit-lg"
-              style={{ 
-                height: 32, 
-                padding: '0 8px',
-                fontSize: '12px',
-                flexShrink: 0
-              }}
-              aria-label="Назад"
-            >
-              ←
-            </button>
-          )}
-          <h1 className="text-lg" style={{ 
-            fontWeight: 600, 
-            margin: 0,
-            flex: 1,
-            textAlign: 'center',
-            whiteSpace: 'nowrap',
+          <span style={{
+            display: 'block',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            minWidth: 0
+            whiteSpace: 'nowrap'
           }}>
             {title}
-          </h1>
+          </span>
         </div>
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: 4,
-          flexShrink: 0
-        }}>
-          {showHome && (
-            <a 
-              href={homeHref} 
-              className="btn-outline hit-lg" 
-              style={{ 
-                height: 32, 
-                padding: '0 8px', 
-                textDecoration: 'none',
-                fontSize: '12px',
-                whiteSpace: 'nowrap'
-              }}
-            >
-              Домой
-            </a>
-          )}
-          {showContact && (
-            <a 
-              href={contactHref} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="btn-primary hit-lg" 
-              style={{ 
-                height: 32, 
-                padding: '0 8px', 
-                textDecoration: 'none',
-                fontSize: '12px',
-                whiteSpace: 'nowrap'
-              }}
-            >
-              Конт
-            </a>
-          )}
-        </div>
+        
+        {showHome && (
+          <a 
+            href={homeHref} 
+            className="nav-item"
+            style={{ 
+              flex: '0 0 auto',
+              minWidth: '60px',
+              maxWidth: '80px',
+              textDecoration: 'none'
+            }}
+          >
+            Домой
+          </a>
+        )}
+        
+        {showContact && (
+          <a 
+            href={contactHref} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="nav-item"
+            style={{ 
+              flex: '0 0 auto',
+              minWidth: '60px',
+              maxWidth: '80px',
+              textDecoration: 'none'
+            }}
+          >
+            Конт
+          </a>
+        )}
       </div>
     </div>
   );
