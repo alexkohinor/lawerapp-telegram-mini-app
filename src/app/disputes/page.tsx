@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { Modal } from '@/components/ui/Modal';
+import { AppHeader } from '@/components/ui/AppHeader';
 
 interface Dispute {
   id: string;
@@ -201,22 +202,12 @@ export default function DisputesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="mb-6 flex justify-between items-center">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              Управление спорами
-            </h1>
-            <p className="text-gray-600">
-              Отслеживайте и управляйте вашими правовыми спорами
-            </p>
-          </div>
-          <Button onClick={() => setShowCreateModal(true)}>
-            Создать спор
-          </Button>
-        </div>
+    <div className="container-narrow">
+      <AppHeader title="Управление спорами" showBack onBack={() => history.back()} />
+      <div className="section" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="text-muted">Отслеживайте и управляйте вашими правовыми спорами</div>
+        <Button onClick={() => setShowCreateModal(true)}>Создать спор</Button>
+      </div>
 
         {/* Disputes List */}
         {disputes.length === 0 ? (

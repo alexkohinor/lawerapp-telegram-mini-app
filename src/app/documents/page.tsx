@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { Modal } from '@/components/ui/Modal';
+import { AppHeader } from '@/components/ui/AppHeader';
 
 interface DocumentForm {
   type: string;
@@ -367,17 +368,9 @@ export default function DocumentsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Генерация документов
-          </h1>
-          <p className="text-gray-600">
-            Создавайте правовые документы с помощью AI
-          </p>
-        </div>
+    <div className="container-narrow">
+      <AppHeader title="Генерация документов" showBack onBack={() => history.back()} />
+      <div className="section text-muted">Создавайте правовые документы с помощью AI</div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Document Generation Form */}

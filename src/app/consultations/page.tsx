@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { StickyBottomBar } from '@/components/ui/StickyBottomBar';
+import { AppHeader } from '@/components/ui/AppHeader';
 
 interface Message {
   id: string;
@@ -124,10 +125,8 @@ export default function ConsultationsPage() {
 
   return (
     <div className="container-narrow">
-      <div className="section">
-        <h1 className="text-xl" style={{ fontWeight: 700, marginBottom: 8 }}>AI Консультации</h1>
-        <div className="text-muted">Получите правовую консультацию с помощью искусственного интеллекта</div>
-      </div>
+      <AppHeader title="AI Консультации" showBack onBack={() => history.back()} />
+      <div className="section text-muted">Получите правовую консультацию с помощью искусственного интеллекта</div>
 
       <Card>
         <div style={{ height: 480, overflowY: 'auto', padding: 12 }}>
