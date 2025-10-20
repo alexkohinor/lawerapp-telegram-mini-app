@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',       // Изменено для поддержки API routes
+  output: 'export',           // Статический экспорт для TimeWeb Cloud
   trailingSlash: true,        // ОБЯЗАТЕЛЬНО для TimeWeb Cloud
   images: {
     unoptimized: true,        // ОБЯЗАТЕЛЬНО для статического экспорта

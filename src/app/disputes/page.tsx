@@ -37,29 +37,91 @@ export default function DisputesPage() {
   const [error, setError] = useState<string | null>(null);
   const [pagination, setPagination] = useState<DisputesResponse['pagination'] | null>(null);
 
+  // Mock данные для споров
+  const mockDisputes: Dispute[] = [
+    {
+      id: '1',
+      title: 'Возврат товара ненадлежащего качества',
+      description: 'Купил телефон, но он не работает. Продавец отказывается возвращать деньги.',
+      type: 'CONSUMER',
+      status: 'ACTIVE',
+      priority: 'HIGH',
+      amount: 25000,
+      createdAt: new Date('2024-01-15'),
+      updatedAt: new Date('2024-01-20'),
+      resolvedAt: null,
+      userId: 'user1',
+      documents: [],
+      timeline: []
+    },
+    {
+      id: '2',
+      title: 'Нарушение трудовых прав',
+      description: 'Работодатель не выплачивает зарплату уже 2 месяца.',
+      type: 'LABOR',
+      status: 'PENDING',
+      priority: 'MEDIUM',
+      amount: 150000,
+      createdAt: new Date('2024-01-10'),
+      updatedAt: new Date('2024-01-18'),
+      resolvedAt: null,
+      userId: 'user1',
+      documents: [],
+      timeline: []
+    },
+    {
+      id: '3',
+      title: 'Спор с ЖКХ',
+      description: 'Управляющая компания начисляет неправильные суммы за коммунальные услуги.',
+      type: 'PROPERTY',
+      status: 'RESOLVED',
+      priority: 'LOW',
+      amount: 5000,
+      createdAt: new Date('2024-01-05'),
+      updatedAt: new Date('2024-01-25'),
+      resolvedAt: new Date('2024-01-25'),
+      userId: 'user1',
+      documents: [],
+      timeline: []
+    }
+  ];
+
   const fetchDisputes = async (filters: DisputeFilters = {}) => {
     try {
       setLoading(true);
       setError(null);
 
-      const params = new URLSearchParams();
-      if (filters.status) params.append('status', filters.status);
-      if (filters.type) params.append('type', filters.type);
-      if (filters.priority) params.append('priority', filters.priority);
-      if (filters.page) params.append('page', filters.page.toString());
-      if (filters.limit) params.append('limit', filters.limit.toString());
-      if (filters.sortBy) params.append('sortBy', filters.sortBy);
-      if (filters.sortOrder) params.append('sortOrder', filters.sortOrder);
-
-      const response = await fetch(`/api/disputes?${params.toString()}`);
+      // Фильтрация mock данных
+      let filteredDisputes = [...mockDisputes];
       
-      if (!response.ok) {
-        throw new Error('Failed to fetch disputes');
+      if (filters.status) {
+        filteredDisputes = filteredDisputes.filter(d => d.status === filters.status);
+      }
+      
+      if (filters.type) {
+        filteredDisputes = filteredDisputes.filter(d => d.type === filters.type);
+      }
+      
+      if (filters.priority) {
+        filteredDisputes = filteredDisputes.filter(d => d.priority === filters.priority);
       }
 
-      const data: DisputesResponse = await response.json();
-      setDisputes(data.data);
-      setPagination(data.pagination);
+      // Пагинация
+      const page = filters.page || 1;
+      const limit = filters.limit || 10;
+      const startIndex = (page - 1) * limit;
+      const endIndex = startIndex + limit;
+      const paginatedDisputes = filteredDisputes.slice(startIndex, endIndex);
+
+      setDisputes(paginatedDisputes);
+      setPagination({
+        page,
+        limit,
+        total: filteredDisputes.length,
+        totalPages: Math.ceil(filteredDisputes.length / limit),
+        hasNextPage: endIndex < filteredDisputes.length,
+        hasPrevPage: page > 1
+      });
     } catch (err) {
       console.error('Error fetching disputes:', err);
       setError(err instanceof Error ? err.message : 'Unknown error');
