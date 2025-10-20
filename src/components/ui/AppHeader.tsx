@@ -14,7 +14,11 @@ interface AppHeaderProps {
 
 export const AppHeader: React.FC<AppHeaderProps> = ({ title, showBack = false, onBack, showHome = true, homeHref = '/', showContact = true, contactHref = 'https://t.me/+79688398919' }) => {
   useEffect(() => {
-    const tg = (typeof window !== 'undefined' ? (window as any).Telegram?.WebApp : undefined);
+    const w = typeof window !== 'undefined' ? window : undefined;
+    // Narrow types without 'any'
+    type TGWebApp = { BackButton: { show: () => void; hide: () => void; onClick: (cb: () => void) => void } };
+    type TGGlobal = { Telegram?: { WebApp?: TGWebApp } };
+    const tg = (w && (w as unknown as TGGlobal).Telegram?.WebApp) as TGWebApp | undefined;
     if (!tg) return;
     if (showBack) {
       tg.BackButton.show();
