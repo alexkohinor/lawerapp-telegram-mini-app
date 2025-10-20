@@ -1,11 +1,20 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { StickyBottomBar } from '@/components/ui/StickyBottomBar';
 
 export default function Home() {
   const router = useRouter();
+  
+  // Force refresh for cache busting
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.location.reload = () => {
+        window.location.href = window.location.href + '?v=' + Date.now();
+      };
+    }
+  }, []);
 
   return (
     <div className="container-narrow">
