@@ -124,6 +124,16 @@ body {
   color: var(--telegram-text);
 }
 
+/* Focus visibility for accessibility */
+.btn-primary:focus-visible,
+.btn-outline:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--telegram-link);
+  outline-offset: 2px;
+  border-radius: var(--radius-12);
+}
+
 .grid-1 {
   display: grid;
   grid-template-columns: 1fr;
@@ -169,10 +179,16 @@ body {
 .chip {
   display: inline-flex;
   align-items: center;
-  height: 32px;
+  height: 36px;
   padding: 0 var(--space-12);
   border-radius: 9999px;
   border: 1px solid var(--telegram-border);
   background: var(--telegram-secondary);
   font-size: var(--fs-sm);
+}
+
+/* Hit-area utility */
+.hit-lg {
+  min-width: 44px;
+  min-height: 44px;
 }
