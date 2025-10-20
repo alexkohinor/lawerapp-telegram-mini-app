@@ -317,3 +317,92 @@ a:focus-visible {
     min-height: 36px;
   }
 }
+
+/* Stepper component */
+.stepper {
+  margin: var(--space-24) 0;
+}
+
+.stepper-progress {
+  position: relative;
+  height: 4px;
+  background: var(--telegram-border);
+  border-radius: 2px;
+  margin-bottom: var(--space-16);
+}
+
+.stepper-progress-bar {
+  height: 100%;
+  background: var(--telegram-accent);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.stepper-steps {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.stepper-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+
+.stepper-step-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--telegram-border);
+  color: var(--telegram-hint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  margin-bottom: var(--space-8);
+  transition: all 0.3s ease;
+}
+
+.stepper-step.active .stepper-step-circle {
+  background: var(--telegram-accent);
+  color: var(--tg-theme-button-text-color, #fff);
+}
+
+.stepper-step.completed .stepper-step-circle {
+  background: var(--success);
+  color: #fff;
+}
+
+.stepper-step-label {
+  font-size: var(--fs-sm);
+  color: var(--telegram-hint);
+  text-align: center;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.stepper-step.active .stepper-step-label {
+  color: var(--telegram-text);
+  font-weight: 600;
+}
+
+.stepper-step.completed .stepper-step-label {
+  color: var(--success);
+}
+
+/* Responsive stepper */
+@media (max-width: 480px) {
+  .stepper-step-circle {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+  
+  .stepper-step-label {
+    font-size: 12px;
+  }
+}
