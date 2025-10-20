@@ -2,7 +2,6 @@
 
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { StickyBottomBar } from '@/components/ui/StickyBottomBar';
 
 export default function Home() {
   const router = useRouter();
@@ -20,58 +19,64 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="container-narrow">
+    <div style={{ padding: '16px', maxWidth: '100%' }}>
       <main>
-        <h1 className="text-2xl" style={{ marginBottom: 16, color: 'var(--telegram-text)' }}>Юридический ассистент</h1>
+        <h1 style={{ 
+          fontSize: '24px', 
+          fontWeight: 'bold', 
+          marginBottom: '16px', 
+          color: 'var(--tg-theme-text-color, #111827)',
+          textAlign: 'center'
+        }}>
+          Юридический ассистент
+        </h1>
 
-        <div className="grid-1 section">
+        <div style={{ marginBottom: '16px' }}>
           <div className="card">
-            <div className="text-lg" style={{ fontWeight: 600, marginBottom: 8 }}>AI Консультации</div>
-            <div className="text-muted" style={{ marginBottom: 12 }}>Получите правовую консультацию с помощью искусственного интеллекта</div>
-            <button className="btn-primary" onClick={() => router.push('/consultations')}>Открыть консультации</button>
+            <h2>AI Консультации</h2>
+            <p>Получите правовую консультацию с помощью искусственного интеллекта</p>
+            <button className="btn" onClick={() => router.push('/consultations')}>
+              Открыть консультации
+            </button>
           </div>
 
           <div className="card">
-            <div className="text-lg" style={{ fontWeight: 600, marginBottom: 8 }}>Документы</div>
-            <div className="text-muted" style={{ marginBottom: 12 }}>Генерация правовых документов и шаблонов</div>
-            <button className="btn-primary" onClick={() => router.push('/documents')}>Создать документ</button>
+            <h2>Документы</h2>
+            <p>Генерация правовых документов и шаблонов</p>
+            <button className="btn" onClick={() => router.push('/documents')}>
+              Создать документ
+            </button>
           </div>
 
           <div className="card">
-            <div className="text-lg" style={{ fontWeight: 600, marginBottom: 8 }}>Споры</div>
-            <div className="text-muted" style={{ marginBottom: 12 }}>Управление правовыми спорами и делами</div>
-            <button className="btn-primary" onClick={() => router.push('/disputes')}>Управлять спорами</button>
+            <h2>Споры</h2>
+            <p>Управление правовыми спорами и делами</p>
+            <button className="btn" onClick={() => router.push('/disputes')}>
+              Управлять спорами
+            </button>
           </div>
 
           <div className="card">
-            <div className="text-lg" style={{ fontWeight: 600, marginBottom: 8 }}>Платежи</div>
-            <div className="text-muted" style={{ marginBottom: 12 }}>Интеграция с российскими платежными системами</div>
-            <button className="btn-primary" onClick={() => router.push('/payments')}>Оплатить услуги</button>
+            <h2>Платежи</h2>
+            <p>Интеграция с российскими платежными системами</p>
+            <button className="btn" onClick={() => router.push('/payments')}>
+              Оплатить услуги
+            </button>
           </div>
 
-          <div className="card">
-            <div className="text-muted" style={{ marginBottom: 12 }}>Не является юридической услугой.</div>
+          <div className="disclaimer">
+            Не является юридической услугой.
           </div>
         </div>
 
-        <StickyBottomBar>
-          <a
-            href="https://t.me/+79688398919"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary"
-            style={{ 
-              width: '100%', 
-              textAlign: 'center',
-              textDecoration: 'none',
-              display: 'block',
-              wordBreak: 'break-word',
-              padding: '12px 16px'
-            }}
-          >
-            Связаться с адвокатом
-          </a>
-        </StickyBottomBar>
+        <a
+          href="https://t.me/+79688398919"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="contact-link"
+        >
+          Связаться с адвокатом
+        </a>
       </main>
     </div>
   );
