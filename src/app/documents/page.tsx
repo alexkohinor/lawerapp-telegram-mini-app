@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { AppHeader } from '@/components/ui/AppHeader';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
 import { Modal } from '@/components/ui/Modal';
 import { Stepper } from '@/components/ui/Stepper';
 
@@ -83,19 +82,25 @@ ${new Date().toLocaleDateString('ru-RU')}
         return (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Выберите тип документа</h3>
-            <div className="grid grid-cols-1 gap-4">
+            <div className="radio-group">
               {documentTypes.map((type) => (
                 <div
                   key={type.id}
-                  className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-                    form.type === type.id
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
+                  className={`radio-item ${form.type === type.id ? 'selected' : ''}`}
                   onClick={() => setForm(prev => ({ ...prev, type: type.id }))}
                 >
-                  <h4 className="font-medium">{type.name}</h4>
-                  <p className="text-sm text-gray-600">{type.description}</p>
+                  <input
+                    type="radio"
+                    name="documentType"
+                    value={type.id}
+                    checked={form.type === type.id}
+                    onChange={() => setForm(prev => ({ ...prev, type: type.id }))}
+                    className="radio-input"
+                  />
+                  <div className="radio-content">
+                    <div className="radio-title">{type.name}</div>
+                    <div className="radio-description">{type.description}</div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -106,16 +111,20 @@ ${new Date().toLocaleDateString('ru-RU')}
         return (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Основная информация</h3>
-            <Input
-              label="Название документа"
-              value={form.title}
-              onChange={(e) => setForm(prev => ({ ...prev, title: e.target.value }))}
-              placeholder="Введите название"
-            />
             <div>
-              <label className="block text-sm font-medium mb-2">Описание ситуации</label>
+              <label className="label">Название документа</label>
+              <input
+                type="text"
+                className="input"
+                value={form.title}
+                onChange={(e) => setForm(prev => ({ ...prev, title: e.target.value }))}
+                placeholder="Введите название"
+              />
+            </div>
+            <div>
+              <label className="label">Описание ситуации</label>
               <textarea
-                className="w-full p-3 border rounded-lg"
+                className="textarea"
                 rows={4}
                 value={form.description}
                 onChange={(e) => setForm(prev => ({ ...prev, description: e.target.value }))}
@@ -135,36 +144,48 @@ ${new Date().toLocaleDateString('ru-RU')}
                   {index === 0 ? 'Продавец/Исполнитель' : 'Покупатель/Заказчик'}
                 </h4>
                 <div className="space-y-3">
-                  <Input
-                    label="ФИО/Название"
-                    value={party.name}
-                    onChange={(e) => {
-                      const newParties = [...form.parties];
-                      newParties[index] = { ...party, name: e.target.value };
-                      setForm(prev => ({ ...prev, parties: newParties }));
-                    }}
-                    placeholder="Введите ФИО или название организации"
-                  />
-                  <Input
-                    label="Адрес"
-                    value={party.address}
-                    onChange={(e) => {
-                      const newParties = [...form.parties];
-                      newParties[index] = { ...party, address: e.target.value };
-                      setForm(prev => ({ ...prev, parties: newParties }));
-                    }}
-                    placeholder="Введите адрес"
-                  />
-                  <Input
-                    label="Телефон"
-                    value={party.phone}
-                    onChange={(e) => {
-                      const newParties = [...form.parties];
-                      newParties[index] = { ...party, phone: e.target.value };
-                      setForm(prev => ({ ...prev, parties: newParties }));
-                    }}
-                    placeholder="Введите телефон"
-                  />
+                  <div>
+                    <label className="label">ФИО/Название</label>
+                    <input
+                      type="text"
+                      className="input"
+                      value={party.name}
+                      onChange={(e) => {
+                        const newParties = [...form.parties];
+                        newParties[index] = { ...party, name: e.target.value };
+                        setForm(prev => ({ ...prev, parties: newParties }));
+                      }}
+                      placeholder="Введите ФИО или название организации"
+                    />
+                  </div>
+                  <div>
+                    <label className="label">Адрес</label>
+                    <input
+                      type="text"
+                      className="input"
+                      value={party.address}
+                      onChange={(e) => {
+                        const newParties = [...form.parties];
+                        newParties[index] = { ...party, address: e.target.value };
+                        setForm(prev => ({ ...prev, parties: newParties }));
+                      }}
+                      placeholder="Введите адрес"
+                    />
+                  </div>
+                  <div>
+                    <label className="label">Телефон</label>
+                    <input
+                      type="text"
+                      className="input"
+                      value={party.phone}
+                      onChange={(e) => {
+                        const newParties = [...form.parties];
+                        newParties[index] = { ...party, phone: e.target.value };
+                        setForm(prev => ({ ...prev, parties: newParties }));
+                      }}
+                      placeholder="Введите телефон"
+                    />
+                  </div>
                 </div>
               </div>
             ))}
@@ -175,24 +196,32 @@ ${new Date().toLocaleDateString('ru-RU')}
         return (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Дополнительные детали</h3>
-            <Input
-              label="Ваше требование"
-              value={form.details.demand || ''}
-              onChange={(e) => setForm(prev => ({ 
-                ...prev, 
-                details: { ...prev.details, demand: e.target.value }
-              }))}
-              placeholder="Что именно вы требуете?"
-            />
-            <Input
-              label="Сумма (если применимо)"
-              value={form.details.amount || ''}
-              onChange={(e) => setForm(prev => ({ 
-                ...prev, 
-                details: { ...prev.details, amount: e.target.value }
-              }))}
-              placeholder="Введите сумму в рублях"
-            />
+            <div>
+              <label className="label">Ваше требование</label>
+              <input
+                type="text"
+                className="input"
+                value={form.details.demand || ''}
+                onChange={(e) => setForm(prev => ({ 
+                  ...prev, 
+                  details: { ...prev.details, demand: e.target.value }
+                }))}
+                placeholder="Что именно вы требуете?"
+              />
+            </div>
+            <div>
+              <label className="label">Сумма (если применимо)</label>
+              <input
+                type="text"
+                className="input"
+                value={form.details.amount || ''}
+                onChange={(e) => setForm(prev => ({ 
+                  ...prev, 
+                  details: { ...prev.details, amount: e.target.value }
+                }))}
+                placeholder="Введите сумму в рублях"
+              />
+            </div>
           </div>
         );
 
@@ -221,22 +250,22 @@ ${new Date().toLocaleDateString('ru-RU')}
 
       <div className="section">
         <div className="flex justify-between">
-          <Button
-            variant="outline"
+          <button
+            className="btn-outline"
             onClick={handlePrev}
             disabled={currentStep === 0}
           >
             Назад
-          </Button>
+          </button>
           
           {currentStep === steps.length - 1 ? (
-            <Button onClick={handleGenerate}>
+            <button className="btn" onClick={handleGenerate}>
               Сгенерировать документ
-            </Button>
+            </button>
           ) : (
-            <Button onClick={handleNext}>
+            <button className="btn" onClick={handleNext}>
               Далее
-            </Button>
+            </button>
           )}
         </div>
       </div>

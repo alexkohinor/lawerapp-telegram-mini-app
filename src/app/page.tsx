@@ -70,9 +70,6 @@ export default function Home() {
             >
               Открыть консультации
             </button>
-            <a href="/consultations" className="btn" style={{ display: 'block', marginTop: '8px', textDecoration: 'none' }}>
-              [Тест] Консультации (ссылка)
-            </a>
           </div>
 
           <div className="card">
