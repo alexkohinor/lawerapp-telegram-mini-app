@@ -60,7 +60,14 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
             className="btn-primary"
-            style={{ width: '100%' }}
+            style={{ 
+              width: '100%', 
+              textAlign: 'center',
+              textDecoration: 'none',
+              display: 'block',
+              wordBreak: 'break-word',
+              padding: '12px 16px'
+            }}
           >
             Связаться с адвокатом
           </a>
