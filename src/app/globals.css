@@ -406,3 +406,97 @@ a:focus-visible {
     font-size: 12px;
   }
 }
+
+/* Badge component */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 500;
+  border-radius: 9999px;
+  border: 1px solid;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Tabs component */
+.tabs {
+  border-bottom: 1px solid var(--telegram-border);
+}
+
+.tabs nav {
+  display: flex;
+  gap: var(--space-8);
+}
+
+.tabs button {
+  position: relative;
+  padding: var(--space-8) var(--space-16);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  border: none;
+  background: transparent;
+  color: var(--telegram-hint);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid transparent;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.tabs button:hover:not(:disabled) {
+  color: var(--telegram-text);
+  border-bottom-color: var(--telegram-border);
+}
+
+.tabs button[aria-selected="true"] {
+  color: var(--telegram-link);
+  border-bottom-color: var(--telegram-link);
+}
+
+.tabs button:disabled {
+  color: var(--telegram-hint);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Timeline component */
+.timeline {
+  position: relative;
+}
+
+.timeline .flow-root {
+  position: relative;
+}
+
+.timeline ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.timeline li {
+  position: relative;
+  padding-bottom: var(--space-32);
+}
+
+.timeline li:last-child {
+  padding-bottom: 0;
+}
+
+/* Responsive tabs */
+@media (max-width: 480px) {
+  .tabs nav {
+    gap: var(--space-4);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .tabs button {
+    padding: var(--space-6) var(--space-12);
+    font-size: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}

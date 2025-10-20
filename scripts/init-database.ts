@@ -98,10 +98,10 @@ async function initDatabase() {
         userId: testUser.id,
         title: 'Спор с работодателем о зарплате',
         description: 'Работодатель не выплачивает премию согласно договору',
-        legalArea: 'labor',
-        status: 'active',
-        priority: 'high',
-        estimatedValue: 50000,
+        type: 'LABOR',
+        status: 'ACTIVE',
+        priority: 'HIGH',
+        amount: 50000,
       },
     });
     console.log(`✅ Создан тестовый спор: ${testDispute.title}`);

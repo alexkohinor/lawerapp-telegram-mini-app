@@ -85,7 +85,7 @@ export default function ConsultationsPage() {
     return () => {
       try { tg?.MainButton?.offClick?.(); } catch {}
     };
-  }, [inputText, isLoading]);
+  }, [inputText, isLoading]); // Removed handleSendMessage to avoid infinite loop
 
   const handleSendMessage = useCallback(async () => {
     if (!inputText.trim() || isLoading) return;

@@ -59,10 +59,10 @@ model Dispute {
   userId          String    @map("user_id")
   title           String
   description     String?
-  legalArea       String?   @map("legal_area")
-  status          String    @default("draft")
-  priority        String    @default("medium")
-  estimatedValue  Float?  @map("estimated_value") 
+  type            String    @default("OTHER") // CONSUMER, LABOR, PROPERTY, OTHER
+  status          String    @default("ACTIVE") // ACTIVE, PENDING, RESOLVED, CLOSED
+  priority        String    @default("MEDIUM") // HIGH, MEDIUM, LOW
+  amount          Decimal?  // Changed from estimatedValue to amount
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime  @updatedAt @map("updated_at")
   resolvedAt      DateTime? @map("resolved_at")
@@ -70,6 +70,7 @@ model Dispute {
   // Relations
   user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   documents       Document[]
+  timeline        TimelineEvent[]
 
   @@map("lawerapp_disputes")
 }
@@ -178,4 +179,18 @@ model AiMonitoring {
   consultation   Consultation @relation(fields: [consultationId], references: [id], onDelete: Cascade)
 
   @@map("lawerapp_ai_monitoring")
+}
+
+model TimelineEvent {
+  id          String   @id @default(uuid())
+  disputeId   String   @map("dispute_id")
+  type        String   // CREATED, UPDATED, DOCUMENT_ADDED, STATUS_CHANGED
+  description String
+  userId      String   @map("user_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relations
+  dispute     Dispute  @relation(fields: [disputeId], references: [id], onDelete: Cascade)
+
+  @@map("lawerapp_timeline_events")
 }
