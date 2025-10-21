@@ -233,7 +233,7 @@ ${new Date().toLocaleDateString('ru-RU')}
         <div style={{ 
           marginTop: '30px', 
           textAlign: 'center',
-          fontSize: '12px', 
+          fontSize: 'clamp(10px, 2.5vw, 12px)', 
           color: 'var(--tg-theme-hint-color, #6b7280)'
         }}>
           {/* Ограничение на бесплатный анализ */}
@@ -243,19 +243,24 @@ ${new Date().toLocaleDateString('ru-RU')}
             border: '1px solid #f59e0b',
             borderRadius: '8px',
             marginBottom: '20px',
-            fontSize: '13px',
+            fontSize: 'clamp(11px, 2.8vw, 13px)',
             color: '#92400e'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-              <span style={{ fontSize: '16px' }}>⚠️</span>
-              <strong>Бесплатно можно загрузить и проанализировать только один документ</strong>
+              <span style={{ fontSize: 'clamp(14px, 3.5vw, 16px)' }}>⚠️</span>
+              <strong style={{ fontSize: 'clamp(11px, 2.8vw, 13px)' }}>
+                Бесплатно можно загрузить и проанализировать только один документ
+              </strong>
             </div>
-            <p style={{ margin: 0, fontSize: '12px' }}>
+            <p style={{ margin: 0, fontSize: 'clamp(10px, 2.5vw, 12px)' }}>
               Для анализа дополнительных документов обратитесь к адвокату.
             </p>
           </div>
           
-          <p style={{ margin: '0 0 10px 0' }}>
+          <p style={{ 
+            margin: '0 0 10px 0',
+            fontSize: 'clamp(10px, 2.5vw, 12px)'
+          }}>
             Не является юридической услугой.
           </p>
           

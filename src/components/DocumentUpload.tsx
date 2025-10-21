@@ -422,17 +422,27 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
           alignItems: 'flex-start',
           gap: '8px',
           cursor: 'pointer',
-          fontSize: '13px',
+          fontSize: 'clamp(10px, 2.5vw, 12px)',
           color: 'var(--tg-theme-text-color, #111827)',
-          lineHeight: '1.4'
+          lineHeight: '1.3'
         }}>
           <input
             type="checkbox"
             checked={privacyConsent}
             onChange={(e) => setPrivacyConsent(e.target.checked)}
-            style={{ margin: 0, marginTop: '2px' }}
+            style={{ 
+              margin: 0, 
+              marginTop: '2px',
+              transform: 'scale(0.9)',
+              minWidth: '14px',
+              minHeight: '14px'
+            }}
           />
-          <span>
+          <span style={{
+            fontSize: 'clamp(10px, 2.5vw, 12px)',
+            lineHeight: '1.3',
+            wordBreak: 'break-word'
+          }}>
             Я даю согласие на обработку персональных данных, содержащихся в загружаемых документах, 
             в соответствии с Федеральным законом &quot;О персональных данных&quot; № 152-ФЗ. 
             Данные будут использованы исключительно для анализа документа и генерации ответа.

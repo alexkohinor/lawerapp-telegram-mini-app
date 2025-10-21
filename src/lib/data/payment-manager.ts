@@ -22,7 +22,7 @@ export interface PaymentResult {
   userId: string;
   amount: number;
   currency: string;
-  paymentMethod: string;
+  paymentMethod: 'yookassa' | 'yoomoney' | 'other' | 'qiwi' | 'sbp' | 'card';
   status: string;
   subscriptionPlan?: string;
   metadata?: Record<string, unknown>;
@@ -33,7 +33,7 @@ export interface PaymentResult {
 export interface PaymentFilters {
   userId?: string;
   status?: string;
-  paymentMethod?: string;
+  paymentMethod?: 'yookassa' | 'yoomoney' | 'other' | 'qiwi' | 'sbp' | 'card';
   paymentType?: string;
   subscriptionPlan?: string;
   dateFrom?: Date;
@@ -76,7 +76,7 @@ export class PaymentManager {
         userId: payment.userId,
         amount: payment.amount,
         currency: payment.currency,
-        paymentMethod: payment.paymentMethod || '',
+        paymentMethod: (payment.paymentMethod as 'yookassa' | 'yoomoney' | 'other' | 'qiwi' | 'sbp' | 'card') || 'other',
         status: payment.status,
         subscriptionPlan: payment.subscriptionPlan || undefined,
         metadata: payment.metadata as Record<string, unknown>,
@@ -108,7 +108,7 @@ export class PaymentManager {
         userId: payment.userId,
         amount: payment.amount,
         currency: payment.currency,
-        paymentMethod: payment.paymentMethod || '',
+        paymentMethod: (payment.paymentMethod as 'yookassa' | 'yoomoney' | 'other' | 'qiwi' | 'sbp' | 'card') || 'other',
         status: payment.status,
         subscriptionPlan: payment.subscriptionPlan || undefined,
         metadata: payment.metadata as Record<string, unknown>,
@@ -140,7 +140,7 @@ export class PaymentManager {
         userId: payment.userId,
         amount: payment.amount,
         currency: payment.currency,
-        paymentMethod: payment.paymentMethod || '',
+        paymentMethod: (payment.paymentMethod as 'yookassa' | 'yoomoney' | 'other' | 'qiwi' | 'sbp' | 'card') || 'other',
         status: payment.status,
         subscriptionPlan: payment.subscriptionPlan || undefined,
         metadata: payment.metadata as Record<string, unknown>,
@@ -185,7 +185,7 @@ export class PaymentManager {
         userId: payment.userId,
         amount: payment.amount,
         currency: payment.currency,
-        paymentMethod: payment.paymentMethod || '',
+        paymentMethod: (payment.paymentMethod as 'yookassa' | 'yoomoney' | 'other' | 'qiwi' | 'sbp' | 'card') || 'other',
         status: payment.status,
         subscriptionPlan: payment.subscriptionPlan || undefined,
         metadata: payment.metadata as Record<string, unknown>,
@@ -225,7 +225,7 @@ export class PaymentManager {
         userId: payment.userId,
         amount: payment.amount,
         currency: payment.currency,
-        paymentMethod: payment.paymentMethod || '',
+        paymentMethod: (payment.paymentMethod as 'yookassa' | 'yoomoney' | 'other' | 'qiwi' | 'sbp' | 'card') || 'other',
         status: payment.status,
         subscriptionPlan: payment.subscriptionPlan || undefined,
         metadata: payment.metadata as Record<string, unknown>,
@@ -394,7 +394,7 @@ export class PaymentManager {
         userId: payment.userId,
         amount: payment.amount,
         currency: payment.currency,
-        paymentMethod: payment.paymentMethod || '',
+        paymentMethod: (payment.paymentMethod as 'yookassa' | 'yoomoney' | 'other' | 'qiwi' | 'sbp' | 'card') || 'other',
         status: payment.status,
         subscriptionPlan: payment.subscriptionPlan || undefined,
         metadata: payment.metadata as Record<string, unknown>,
@@ -416,7 +416,7 @@ export class PaymentManager {
     subscriptionPlan: string,
     amount: number,
     currency: string,
-    paymentMethod: string,
+    paymentMethod: 'yookassa' | 'yoomoney' | 'other' | 'qiwi' | 'sbp' | 'card',
     externalPaymentId?: string
   ): Promise<PaymentResult> {
     return this.createPayment({
@@ -424,7 +424,7 @@ export class PaymentManager {
       amount,
       currency,
       description: `Оплата подписки ${subscriptionPlan}`,
-      paymentMethod: paymentMethod as string,
+      paymentMethod: paymentMethod,
       status: 'pending',
       paymentType: 'subscription',
       externalPaymentId,
@@ -439,7 +439,7 @@ export class PaymentManager {
     userId: string,
     amount: number,
     currency: string,
-    paymentMethod: string,
+    paymentMethod: 'yookassa' | 'yoomoney' | 'other' | 'qiwi' | 'sbp' | 'card',
     consultationId?: string,
     externalPaymentId?: string
   ): Promise<PaymentResult> {
@@ -448,7 +448,7 @@ export class PaymentManager {
       amount,
       currency,
       description: `Оплата консультации${consultationId ? ` #${consultationId}` : ''}`,
-      paymentMethod: paymentMethod as string,
+      paymentMethod: paymentMethod,
       status: 'pending',
       paymentType: 'consultation',
       externalPaymentId,
