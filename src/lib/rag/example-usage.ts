@@ -88,7 +88,7 @@ export async function exampleRAGUsage() {
       'права и обязанности граждан',
       'civil-law'
     );
-    console.log('🔎 Похожие документы:', similarDocs.map(doc => ({
+    console.log('🔎 Похожие документы:', similarDocs.map((doc: any) => ({
       title: doc.title,
       relevance: doc.relevance,
       type: doc.type

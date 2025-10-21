@@ -41,14 +41,15 @@ if (process.env.NODE_ENV !== 'production') {
 
 // Логирование запросов в development режиме
 if (process.env.NODE_ENV === 'development') {
-  // @ts-ignore - Prisma event types issue
-  prisma.$on('query', (e: any) => {
-    console.log('Query: ' + e.query);
-    console.log('Params: ' + e.params);
-    console.log('Duration: ' + e.duration + 'ms');
+  // @ts-expect-error - Prisma event types issue
+  prisma.$on('query', (e: unknown) => {
+    console.log('Query: ' + (e as Record<string, unknown>).query);
+    console.log('Params: ' + (e as Record<string, unknown>).params);
+    console.log('Duration: ' + (e as Record<string, unknown>).duration + 'ms');
   });
 
-  prisma.$on('error', (e) => {
+  // @ts-expect-error - Prisma event types issue
+  prisma.$on('error', (e: unknown) => {
     console.error('Prisma Error:', e);
   });
 }

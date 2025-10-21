@@ -88,14 +88,14 @@ export class DocumentProcessor {
       // 5. Создаем векторные документы
       const vectorDocuments: VectorDocument[] = chunks.map((chunk, index) => ({
         id: chunk.id,
-        vector: embeddings[index],
+        vector: (embeddings[index] as number[]) || [],
         metadata: {
           documentId: chunk.documentId,
           chunkIndex: chunk.chunkIndex,
           content: chunk.content,
           title: chunk.metadata.title,
           legalArea: chunk.metadata.legalArea,
-          documentType: chunk.metadata.documentType,
+          documentType: chunk.metadata.documentType as 'law' | 'precedent' | 'template' | 'guideline',
           source: chunk.metadata.source,
           url: metadata.url,
           tags: chunk.metadata.tags,
@@ -186,7 +186,7 @@ export class DocumentProcessor {
     let chunkIndex = 0;
 
     while (startPosition < text.length) {
-      const endPosition = Math.min(startPosition + chunkSize, text.length);
+      let endPosition = Math.min(startPosition + chunkSize, text.length);
       let chunkText = text.substring(startPosition, endPosition);
 
       // Пытаемся найти границу предложения для лучшего разбиения
@@ -194,10 +194,10 @@ export class DocumentProcessor {
         const lastSentenceEnd = chunkText.lastIndexOf('.');
         const lastParagraphEnd = chunkText.lastIndexOf('\n\n');
         
-        if (lastSentenceEnd > chunkSize * 0.7) {
+        if (lastSentenceEnd > 0 && lastSentenceEnd > chunkSize * 0.7) {
           chunkText = chunkText.substring(0, lastSentenceEnd + 1);
           endPosition = startPosition + lastSentenceEnd + 1;
-        } else if (lastParagraphEnd > chunkSize * 0.7) {
+        } else if (lastParagraphEnd > 0 && lastParagraphEnd > chunkSize * 0.7) {
           chunkText = chunkText.substring(0, lastParagraphEnd);
           endPosition = startPosition + lastParagraphEnd;
         }
