@@ -54,7 +54,12 @@ export class RAGSystemFactory {
   /**
    * Создание полной RAG системы
    */
-  static createRAGSystem(config: RAGConfig) {
+  static createRAGSystem(config: import('./config').RAGConfig) {
+    const { VectorDBClient } = require('./vector-db-client');
+    const { ObjectStorageClient } = require('./object-storage-client');
+    const { EmbeddingClient } = require('./embedding-client');
+    const { DocumentProcessor } = require('./document-processor');
+    
     const vectorDbClient = new VectorDBClient(config);
     const objectStorageClient = new ObjectStorageClient(config);
     const embeddingClient = new EmbeddingClient(config);

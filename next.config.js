@@ -12,6 +12,15 @@ const nextConfig = {
   generateBuildId: async () => {
     return 'stable-build';
   },
+  // Настройки для Telegram Mini App
+  async rewrites() {
+    return [
+      {
+        source: '/',
+        destination: '/index.html',
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
