@@ -59,9 +59,7 @@ async function testPostgreSQLConnection() {
         question: 'Тестовый вопрос PostgreSQL TimeWeb',
         answer: 'Тестовый ответ PostgreSQL TimeWeb',
         status: 'completed',
-        legalArea: 'civil-law',
-        priority: 'medium',
-        source: 'manual'
+        legalArea: 'civil-law'
       }
     });
     console.log('✅ Тестовая консультация создана в PostgreSQL:', consultation.id);
@@ -71,12 +69,10 @@ async function testPostgreSQLConnection() {
       data: {
         userId: testUser.id,
         title: 'Тестовый документ PostgreSQL TimeWeb',
-        fileName: 'test-postgresql-timeweb.pdf',
         fileSize: 1024000,
         mimeType: 'application/pdf',
         status: 'uploaded',
-        documentType: 'contract',
-        legalArea: 'civil-law'
+        documentType: 'contract'
       }
     });
     console.log('✅ Тестовый документ создан в PostgreSQL:', document.id);
@@ -87,10 +83,8 @@ async function testPostgreSQLConnection() {
         userId: testUser.id,
         title: 'Тестовый спор PostgreSQL TimeWeb',
         description: 'Описание тестового спора PostgreSQL TimeWeb',
-        status: 'open',
-        priority: 'medium',
-        disputeType: 'consumer',
-        legalArea: 'consumer-rights'
+        status: 'ACTIVE',
+        type: 'CONSUMER'
       }
     });
     console.log('✅ Тестовый спор создан в PostgreSQL:', dispute.id);
@@ -151,10 +145,9 @@ async function testPostgreSQLConnection() {
           userId: testUser.id,
           amount: 1000,
           currency: 'RUB',
-          description: 'Тестовый платеж в транзакции',
           paymentMethod: 'yookassa',
           status: 'completed',
-          paymentType: 'subscription'
+          subscriptionPlan: 'premium'
         }
       });
       
@@ -164,8 +157,6 @@ async function testPostgreSQLConnection() {
           type: 'info',
           title: 'Уведомление о платеже',
           message: 'Платеж успешно обработан',
-          priority: 'medium',
-          category: 'payment',
           isRead: false
         }
       });

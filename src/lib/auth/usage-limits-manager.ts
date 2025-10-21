@@ -27,7 +27,7 @@ export interface UsageStats {
 export interface UsageEvent {
   userId: string;
   type: 'document_upload' | 'consultation' | 'dispute_creation' | 'api_call';
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   timestamp: Date;
 }
 

@@ -121,7 +121,7 @@ export class EmbeddingClient {
       const data = await response.json();
       
       return {
-        embeddings: data.data.map((item: any) => item.embedding),
+        embeddings: data.data.map((item: { embedding: number[] }) => item.embedding),
         model: data.model,
         dimensions: data.data[0].embedding.length,
         totalTokens: data.usage.total_tokens,
@@ -223,7 +223,7 @@ export class EmbeddingClient {
       }
 
       const data = await response.json();
-      const model = data.data.find((m: any) => m.id === this.defaultModel);
+      const model = data.data.find((m: { id: string }) => m.id === this.defaultModel);
       
       if (!model) {
         throw new Error(`Модель ${this.defaultModel} не найдена`);

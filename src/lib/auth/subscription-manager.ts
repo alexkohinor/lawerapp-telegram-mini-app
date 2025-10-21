@@ -144,13 +144,13 @@ export class SubscriptionManager {
 
       // Проверяем, не истекла ли подписка
       const isActive = plan === 'free' || 
-        (user.subscriptionExpiresAt && user.subscriptionExpiresAt > new Date());
+        (user.subscriptionExpiresAt && user.subscriptionExpiresAt > new Date()) || false;
 
       return {
         userId,
         plan,
         features,
-        expiresAt: user.subscriptionExpiresAt,
+        expiresAt: user.subscriptionExpiresAt || undefined,
         isActive,
         autoRenew: plan !== 'free',
         pricePerMonth: pricing.price,
@@ -198,7 +198,7 @@ export class SubscriptionManager {
         plan: newPlan,
         features,
         expiresAt: subscriptionExpiresAt,
-        isActive: newPlan === 'free' || (subscriptionExpiresAt && subscriptionExpiresAt > new Date()),
+        isActive: newPlan === 'free' || (subscriptionExpiresAt && subscriptionExpiresAt > new Date()) || false,
         autoRenew: newPlan !== 'free',
         pricePerMonth: pricing.price,
         currency: pricing.currency,
@@ -283,7 +283,7 @@ export class SubscriptionManager {
   async canUseFeature(userId: string, feature: keyof SubscriptionFeatures): Promise<boolean> {
     try {
       const subscription = await this.getUserSubscription(userId);
-      return subscription.features[feature] && subscription.isActive;
+      return Boolean(subscription.features[feature] && subscription.isActive);
     } catch (error) {
       console.error('Check Feature Access Error:', error);
       return false;

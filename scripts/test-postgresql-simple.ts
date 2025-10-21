@@ -53,9 +53,7 @@ async function testPostgreSQLConnection() {
         question: 'Тестовый вопрос PostgreSQL',
         answer: 'Тестовый ответ PostgreSQL',
         status: 'completed',
-        legalArea: 'civil-law',
-        priority: 'medium',
-        source: 'manual'
+        legalArea: 'civil-law'
       }
     });
     console.log('✅ Тестовая консультация создана в PostgreSQL:', consultation.id);

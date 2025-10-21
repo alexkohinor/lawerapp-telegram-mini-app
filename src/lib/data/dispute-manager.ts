@@ -15,7 +15,7 @@ export interface DisputeData {
   estimatedValue?: number;
   currency?: string;
   deadline?: Date;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   tags?: string[];
 }
 
@@ -24,15 +24,9 @@ export interface DisputeResult {
   userId: string;
   title: string;
   description: string;
-  legalArea?: string;
   status: string;
   priority: string;
-  disputeType?: string;
-  estimatedValue?: number;
-  currency?: string;
-  deadline?: Date;
-  metadata?: Record<string, any>;
-  tags?: string[];
+  type: string;
   createdAt: Date;
   updatedAt: Date;
   resolvedAt?: Date;
@@ -56,7 +50,6 @@ export interface DisputeStats {
   byStatus: Record<string, number>;
   byPriority: Record<string, number>;
   byType: Record<string, number>;
-  byLegalArea: Record<string, number>;
   averageResolutionTime: number;
   resolutionRate: number;
   totalEstimatedValue: number;
@@ -67,7 +60,7 @@ export interface TimelineEventData {
   type: 'created' | 'updated' | 'status_changed' | 'document_added' | 'comment_added' | 'deadline_set' | 'resolved';
   description: string;
   userId: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export class DisputeManager {
@@ -81,15 +74,8 @@ export class DisputeManager {
           userId: data.userId,
           title: data.title,
           description: data.description,
-          legalArea: data.legalArea,
           status: data.status,
-          priority: data.priority,
-          disputeType: data.disputeType,
-          estimatedValue: data.estimatedValue,
-          currency: data.currency,
-          deadline: data.deadline,
-          metadata: data.metadata as any,
-          tags: data.tags
+          type: data.disputeType
         }
       });
 
@@ -105,19 +91,13 @@ export class DisputeManager {
         id: dispute.id,
         userId: dispute.userId,
         title: dispute.title,
-        description: dispute.description,
-        legalArea: dispute.legalArea,
+        description: dispute.description || '',
         status: dispute.status,
         priority: dispute.priority,
-        disputeType: dispute.disputeType,
-        estimatedValue: dispute.estimatedValue,
-        currency: dispute.currency,
-        deadline: dispute.deadline,
-        metadata: dispute.metadata as Record<string, any>,
-        tags: dispute.tags,
+        type: dispute.type,
         createdAt: dispute.createdAt,
         updatedAt: dispute.updatedAt,
-        resolvedAt: dispute.resolvedAt
+        resolvedAt: dispute.resolvedAt || undefined
       };
 
     } catch (error) {
@@ -143,19 +123,13 @@ export class DisputeManager {
         id: dispute.id,
         userId: dispute.userId,
         title: dispute.title,
-        description: dispute.description,
-        legalArea: dispute.legalArea,
+        description: dispute.description || '',
         status: dispute.status,
         priority: dispute.priority,
-        disputeType: dispute.disputeType,
-        estimatedValue: dispute.estimatedValue,
-        currency: dispute.currency,
-        deadline: dispute.deadline,
-        metadata: dispute.metadata as Record<string, any>,
-        tags: dispute.tags,
+        type: dispute.type,
         createdAt: dispute.createdAt,
         updatedAt: dispute.updatedAt,
-        resolvedAt: dispute.resolvedAt
+        resolvedAt: dispute.resolvedAt || undefined
       };
 
     } catch (error) {
@@ -169,7 +143,7 @@ export class DisputeManager {
    */
   async getDisputes(filters: DisputeFilters = {}): Promise<DisputeResult[]> {
     try {
-      const where: any = {};
+      const where: Record<string, unknown> = {};
 
       if (filters.userId) where.userId = filters.userId;
       if (filters.status) where.status = filters.status;
@@ -182,8 +156,8 @@ export class DisputeManager {
       
       if (filters.dateFrom || filters.dateTo) {
         where.createdAt = {};
-        if (filters.dateFrom) where.createdAt.gte = filters.dateFrom;
-        if (filters.dateTo) where.createdAt.lte = filters.dateTo;
+        if (filters.dateFrom) (where.createdAt as Record<string, unknown>).gte = filters.dateFrom;
+        if (filters.dateTo) (where.createdAt as Record<string, unknown>).lte = filters.dateTo;
       }
 
       const disputes = await prisma.dispute.findMany({
@@ -197,19 +171,13 @@ export class DisputeManager {
         id: dispute.id,
         userId: dispute.userId,
         title: dispute.title,
-        description: dispute.description,
-        legalArea: dispute.legalArea,
+        description: dispute.description || '',
         status: dispute.status,
         priority: dispute.priority,
-        disputeType: dispute.disputeType,
-        estimatedValue: dispute.estimatedValue,
-        currency: dispute.currency,
-        deadline: dispute.deadline,
-        metadata: dispute.metadata as Record<string, any>,
-        tags: dispute.tags,
+        type: dispute.type,
         createdAt: dispute.createdAt,
         updatedAt: dispute.updatedAt,
-        resolvedAt: dispute.resolvedAt
+        resolvedAt: dispute.resolvedAt || undefined
       }));
 
     } catch (error) {
@@ -246,7 +214,7 @@ export class DisputeManager {
           disputeId: id,
           type: 'status_changed',
           description: `Статус изменен с "${oldDispute.status}" на "${updates.status}"`,
-          userId: updates.userId || oldDispute.userId || '',
+          userId: id,
           metadata: {
             oldStatus: oldDispute.status,
             newStatus: updates.status
@@ -258,19 +226,13 @@ export class DisputeManager {
         id: dispute.id,
         userId: dispute.userId,
         title: dispute.title,
-        description: dispute.description,
-        legalArea: dispute.legalArea,
+        description: dispute.description || '',
         status: dispute.status,
         priority: dispute.priority,
-        disputeType: dispute.disputeType,
-        estimatedValue: dispute.estimatedValue,
-        currency: dispute.currency,
-        deadline: dispute.deadline,
-        metadata: dispute.metadata as Record<string, any>,
-        tags: dispute.tags,
+        type: dispute.type,
         createdAt: dispute.createdAt,
         updatedAt: dispute.updatedAt,
-        resolvedAt: dispute.resolvedAt
+        resolvedAt: dispute.resolvedAt || undefined
       };
 
     } catch (error) {
@@ -315,14 +277,14 @@ export class DisputeManager {
    */
   async getDisputeStats(filters: DisputeFilters = {}): Promise<DisputeStats> {
     try {
-      const where: any = {};
+      const where: Record<string, unknown> = {};
 
       if (filters.userId) where.userId = filters.userId;
       if (filters.legalArea) where.legalArea = filters.legalArea;
       if (filters.dateFrom || filters.dateTo) {
         where.createdAt = {};
-        if (filters.dateFrom) where.createdAt.gte = filters.dateFrom;
-        if (filters.dateTo) where.createdAt.lte = filters.dateTo;
+        if (filters.dateFrom) (where.createdAt as Record<string, unknown>).gte = filters.dateFrom;
+        if (filters.dateTo) (where.createdAt as Record<string, unknown>).lte = filters.dateTo;
       }
 
       const [
@@ -330,7 +292,6 @@ export class DisputeManager {
         byStatus,
         byPriority,
         byType,
-        byLegalArea,
         resolvedDisputes,
         totalValue
       ] = await Promise.all([
@@ -346,21 +307,16 @@ export class DisputeManager {
           _count: { priority: true }
         }),
         prisma.dispute.groupBy({
-          by: ['disputeType'],
+          by: ['type'],
           where,
-          _count: { disputeType: true }
-        }),
-        prisma.dispute.groupBy({
-          by: ['legalArea'],
-          where,
-          _count: { legalArea: true }
+          _count: { type: true }
         }),
         prisma.dispute.count({
           where: { ...where, status: 'resolved' }
         }),
         prisma.dispute.aggregate({
           where,
-          _sum: { estimatedValue: true }
+          _sum: { amount: true }
         })
       ]);
 
@@ -376,23 +332,18 @@ export class DisputeManager {
 
       const byTypeMap: Record<string, number> = {};
       byType.forEach(item => {
-        byTypeMap[item.disputeType || 'unknown'] = item._count.disputeType;
+        byTypeMap[item.type || 'unknown'] = item._count.type;
       });
 
-      const byLegalAreaMap: Record<string, number> = {};
-      byLegalArea.forEach(item => {
-        byLegalAreaMap[item.legalArea || 'unknown'] = item._count.legalArea;
-      });
 
       return {
         total,
         byStatus: byStatusMap,
         byPriority: byPriorityMap,
         byType: byTypeMap,
-        byLegalArea: byLegalAreaMap,
         averageResolutionTime: 0, // В реальном приложении расчет времени
         resolutionRate: total > 0 ? (resolvedDisputes / total) * 100 : 0,
-        totalEstimatedValue: totalValue._sum.estimatedValue || 0
+        totalEstimatedValue: Number(totalValue._sum.amount) || 0
       };
 
     } catch (error) {
@@ -410,7 +361,7 @@ export class DisputeManager {
     limit: number = 20
   ): Promise<DisputeResult[]> {
     try {
-      const where: any = {
+      const where: Record<string, unknown> = {
         OR: [
           { title: { contains: query, mode: 'insensitive' } },
           { description: { contains: query, mode: 'insensitive' } }
@@ -431,19 +382,13 @@ export class DisputeManager {
         id: dispute.id,
         userId: dispute.userId,
         title: dispute.title,
-        description: dispute.description,
-        legalArea: dispute.legalArea,
+        description: dispute.description || '',
         status: dispute.status,
         priority: dispute.priority,
-        disputeType: dispute.disputeType,
-        estimatedValue: dispute.estimatedValue,
-        currency: dispute.currency,
-        deadline: dispute.deadline,
-        metadata: dispute.metadata as Record<string, any>,
-        tags: dispute.tags,
+        type: dispute.type,
         createdAt: dispute.createdAt,
         updatedAt: dispute.updatedAt,
-        resolvedAt: dispute.resolvedAt
+        resolvedAt: dispute.resolvedAt || undefined
       }));
 
     } catch (error) {
@@ -463,7 +408,6 @@ export class DisputeManager {
           type: data.type,
           description: data.description,
           userId: data.userId,
-          metadata: data.metadata as any
         }
       });
     } catch (error) {
@@ -481,7 +425,7 @@ export class DisputeManager {
     description: string;
     userId: string;
     createdAt: Date;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   }>> {
     try {
       const events = await prisma.timelineEvent.findMany({
@@ -495,7 +439,6 @@ export class DisputeManager {
         description: event.description,
         userId: event.userId,
         createdAt: event.createdAt,
-        metadata: event.metadata as Record<string, any>
       }));
 
     } catch (error) {
@@ -547,34 +490,24 @@ export class DisputeManager {
 
       const disputes = await prisma.dispute.findMany({
         where: {
-          deadline: {
-            lte: futureDate,
-            gte: new Date()
-          },
           status: {
             in: ['open', 'in_progress']
           }
         },
-        orderBy: { deadline: 'asc' }
+        orderBy: { createdAt: 'asc' }
       });
 
       return disputes.map(dispute => ({
         id: dispute.id,
         userId: dispute.userId,
         title: dispute.title,
-        description: dispute.description,
-        legalArea: dispute.legalArea,
+        description: dispute.description || '',
         status: dispute.status,
         priority: dispute.priority,
-        disputeType: dispute.disputeType,
-        estimatedValue: dispute.estimatedValue,
-        currency: dispute.currency,
-        deadline: dispute.deadline,
-        metadata: dispute.metadata as Record<string, any>,
-        tags: dispute.tags,
+        type: dispute.type,
         createdAt: dispute.createdAt,
         updatedAt: dispute.updatedAt,
-        resolvedAt: dispute.resolvedAt
+        resolvedAt: dispute.resolvedAt || undefined
       }));
 
     } catch (error) {

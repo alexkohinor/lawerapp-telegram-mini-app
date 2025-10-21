@@ -67,9 +67,7 @@ export async function POST(request: NextRequest) {
         session: {
           id: authResult.session.id,
           sessionToken: authResult.session.sessionToken,
-          expiresAt: authResult.session.expiresAt,
-          isActive: authResult.session.isActive,
-          lastActivityAt: authResult.session.lastActivityAt
+          expiresAt: authResult.session.expiresAt
         },
         profile: {
           subscription: authResult.profile.subscription,
@@ -85,7 +83,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error: 'Ошибка валидации',
-          details: error.errors
+          details: error.issues
         },
         { status: 400 }
       );

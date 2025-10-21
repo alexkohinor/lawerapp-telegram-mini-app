@@ -126,13 +126,13 @@ export class TelegramAuthService {
       return {
         id: user.id,
         telegramId: user.telegramId,
-        telegramUsername: user.telegramUsername,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        telegramUsername: user.telegramUsername || undefined,
+        firstName: user.firstName || undefined,
+        lastName: user.lastName || undefined,
         subscriptionPlan: user.subscriptionPlan,
         isActive: user.isActive,
         documentsUsed: user.documentsUsed,
-        lastLoginAt: user.lastLoginAt,
+        lastLoginAt: user.lastLoginAt || undefined,
         createdAt: user.createdAt
       };
 
@@ -158,13 +158,13 @@ export class TelegramAuthService {
       return {
         id: user.id,
         telegramId: user.telegramId,
-        telegramUsername: user.telegramUsername,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        telegramUsername: user.telegramUsername || undefined,
+        firstName: user.firstName || undefined,
+        lastName: user.lastName || undefined,
         subscriptionPlan: user.subscriptionPlan,
         isActive: user.isActive,
         documentsUsed: user.documentsUsed,
-        lastLoginAt: user.lastLoginAt,
+        lastLoginAt: user.lastLoginAt || undefined,
         createdAt: user.createdAt
       };
 
@@ -198,13 +198,13 @@ export class TelegramAuthService {
       return {
         id: user.id,
         telegramId: user.telegramId,
-        telegramUsername: user.telegramUsername,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        telegramUsername: user.telegramUsername || undefined,
+        firstName: user.firstName || undefined,
+        lastName: user.lastName || undefined,
         subscriptionPlan: user.subscriptionPlan,
         isActive: user.isActive,
         documentsUsed: user.documentsUsed,
-        lastLoginAt: user.lastLoginAt,
+        lastLoginAt: user.lastLoginAt || undefined,
         createdAt: user.createdAt
       };
 
@@ -275,7 +275,7 @@ export class TelegramAuthService {
         documentsUsed: user.documentsUsed,
         subscriptionPlan: user.subscriptionPlan,
         isActive: user.isActive,
-        lastLoginAt: user.lastLoginAt,
+        lastLoginAt: user.lastLoginAt || undefined,
         createdAt: user.createdAt
       };
 
@@ -314,16 +314,16 @@ export class TelegramAuthService {
         skip: offset
       });
 
-      return users.map((user: any) => ({
+      return users.map((user) => ({
         id: user.id,
         telegramId: user.telegramId,
-        telegramUsername: user.telegramUsername,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        telegramUsername: user.telegramUsername || undefined,
+        firstName: user.firstName || undefined,
+        lastName: user.lastName || undefined,
         subscriptionPlan: user.subscriptionPlan,
         isActive: user.isActive,
         documentsUsed: user.documentsUsed,
-        lastLoginAt: user.lastLoginAt,
+        lastLoginAt: user.lastLoginAt || undefined,
         createdAt: user.createdAt
       }));
 

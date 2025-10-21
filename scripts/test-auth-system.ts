@@ -259,10 +259,7 @@ async function testDatabaseOperations() {
       data: {
         userId: testUser.id,
         sessionToken: 'test-session-token',
-        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
-        isActive: true,
-        userAgent: 'Test Agent',
-        ipAddress: '127.0.0.1'
+        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000)
       }
     });
     console.log('✅ Тестовая сессия создана:', testSession.id);

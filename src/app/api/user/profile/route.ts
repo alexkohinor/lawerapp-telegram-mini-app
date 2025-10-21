@@ -104,7 +104,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json(
         {
           error: 'Ошибка валидации',
-          details: error.errors
+          details: error.issues
         },
         { status: 400 }
       );

@@ -9,24 +9,37 @@ import { RAGConfig } from '../src/lib/rag/config';
 
 // Конфигурация для тестирования
 const ragConfig: RAGConfig = {
-  timeWebCloud: {
+  timeweb: {
     apiKey: 'test-key',
-    endpoint: 'https://api.timeweb.cloud/vector-db',
-    collectionName: 'test-collection'
+    vectorDbEndpoint: 'https://api.timeweb.cloud/vector-db',
+    objectStorageEndpoint: 'https://s3.timeweb.cloud',
+    embeddingServiceEndpoint: 'https://api.timeweb.cloud/embedding'
   },
   objectStorage: {
     accessKeyId: 'test-key',
     secretAccessKey: 'test-secret',
     endpoint: 'https://s3.timeweb.cloud',
-    bucketName: 'test-bucket'
+    bucket: 'test-bucket',
+    region: 'ru-1'
   },
   embedding: {
-    apiKey: 'test-key',
-    endpoint: 'https://api.timeweb.cloud/embedding',
-    model: 'text-embedding-ada-002'
+    model: 'text-embedding-ada-002',
+    dimensions: 1536,
+    maxTokens: 8192,
+    batchSize: 100
   },
-  llmModel: 'gpt-4',
-  llmEndpoint: 'https://api.openai.com/v1/chat/completions'
+  vectorDb: {
+    endpoint: 'https://vector-db.timeweb.cloud',
+    apiKey: 'test-key',
+    collectionName: 'test-collection',
+    dimensions: 1536
+  },
+  documentProcessing: {
+    chunkSize: 1000,
+    chunkOverlap: 200,
+    maxFileSize: 50 * 1024 * 1024,
+    supportedFormats: ['pdf', 'docx', 'doc', 'txt', 'rtf']
+  }
 };
 
 const prisma = new PrismaClient();
@@ -95,7 +108,7 @@ async function testRAGConsultation(userId: string) {
   
   try {
     // Создаем тестовую консультацию
-    const consultation = await prisma.ragConsultation.create({
+    const consultation = await prisma.rAGConsultation.create({
       data: {
         userId,
         question: 'Какие права имеет потребитель при возврате товара?',
@@ -201,7 +214,7 @@ async function testRAGQuery(userId: string) {
   console.log('\n🔍 Тестирование RAG запроса...');
   
   try {
-    const query = await prisma.ragQuery.create({
+    const query = await prisma.rAGQuery.create({
       data: {
         userId,
         query: 'Как вернуть товар ненадлежащего качества?',
@@ -283,7 +296,7 @@ async function cleanupTestData(userId: string) {
       }
     });
     
-    await prisma.ragConsultation.deleteMany({
+    await prisma.rAGConsultation.deleteMany({
       where: { userId }
     });
     
@@ -291,7 +304,7 @@ async function cleanupTestData(userId: string) {
       where: { userId }
     });
     
-    await prisma.ragQuery.deleteMany({
+    await prisma.rAGQuery.deleteMany({
       where: { userId }
     });
     

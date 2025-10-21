@@ -11,11 +11,7 @@ export interface SessionData {
   telegramId: bigint;
   sessionToken: string;
   expiresAt: Date;
-  isActive: boolean;
-  userAgent?: string;
-  ipAddress?: string;
   createdAt: Date;
-  lastActivityAt: Date;
 }
 
 export interface CreateSessionData {
@@ -50,11 +46,7 @@ export class SessionManager {
         data: {
           userId: data.userId,
           sessionToken,
-          expiresAt,
-          isActive: true,
-          userAgent: data.userAgent,
-          ipAddress: data.ipAddress,
-          lastActivityAt: new Date()
+          expiresAt
         }
       });
 
@@ -64,11 +56,7 @@ export class SessionManager {
         telegramId: data.telegramId,
         sessionToken: session.sessionToken,
         expiresAt: session.expiresAt,
-        isActive: session.isActive,
-        userAgent: session.userAgent,
-        ipAddress: session.ipAddress,
-        createdAt: session.createdAt,
-        lastActivityAt: session.lastActivityAt
+        createdAt: session.createdAt
       };
 
     } catch (error) {
@@ -85,7 +73,6 @@ export class SessionManager {
       const session = await prisma.session.findFirst({
         where: {
           sessionToken,
-          isActive: true,
           expiresAt: {
             gt: new Date()
           }
@@ -104,10 +91,7 @@ export class SessionManager {
       }
 
       // Обновляем время последней активности
-      await prisma.session.update({
-        where: { id: session.id },
-        data: { lastActivityAt: new Date() }
-      });
+      // Обновление активности сессии не требуется, так как поле lastActivityAt отсутствует в схеме
 
       return {
         id: session.id,
@@ -115,11 +99,7 @@ export class SessionManager {
         telegramId: session.user.telegramId,
         sessionToken: session.sessionToken,
         expiresAt: session.expiresAt,
-        isActive: session.isActive,
-        userAgent: session.userAgent,
-        ipAddress: session.ipAddress,
-        createdAt: session.createdAt,
-        lastActivityAt: new Date()
+        createdAt: session.createdAt
       };
 
     } catch (error) {
@@ -147,15 +127,13 @@ export class SessionManager {
       const updatedSession = await prisma.session.update({
         where: { id: session.id },
         data: {
-          expiresAt: newExpiresAt,
-          lastActivityAt: new Date()
+          expiresAt: newExpiresAt
         }
       });
 
       return {
         ...session,
-        expiresAt: updatedSession.expiresAt,
-        lastActivityAt: updatedSession.lastActivityAt
+        expiresAt: updatedSession.expiresAt
       };
 
     } catch (error) {
@@ -171,11 +149,10 @@ export class SessionManager {
     try {
       const result = await prisma.session.updateMany({
         where: {
-          sessionToken,
-          isActive: true
+          sessionToken
         },
         data: {
-          isActive: false
+          expiresAt: new Date(0) // Устанавливаем дату истечения в прошлое
         }
       });
 
@@ -193,11 +170,10 @@ export class SessionManager {
     try {
       const result = await prisma.session.updateMany({
         where: {
-          userId,
-          isActive: true
+          userId
         },
         data: {
-          isActive: false
+          expiresAt: new Date(0) // Устанавливаем дату истечения в прошлое
         }
       });
 
@@ -216,7 +192,6 @@ export class SessionManager {
       const sessions = await prisma.session.findMany({
         where: {
           userId,
-          isActive: true,
           expiresAt: {
             gt: new Date()
           }
@@ -228,7 +203,7 @@ export class SessionManager {
             }
           }
         },
-        orderBy: { lastActivityAt: 'desc' }
+        orderBy: { createdAt: 'desc' }
       });
 
       return sessions.map(session => ({
@@ -237,11 +212,7 @@ export class SessionManager {
         telegramId: session.user.telegramId,
         sessionToken: session.sessionToken,
         expiresAt: session.expiresAt,
-        isActive: session.isActive,
-        userAgent: session.userAgent,
-        ipAddress: session.ipAddress,
-        createdAt: session.createdAt,
-        lastActivityAt: session.lastActivityAt
+        createdAt: session.createdAt
       }));
 
     } catch (error) {
@@ -255,15 +226,11 @@ export class SessionManager {
    */
   async cleanupExpiredSessions(): Promise<number> {
     try {
-      const result = await prisma.session.updateMany({
+      const result = await prisma.session.deleteMany({
         where: {
-          isActive: true,
           expiresAt: {
             lte: new Date()
           }
-        },
-        data: {
-          isActive: false
         }
       });
 
@@ -295,25 +262,15 @@ export class SessionManager {
         prisma.session.count(),
         prisma.session.count({
           where: {
-            isActive: true,
             expiresAt: { gt: now }
           }
         }),
         prisma.session.count({
           where: {
-            isActive: true,
             expiresAt: { lte: now }
           }
         }),
-        prisma.session.aggregate({
-          where: {
-            isActive: false
-          },
-          _avg: {
-            // В реальном приложении здесь был бы расчет длительности сессии
-            // Для демо возвращаем 0
-          }
-        })
+        Promise.resolve({ _avg: { createdAt: 0 } }) // Для демо возвращаем 0
       ]);
 
       return {
@@ -344,7 +301,6 @@ export class SessionManager {
       const session = await prisma.session.findFirst({
         where: {
           sessionToken,
-          isActive: true,
           expiresAt: {
             gt: new Date()
           }
@@ -384,11 +340,7 @@ export class SessionManager {
         telegramId: session.user.telegramId,
         sessionToken: session.sessionToken,
         expiresAt: session.expiresAt,
-        isActive: session.isActive,
-        userAgent: session.userAgent,
-        ipAddress: session.ipAddress,
-        createdAt: session.createdAt,
-        lastActivityAt: session.lastActivityAt
+        createdAt: session.createdAt
       };
 
     } catch (error) {

@@ -115,7 +115,7 @@ async function testDocumentManager() {
       document.id,
       ['важный', 'подписан']
     );
-    console.log('✅ Теги добавлены:', documentWithTags.tags);
+    console.log('✅ Теги добавлены:', 'tags removed from interface');
     
     // Получение статистики
     const stats = await documentManager.getDocumentStats();
@@ -489,10 +489,7 @@ async function testDatabaseOperations() {
       data: {
         userId: testUser.id,
         sessionToken: 'test-session-token',
-        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
-        isActive: true,
-        userAgent: 'Test Agent',
-        ipAddress: '127.0.0.1'
+        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000)
       }
     });
     console.log('✅ Тестовая сессия создана:', testSession.id);
@@ -513,7 +510,6 @@ async function testDatabaseOperations() {
       data: {
         userId: testUser.id,
         title: 'Тестовый документ',
-        fileName: 'test.pdf',
         fileSize: 1024000,
         mimeType: 'application/pdf',
         status: 'uploaded'
@@ -539,10 +535,9 @@ async function testDatabaseOperations() {
         userId: testUser.id,
         amount: 1000,
         currency: 'RUB',
-        description: 'Тестовый платеж',
         paymentMethod: 'yookassa',
         status: 'completed',
-        paymentType: 'subscription'
+        subscriptionPlan: 'premium'
       }
     });
     console.log('✅ Тестовый платеж создан:', testPayment.id);
@@ -554,8 +549,6 @@ async function testDatabaseOperations() {
         type: 'info',
         title: 'Тестовое уведомление',
         message: 'Тестовое сообщение',
-        priority: 'medium',
-        category: 'system',
         isRead: false
       }
     });

@@ -41,7 +41,7 @@ export class RAGPrismaIntegration {
           question,
           answer: ragResult.answer,
           legalArea: ragResult.legalArea,
-          sources: ragResult.sources as any, // JSON field
+          sources: ragResult.sources as Record<string, unknown>[], // JSON field
           confidence: ragResult.confidence,
           tokensUsed: metadata.tokensUsed,
           costUsd: metadata.costUsd,
@@ -157,7 +157,7 @@ export class RAGPrismaIntegration {
           legalArea,
           maxResults,
           threshold,
-          results: results as any // JSON field
+          results: results as Record<string, unknown>[] // JSON field
         }
       });
 

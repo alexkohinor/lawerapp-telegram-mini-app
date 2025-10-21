@@ -18,24 +18,37 @@ const consultationRequestSchema = z.object({
 
 // Конфигурация RAG (в реальном приложении из env переменных)
 const ragConfig: RAGConfig = {
-  timeWebCloud: {
+  timeweb: {
     apiKey: process.env.TIMEWEB_CLOUD_API_KEY || 'demo-key',
-    endpoint: process.env.TIMEWEB_CLOUD_ENDPOINT || 'https://api.timeweb.cloud/vector-db',
-    collectionName: process.env.TIMEWEB_CLOUD_COLLECTION_NAME || 'lawerapp-legal-docs'
+    vectorDbEndpoint: process.env.TIMEWEB_CLOUD_ENDPOINT || 'https://api.timeweb.cloud/vector-db',
+    objectStorageEndpoint: process.env.S3_ENDPOINT || 'https://s3.timeweb.cloud',
+    embeddingServiceEndpoint: process.env.EMBEDDING_ENDPOINT || 'https://api.timeweb.cloud/embedding'
   },
   objectStorage: {
     accessKeyId: process.env.S3_ACCESS_KEY_ID || 'demo-key',
     secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || 'demo-secret',
     endpoint: process.env.S3_ENDPOINT || 'https://s3.timeweb.cloud',
-    bucketName: process.env.S3_BUCKET_NAME || 'lawerapp-legal-documents'
+    bucket: process.env.S3_BUCKET_NAME || 'lawerapp-legal-documents',
+    region: process.env.S3_REGION || 'ru-1'
+  },
+  vectorDb: {
+    endpoint: process.env.TIMEWEB_CLOUD_ENDPOINT || 'https://api.timeweb.cloud/vector-db',
+    apiKey: process.env.TIMEWEB_CLOUD_API_KEY || 'demo-key',
+    collectionName: process.env.TIMEWEB_CLOUD_COLLECTION_NAME || 'lawerapp-legal-docs',
+    dimensions: 1536
   },
   embedding: {
-    apiKey: process.env.EMBEDDING_API_KEY || 'demo-key',
-    endpoint: process.env.EMBEDDING_ENDPOINT || 'https://api.timeweb.cloud/embedding',
-    model: process.env.EMBEDDING_MODEL || 'text-embedding-ada-002'
+    model: process.env.EMBEDDING_MODEL || 'text-embedding-ada-002',
+    dimensions: 1536,
+    maxTokens: 8192,
+    batchSize: 100
   },
-  llmModel: process.env.LLM_MODEL || 'gpt-4',
-  llmEndpoint: process.env.LLM_ENDPOINT || 'https://api.openai.com/v1/chat/completions'
+  documentProcessing: {
+    chunkSize: 1000,
+    chunkOverlap: 200,
+    maxFileSize: 50 * 1024 * 1024,
+    supportedFormats: ['pdf', 'docx', 'doc', 'txt', 'rtf']
+  }
 };
 
 const ragService = new RAGServiceWithPrisma(ragConfig);
@@ -68,7 +81,7 @@ export async function POST(request: NextRequest) {
     const result = await ragService.queryWithPersistence(
       {
         question: validatedData.question,
-        legalArea: validatedData.legalArea as any,
+        legalArea: validatedData.legalArea as 'consumer-rights' | 'labor-law' | 'civil-law' | 'criminal-law' | 'family-law' | 'tax-law' | 'general',
         maxResults: validatedData.maxResults,
         threshold: validatedData.threshold
       },
@@ -104,7 +117,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error: 'Ошибка валидации',
-          details: error.errors
+          details: error.issues
         },
         { status: 400 }
       );

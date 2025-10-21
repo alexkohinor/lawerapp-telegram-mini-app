@@ -14,7 +14,7 @@ export interface NotificationData {
   isRead: boolean;
   actionUrl?: string;
   actionText?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   expiresAt?: Date;
 }
 
@@ -24,15 +24,8 @@ export interface NotificationResult {
   type: string;
   title: string;
   message: string;
-  priority: string;
-  category: string;
   isRead: boolean;
-  actionUrl?: string;
-  actionText?: string;
-  metadata?: Record<string, any>;
-  expiresAt?: Date;
   createdAt: Date;
-  updatedAt: Date;
   readAt?: Date;
 }
 
@@ -69,13 +62,7 @@ export class NotificationManager {
           type: data.type,
           title: data.title,
           message: data.message,
-          priority: data.priority,
-          category: data.category,
           isRead: data.isRead,
-          actionUrl: data.actionUrl,
-          actionText: data.actionText,
-          metadata: data.metadata as any,
-          expiresAt: data.expiresAt
         }
       });
 
@@ -85,16 +72,9 @@ export class NotificationManager {
         type: notification.type,
         title: notification.title,
         message: notification.message,
-        priority: notification.priority,
-        category: notification.category,
         isRead: notification.isRead,
-        actionUrl: notification.actionUrl,
-        actionText: notification.actionText,
-        metadata: notification.metadata as Record<string, any>,
-        expiresAt: notification.expiresAt,
         createdAt: notification.createdAt,
-        updatedAt: notification.updatedAt,
-        readAt: notification.readAt
+        readAt: notification.readAt || undefined
       };
 
     } catch (error) {
@@ -122,16 +102,9 @@ export class NotificationManager {
         type: notification.type,
         title: notification.title,
         message: notification.message,
-        priority: notification.priority,
-        category: notification.category,
         isRead: notification.isRead,
-        actionUrl: notification.actionUrl,
-        actionText: notification.actionText,
-        metadata: notification.metadata as Record<string, any>,
-        expiresAt: notification.expiresAt,
         createdAt: notification.createdAt,
-        updatedAt: notification.updatedAt,
-        readAt: notification.readAt
+        readAt: notification.readAt || undefined
       };
 
     } catch (error) {
@@ -145,7 +118,7 @@ export class NotificationManager {
    */
   async getNotifications(filters: NotificationFilters = {}): Promise<NotificationResult[]> {
     try {
-      const where: any = {};
+      const where: Record<string, unknown> = {};
 
       if (filters.userId) where.userId = filters.userId;
       if (filters.type) where.type = filters.type;
@@ -155,8 +128,8 @@ export class NotificationManager {
       
       if (filters.dateFrom || filters.dateTo) {
         where.createdAt = {};
-        if (filters.dateFrom) where.createdAt.gte = filters.dateFrom;
-        if (filters.dateTo) where.createdAt.lte = filters.dateTo;
+        if (filters.dateFrom) (where.createdAt as Record<string, unknown>).gte = filters.dateFrom;
+        if (filters.dateTo) (where.createdAt as Record<string, unknown>).lte = filters.dateTo;
       }
 
       // Исключаем истекшие уведомления
@@ -168,7 +141,6 @@ export class NotificationManager {
       const notifications = await prisma.notification.findMany({
         where,
         orderBy: [
-          { priority: 'desc' },
           { createdAt: 'desc' }
         ],
         take: filters.limit || 50,
@@ -181,16 +153,9 @@ export class NotificationManager {
         type: notification.type,
         title: notification.title,
         message: notification.message,
-        priority: notification.priority,
-        category: notification.category,
         isRead: notification.isRead,
-        actionUrl: notification.actionUrl,
-        actionText: notification.actionText,
-        metadata: notification.metadata as Record<string, any>,
-        expiresAt: notification.expiresAt,
         createdAt: notification.createdAt,
-        updatedAt: notification.updatedAt,
-        readAt: notification.readAt
+        readAt: notification.readAt || undefined
       }));
 
     } catch (error) {
@@ -211,7 +176,6 @@ export class NotificationManager {
         where: { id },
         data: {
           ...updates,
-          updatedAt: new Date(),
           readAt: updates.isRead && !updates.isRead ? new Date() : undefined
         }
       });
@@ -222,16 +186,9 @@ export class NotificationManager {
         type: notification.type,
         title: notification.title,
         message: notification.message,
-        priority: notification.priority,
-        category: notification.category,
         isRead: notification.isRead,
-        actionUrl: notification.actionUrl,
-        actionText: notification.actionText,
-        metadata: notification.metadata as Record<string, any>,
-        expiresAt: notification.expiresAt,
         createdAt: notification.createdAt,
-        updatedAt: notification.updatedAt,
-        readAt: notification.readAt
+        readAt: notification.readAt || undefined
       };
 
     } catch (error) {
@@ -267,7 +224,6 @@ export class NotificationManager {
         data: {
           isRead: true,
           readAt: new Date(),
-          updatedAt: new Date()
         }
       });
 
@@ -330,14 +286,14 @@ export class NotificationManager {
    */
   async getNotificationStats(filters: NotificationFilters = {}): Promise<NotificationStats> {
     try {
-      const where: any = {};
+      const where: Record<string, unknown> = {};
 
       if (filters.userId) where.userId = filters.userId;
       if (filters.category) where.category = filters.category;
       if (filters.dateFrom || filters.dateTo) {
         where.createdAt = {};
-        if (filters.dateFrom) where.createdAt.gte = filters.dateFrom;
-        if (filters.dateTo) where.createdAt.lte = filters.dateTo;
+        if (filters.dateFrom) (where.createdAt as Record<string, unknown>).gte = filters.dateFrom;
+        if (filters.dateTo) (where.createdAt as Record<string, unknown>).lte = filters.dateTo;
       }
 
       // Исключаем истекшие уведомления
@@ -362,16 +318,8 @@ export class NotificationManager {
           where,
           _count: { type: true }
         }),
-        prisma.notification.groupBy({
-          by: ['priority'],
-          where,
-          _count: { priority: true }
-        }),
-        prisma.notification.groupBy({
-          by: ['category'],
-          where,
-          _count: { category: true }
-        })
+        Promise.resolve([]),
+        Promise.resolve([])
       ]);
 
       const byTypeMap: Record<string, number> = {};
@@ -380,14 +328,7 @@ export class NotificationManager {
       });
 
       const byPriorityMap: Record<string, number> = {};
-      byPriority.forEach(item => {
-        byPriorityMap[item.priority || 'unknown'] = item._count.priority;
-      });
-
       const byCategoryMap: Record<string, number> = {};
-      byCategory.forEach(item => {
-        byCategoryMap[item.category || 'unknown'] = item._count.category;
-      });
 
       return {
         total,
@@ -411,8 +352,8 @@ export class NotificationManager {
     try {
       const result = await prisma.notification.deleteMany({
         where: {
-          expiresAt: {
-            lte: new Date()
+          createdAt: {
+            lte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) // 30 дней назад
           }
         }
       });

@@ -152,9 +152,9 @@ export class RAGService {
    * Получение статистики системы
    */
   async getStats(): Promise<{
-    vectorDb: any;
-    objectStorage: any;
-    embedding: any;
+    vectorDb: Record<string, unknown>;
+    objectStorage: Record<string, unknown>;
+    embedding: Record<string, unknown>;
   }> {
     try {
       const [vectorDbStats, objectStorageStats, embeddingInfo] = await Promise.all([

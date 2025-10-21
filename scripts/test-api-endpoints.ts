@@ -47,7 +47,6 @@ async function testDataOverviewAPI() {
       data: {
         userId: testUser.id,
         title: 'Тестовый документ',
-        fileName: 'test.pdf',
         fileSize: 1024000,
         mimeType: 'application/pdf',
         status: 'uploaded'
@@ -70,10 +69,9 @@ async function testDataOverviewAPI() {
         userId: testUser.id,
         amount: 1000,
         currency: 'RUB',
-        description: 'Тестовый платеж',
         paymentMethod: 'yookassa',
         status: 'completed',
-        paymentType: 'subscription'
+        subscriptionPlan: 'premium'
       }
     });
     
@@ -84,8 +82,6 @@ async function testDataOverviewAPI() {
         type: 'info',
         title: 'Тестовое уведомление',
         message: 'Тестовое сообщение',
-        priority: 'medium',
-        category: 'system',
         isRead: false
       }
     });
@@ -166,7 +162,7 @@ async function testAnalyticsAPI() {
     // Создаем тестового пользователя
     const testUser = await prisma.user.create({
       data: {
-        telegramId: testTelegramId + 1n,
+        telegramId: testTelegramId + BigInt(1),
         telegramUsername: 'testuser2',
         firstName: 'Test2',
         lastName: 'User2',
@@ -214,20 +210,18 @@ async function testAnalyticsAPI() {
           userId: testUser.id,
           amount: 1000,
           currency: 'RUB',
-          description: 'Платеж 1',
           paymentMethod: 'yookassa',
           status: 'completed',
-          paymentType: 'subscription',
+          subscriptionPlan: 'premium',
           createdAt: today
         },
         {
           userId: testUser.id,
           amount: 500,
           currency: 'RUB',
-          description: 'Платеж 2',
           paymentMethod: 'yoomoney',
           status: 'completed',
-          paymentType: 'consultation',
+          subscriptionPlan: 'basic',
           createdAt: yesterday
         }
       ]
@@ -321,7 +315,7 @@ async function testSearchAPI() {
     // Создаем тестового пользователя
     const testUser = await prisma.user.create({
       data: {
-        telegramId: testTelegramId + 2n,
+        telegramId: testTelegramId + BigInt(2),
         telegramUsername: 'testuser3',
         firstName: 'Test3',
         lastName: 'User3',
@@ -337,8 +331,7 @@ async function testSearchAPI() {
         userId: testUser.id,
         question: 'Вопрос о договоре купли-продажи',
         answer: 'Ответ о договоре купли-продажи',
-        status: 'completed',
-        tags: ['договор', 'купля-продажа']
+        status: 'completed'
       }
     });
     
@@ -346,11 +339,9 @@ async function testSearchAPI() {
       data: {
         userId: testUser.id,
         title: 'Договор купли-продажи автомобиля',
-        fileName: 'contract.pdf',
         fileSize: 1024000,
         mimeType: 'application/pdf',
-        status: 'uploaded',
-        tags: ['договор', 'автомобиль']
+        status: 'uploaded'
       }
     });
     
@@ -359,8 +350,7 @@ async function testSearchAPI() {
         userId: testUser.id,
         title: 'Спор по договору купли-продажи',
         description: 'Описание спора по договору',
-        status: 'open',
-        tags: ['договор', 'спор']
+        status: 'ACTIVE'
       }
     });
     
@@ -378,8 +368,7 @@ async function testSearchAPI() {
     const documentResults = await prisma.document.findMany({
       where: {
         OR: [
-          { title: { contains: 'договор' } },
-          { fileName: { contains: 'договор' } }
+          { title: { contains: 'договор' } }
         ]
       }
     });
@@ -423,7 +412,7 @@ async function testCleanupAPI() {
     // Создаем тестового пользователя
     const testUser = await prisma.user.create({
       data: {
-        telegramId: testTelegramId + 3n,
+        telegramId: testTelegramId + BigInt(3),
         telegramUsername: 'testuser4',
         firstName: 'Test4',
         lastName: 'User4',
@@ -452,8 +441,6 @@ async function testCleanupAPI() {
         type: 'info',
         title: 'Старое уведомление',
         message: 'Старое сообщение',
-        priority: 'medium',
-        category: 'system',
         isRead: true,
         createdAt: oldDate
       }

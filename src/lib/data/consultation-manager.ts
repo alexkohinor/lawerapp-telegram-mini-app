@@ -4,6 +4,7 @@
 
 import { prisma } from '../prisma';
 import { RAGPrismaIntegration } from '../rag/prisma-integration';
+import { LegalSource } from '../rag/rag-service';
 
 export interface ConsultationData {
   userId: string;
@@ -13,7 +14,7 @@ export interface ConsultationData {
   status: 'pending' | 'processing' | 'completed' | 'failed';
   priority?: 'low' | 'medium' | 'high' | 'urgent';
   source?: 'manual' | 'rag' | 'ai_generated';
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface ConsultationResult {
@@ -25,9 +26,8 @@ export interface ConsultationResult {
   status: string;
   priority?: string;
   source?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt: Date;
-  updatedAt: Date;
   completedAt?: Date;
 }
 
@@ -47,8 +47,6 @@ export interface ConsultationStats {
   total: number;
   byStatus: Record<string, number>;
   byLegalArea: Record<string, number>;
-  byPriority: Record<string, number>;
-  bySource: Record<string, number>;
   averageResponseTime: number;
   completionRate: number;
 }
@@ -72,9 +70,6 @@ export class ConsultationManager {
           answer: data.answer,
           legalArea: data.legalArea,
           status: data.status,
-          priority: data.priority || 'medium',
-          source: data.source || 'manual',
-          metadata: data.metadata as any
         }
       });
 
@@ -82,15 +77,11 @@ export class ConsultationManager {
         id: consultation.id,
         userId: consultation.userId,
         question: consultation.question,
-        answer: consultation.answer,
-        legalArea: consultation.legalArea,
+        answer: consultation.answer || undefined,
+        legalArea: consultation.legalArea || undefined,
         status: consultation.status,
-        priority: consultation.priority,
-        source: consultation.source,
-        metadata: consultation.metadata as Record<string, any>,
         createdAt: consultation.createdAt,
-        updatedAt: consultation.updatedAt,
-        completedAt: consultation.completedAt
+        completedAt: consultation.completedAt || undefined
       };
 
     } catch (error) {
@@ -116,15 +107,11 @@ export class ConsultationManager {
         id: consultation.id,
         userId: consultation.userId,
         question: consultation.question,
-        answer: consultation.answer,
-        legalArea: consultation.legalArea,
+        answer: consultation.answer || undefined,
+        legalArea: consultation.legalArea || undefined,
         status: consultation.status,
-        priority: consultation.priority,
-        source: consultation.source,
-        metadata: consultation.metadata as Record<string, any>,
         createdAt: consultation.createdAt,
-        updatedAt: consultation.updatedAt,
-        completedAt: consultation.completedAt
+        completedAt: consultation.completedAt || undefined
       };
 
     } catch (error) {
@@ -138,7 +125,7 @@ export class ConsultationManager {
    */
   async getConsultations(filters: ConsultationFilters = {}): Promise<ConsultationResult[]> {
     try {
-      const where: any = {};
+      const where: Record<string, unknown> = {};
 
       if (filters.userId) where.userId = filters.userId;
       if (filters.status) where.status = filters.status;
@@ -148,8 +135,8 @@ export class ConsultationManager {
       
       if (filters.dateFrom || filters.dateTo) {
         where.createdAt = {};
-        if (filters.dateFrom) where.createdAt.gte = filters.dateFrom;
-        if (filters.dateTo) where.createdAt.lte = filters.dateTo;
+        if (filters.dateFrom) (where.createdAt as Record<string, unknown>).gte = filters.dateFrom;
+        if (filters.dateTo) (where.createdAt as Record<string, unknown>).lte = filters.dateTo;
       }
 
       const consultations = await prisma.consultation.findMany({
@@ -163,15 +150,11 @@ export class ConsultationManager {
         id: consultation.id,
         userId: consultation.userId,
         question: consultation.question,
-        answer: consultation.answer,
-        legalArea: consultation.legalArea,
+        answer: consultation.answer || undefined,
+        legalArea: consultation.legalArea || undefined,
         status: consultation.status,
-        priority: consultation.priority,
-        source: consultation.source,
-        metadata: consultation.metadata as Record<string, any>,
         createdAt: consultation.createdAt,
-        updatedAt: consultation.updatedAt,
-        completedAt: consultation.completedAt
+        completedAt: consultation.completedAt || undefined
       }));
 
     } catch (error) {
@@ -192,7 +175,6 @@ export class ConsultationManager {
         where: { id },
         data: {
           ...updates,
-          updatedAt: new Date(),
           completedAt: updates.status === 'completed' ? new Date() : undefined
         }
       });
@@ -201,15 +183,11 @@ export class ConsultationManager {
         id: consultation.id,
         userId: consultation.userId,
         question: consultation.question,
-        answer: consultation.answer,
-        legalArea: consultation.legalArea,
+        answer: consultation.answer || undefined,
+        legalArea: consultation.legalArea || undefined,
         status: consultation.status,
-        priority: consultation.priority,
-        source: consultation.source,
-        metadata: consultation.metadata as Record<string, any>,
         createdAt: consultation.createdAt,
-        updatedAt: consultation.updatedAt,
-        completedAt: consultation.completedAt
+        completedAt: consultation.completedAt || undefined
       };
 
     } catch (error) {
@@ -243,7 +221,7 @@ export class ConsultationManager {
     legalArea?: string,
     ragResult?: {
       answer: string;
-      sources: any[];
+      sources: unknown[];
       confidence: number;
       legalReferences: string[];
       suggestedActions: string[];
@@ -273,11 +251,10 @@ export class ConsultationManager {
           question,
           {
             answer: ragResult.answer,
-            sources: ragResult.sources,
+            sources: ragResult.sources as LegalSource[],
             confidence: ragResult.confidence,
             legalReferences: ragResult.legalReferences,
             suggestedActions: ragResult.suggestedActions,
-            legalArea: legalArea as any
           },
           {
             tokensUsed: this.estimateTokens(ragResult.answer),
@@ -318,22 +295,20 @@ export class ConsultationManager {
    */
   async getConsultationStats(filters: ConsultationFilters = {}): Promise<ConsultationStats> {
     try {
-      const where: any = {};
+      const where: Record<string, unknown> = {};
 
       if (filters.userId) where.userId = filters.userId;
       if (filters.legalArea) where.legalArea = filters.legalArea;
       if (filters.dateFrom || filters.dateTo) {
         where.createdAt = {};
-        if (filters.dateFrom) where.createdAt.gte = filters.dateFrom;
-        if (filters.dateTo) where.createdAt.lte = filters.dateTo;
+        if (filters.dateFrom) (where.createdAt as Record<string, unknown>).gte = filters.dateFrom;
+        if (filters.dateTo) (where.createdAt as Record<string, unknown>).lte = filters.dateTo;
       }
 
       const [
         total,
         byStatus,
         byLegalArea,
-        byPriority,
-        bySource,
         completedConsultations,
         avgResponseTime
       ] = await Promise.all([
@@ -347,16 +322,6 @@ export class ConsultationManager {
           by: ['legalArea'],
           where,
           _count: { legalArea: true }
-        }),
-        prisma.consultation.groupBy({
-          by: ['priority'],
-          where,
-          _count: { priority: true }
-        }),
-        prisma.consultation.groupBy({
-          by: ['source'],
-          where,
-          _count: { source: true }
         }),
         prisma.consultation.count({
           where: { ...where, status: 'completed' }
@@ -379,22 +344,11 @@ export class ConsultationManager {
         byLegalAreaMap[item.legalArea || 'unknown'] = item._count.legalArea;
       });
 
-      const byPriorityMap: Record<string, number> = {};
-      byPriority.forEach(item => {
-        byPriorityMap[item.priority || 'unknown'] = item._count.priority;
-      });
-
-      const bySourceMap: Record<string, number> = {};
-      bySource.forEach(item => {
-        bySourceMap[item.source || 'unknown'] = item._count.source;
-      });
 
       return {
         total,
         byStatus: byStatusMap,
         byLegalArea: byLegalAreaMap,
-        byPriority: byPriorityMap,
-        bySource: bySourceMap,
         averageResponseTime: 0, // avgResponseTime._avg.responseTime || 0
         completionRate: total > 0 ? (completedConsultations / total) * 100 : 0
       };
@@ -414,7 +368,7 @@ export class ConsultationManager {
     limit: number = 20
   ): Promise<ConsultationResult[]> {
     try {
-      const where: any = {
+      const where: Record<string, unknown> = {
         OR: [
           { question: { contains: query, mode: 'insensitive' } },
           { answer: { contains: query, mode: 'insensitive' } }
@@ -435,15 +389,11 @@ export class ConsultationManager {
         id: consultation.id,
         userId: consultation.userId,
         question: consultation.question,
-        answer: consultation.answer,
-        legalArea: consultation.legalArea,
+        answer: consultation.answer || undefined,
+        legalArea: consultation.legalArea || undefined,
         status: consultation.status,
-        priority: consultation.priority,
-        source: consultation.source,
-        metadata: consultation.metadata as Record<string, any>,
         createdAt: consultation.createdAt,
-        updatedAt: consultation.updatedAt,
-        completedAt: consultation.completedAt
+        completedAt: consultation.completedAt || undefined
       }));
 
     } catch (error) {

@@ -41,10 +41,7 @@ async function testBasicOperations() {
         question: 'Тестовый вопрос по праву',
         answer: 'Тестовый ответ на вопрос',
         legalArea: 'civil-law',
-        status: 'completed',
-        priority: 'medium',
-        source: 'manual',
-        tags: ['тест', 'консультация']
+        status: 'completed'
       }
     });
     console.log('✅ Тестовая консультация создана:', testConsultation.id);
@@ -54,11 +51,9 @@ async function testBasicOperations() {
       data: {
         userId: testUser.id,
         title: 'Тестовый документ',
-        fileName: 'test.pdf',
         fileSize: 1024000,
         mimeType: 'application/pdf',
-        status: 'uploaded',
-        tags: ['тест', 'документ']
+        status: 'uploaded'
       }
     });
     console.log('✅ Тестовый документ создан:', testDocument.id);
@@ -69,9 +64,7 @@ async function testBasicOperations() {
         userId: testUser.id,
         title: 'Тестовый спор',
         description: 'Описание тестового спора',
-        status: 'open',
-        priority: 'medium',
-        tags: ['тест', 'спор']
+        status: 'ACTIVE'
       }
     });
     console.log('✅ Тестовый спор создан:', testDispute.id);
@@ -82,10 +75,9 @@ async function testBasicOperations() {
         userId: testUser.id,
         amount: 1000,
         currency: 'RUB',
-        description: 'Тестовый платеж',
         paymentMethod: 'yookassa',
         status: 'completed',
-        paymentType: 'subscription'
+        subscriptionPlan: 'premium'
       }
     });
     console.log('✅ Тестовый платеж создан:', testPayment.id);
@@ -97,8 +89,6 @@ async function testBasicOperations() {
         type: 'info',
         title: 'Тестовое уведомление',
         message: 'Тестовое сообщение',
-        priority: 'medium',
-        category: 'system',
         isRead: false
       }
     });
@@ -109,10 +99,7 @@ async function testBasicOperations() {
       data: {
         userId: testUser.id,
         sessionToken: 'test-session-token',
-        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
-        isActive: true,
-        userAgent: 'Test Agent',
-        ipAddress: '127.0.0.1'
+        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000)
       }
     });
     console.log('✅ Тестовая сессия создана:', testSession.id);
@@ -190,7 +177,7 @@ async function testRAGModels() {
     // Создаем тестового пользователя
     const testUser = await prisma.user.create({
       data: {
-        telegramId: testTelegramId + 1n,
+        telegramId: testTelegramId + BigInt(1),
         telegramUsername: 'testuser2',
         firstName: 'Test2',
         lastName: 'User2',
@@ -255,10 +242,7 @@ async function testRAGModels() {
         userId: testUser.id,
         query: 'Тестовый RAG запрос',
         legalArea: 'civil-law',
-        results: { documents: ['doc1'], laws: ['law1'] },
-        tokensUsed: 800,
-        costUsd: 0.03,
-        responseTimeMs: 1500
+        results: { documents: ['doc1'], laws: ['law1'] }
       }
     });
     console.log('✅ RAG запрос создан:', ragQuery.id);
@@ -318,7 +302,7 @@ async function testRelations() {
     // Создаем тестового пользователя
     const testUser = await prisma.user.create({
       data: {
-        telegramId: testTelegramId + 2n,
+        telegramId: testTelegramId + BigInt(2),
         telegramUsername: 'testuser3',
         firstName: 'Test3',
         lastName: 'User3',

@@ -80,7 +80,7 @@ export interface SystemAnalytics {
 export interface TimeSeriesData {
   period: string;
   value: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export class AnalyticsManager {
@@ -577,11 +577,17 @@ export class AnalyticsManager {
    */
   private async getRevenueTimeSeries(period: AnalyticsPeriod): Promise<TimeSeriesData[]> {
     try {
-      return await this.paymentManager.getRevenueByPeriod(
+      const data = await this.paymentManager.getRevenueByPeriod(
         period.startDate,
         period.endDate,
-        period.groupBy
+        period.groupBy === 'year' ? 'month' : period.groupBy
       );
+      
+      return data.map(item => ({
+        period: item.period,
+        value: item.amount,
+        count: item.count
+      }));
     } catch (error) {
       console.error('Get Revenue Time Series Error:', error);
       return [];
@@ -665,11 +671,17 @@ export class AnalyticsManager {
    */
   private async getPaymentTimeSeries(period: AnalyticsPeriod): Promise<TimeSeriesData[]> {
     try {
-      return await this.paymentManager.getRevenueByPeriod(
+      const data = await this.paymentManager.getRevenueByPeriod(
         period.startDate,
         period.endDate,
-        period.groupBy
+        period.groupBy === 'year' ? 'month' : period.groupBy
       );
+      
+      return data.map(item => ({
+        period: item.period,
+        value: item.amount,
+        count: item.count
+      }));
     } catch (error) {
       console.error('Get Payment Time Series Error:', error);
       return [];

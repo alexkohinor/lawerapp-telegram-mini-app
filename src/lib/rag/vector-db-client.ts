@@ -189,7 +189,7 @@ export class VectorDBClient {
 
       const data = await response.json();
       
-      return data.result.map((item: any) => ({
+      return data.result.map((item: { id: string; score: number; payload: Record<string, unknown> }) => ({
         id: item.id,
         score: item.score,
         metadata: item.payload

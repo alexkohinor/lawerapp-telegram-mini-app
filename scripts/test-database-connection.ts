@@ -122,7 +122,6 @@ async function testSQLiteConnection() {
       data: {
         userId: testUser.id,
         title: 'Тестовый документ подключения',
-        fileName: 'test-connection.pdf',
         fileSize: 1024000,
         mimeType: 'application/pdf',
         status: 'uploaded'
@@ -296,7 +295,6 @@ async function testTransactions() {
         data: {
           userId: user.id,
           title: 'Документ в транзакции',
-          fileName: 'transaction.pdf',
           fileSize: 1024000,
           mimeType: 'application/pdf',
           status: 'uploaded'

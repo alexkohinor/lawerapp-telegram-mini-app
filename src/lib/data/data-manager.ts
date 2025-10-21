@@ -405,13 +405,12 @@ export class DataManager {
       
       const result = await prisma.session.updateMany({
         where: {
-          isActive: true,
           expiresAt: {
             lte: new Date()
           }
         },
         data: {
-          isActive: false
+          expiresAt: new Date(0)
         }
       });
 
@@ -531,10 +530,10 @@ export class DataManager {
     userId?: string,
     limit: number = 20
   ): Promise<{
-    consultations: any[];
-    documents: any[];
-    disputes: any[];
-    payments: any[];
+    consultations: unknown[];
+    documents: unknown[];
+    disputes: unknown[];
+    payments: unknown[];
   }> {
     try {
       const [

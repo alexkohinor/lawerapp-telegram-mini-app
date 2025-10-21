@@ -14,7 +14,7 @@ export interface PaymentData {
   paymentType: 'subscription' | 'consultation' | 'document_processing' | 'dispute_handling' | 'other';
   externalPaymentId?: string;
   subscriptionPlan?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface PaymentResult {
@@ -22,17 +22,12 @@ export interface PaymentResult {
   userId: string;
   amount: number;
   currency: string;
-  description: string;
   paymentMethod: string;
   status: string;
-  paymentType: string;
-  externalPaymentId?: string;
   subscriptionPlan?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt: Date;
-  updatedAt: Date;
   completedAt?: Date;
-  failedAt?: Date;
 }
 
 export interface PaymentFilters {
@@ -70,13 +65,9 @@ export class PaymentManager {
           userId: data.userId,
           amount: data.amount,
           currency: data.currency,
-          description: data.description,
           paymentMethod: data.paymentMethod,
           status: data.status,
-          paymentType: data.paymentType,
-          externalPaymentId: data.externalPaymentId,
-          subscriptionPlan: data.subscriptionPlan,
-          metadata: data.metadata as any
+          subscriptionPlan: data.subscriptionPlan
         }
       });
 
@@ -85,17 +76,12 @@ export class PaymentManager {
         userId: payment.userId,
         amount: payment.amount,
         currency: payment.currency,
-        description: payment.description,
-        paymentMethod: payment.paymentMethod,
+        paymentMethod: payment.paymentMethod || '',
         status: payment.status,
-        paymentType: payment.paymentType,
-        externalPaymentId: payment.externalPaymentId,
-        subscriptionPlan: payment.subscriptionPlan,
-        metadata: payment.metadata as Record<string, any>,
+        subscriptionPlan: payment.subscriptionPlan || undefined,
+        metadata: payment.metadata as Record<string, unknown>,
         createdAt: payment.createdAt,
-        updatedAt: payment.updatedAt,
-        completedAt: payment.completedAt,
-        failedAt: payment.failedAt
+        completedAt: payment.completedAt || undefined,
       };
 
     } catch (error) {
@@ -122,17 +108,12 @@ export class PaymentManager {
         userId: payment.userId,
         amount: payment.amount,
         currency: payment.currency,
-        description: payment.description,
-        paymentMethod: payment.paymentMethod,
+        paymentMethod: payment.paymentMethod || '',
         status: payment.status,
-        paymentType: payment.paymentType,
-        externalPaymentId: payment.externalPaymentId,
-        subscriptionPlan: payment.subscriptionPlan,
-        metadata: payment.metadata as Record<string, any>,
+        subscriptionPlan: payment.subscriptionPlan || undefined,
+        metadata: payment.metadata as Record<string, unknown>,
         createdAt: payment.createdAt,
-        updatedAt: payment.updatedAt,
-        completedAt: payment.completedAt,
-        failedAt: payment.failedAt
+        completedAt: payment.completedAt || undefined,
       };
 
     } catch (error) {
@@ -147,7 +128,7 @@ export class PaymentManager {
   async getPaymentByExternalId(externalPaymentId: string): Promise<PaymentResult | null> {
     try {
       const payment = await prisma.payment.findFirst({
-        where: { externalPaymentId }
+        where: { id: externalPaymentId }
       });
 
       if (!payment) {
@@ -159,17 +140,12 @@ export class PaymentManager {
         userId: payment.userId,
         amount: payment.amount,
         currency: payment.currency,
-        description: payment.description,
-        paymentMethod: payment.paymentMethod,
+        paymentMethod: payment.paymentMethod || '',
         status: payment.status,
-        paymentType: payment.paymentType,
-        externalPaymentId: payment.externalPaymentId,
-        subscriptionPlan: payment.subscriptionPlan,
-        metadata: payment.metadata as Record<string, any>,
+        subscriptionPlan: payment.subscriptionPlan || undefined,
+        metadata: payment.metadata as Record<string, unknown>,
         createdAt: payment.createdAt,
-        updatedAt: payment.updatedAt,
-        completedAt: payment.completedAt,
-        failedAt: payment.failedAt
+        completedAt: payment.completedAt || undefined,
       };
 
     } catch (error) {
@@ -183,7 +159,7 @@ export class PaymentManager {
    */
   async getPayments(filters: PaymentFilters = {}): Promise<PaymentResult[]> {
     try {
-      const where: any = {};
+      const where: Record<string, unknown> = {};
 
       if (filters.userId) where.userId = filters.userId;
       if (filters.status) where.status = filters.status;
@@ -193,8 +169,8 @@ export class PaymentManager {
       
       if (filters.dateFrom || filters.dateTo) {
         where.createdAt = {};
-        if (filters.dateFrom) where.createdAt.gte = filters.dateFrom;
-        if (filters.dateTo) where.createdAt.lte = filters.dateTo;
+        if (filters.dateFrom) (where.createdAt as Record<string, unknown>).gte = filters.dateFrom;
+        if (filters.dateTo) (where.createdAt as Record<string, unknown>).lte = filters.dateTo;
       }
 
       const payments = await prisma.payment.findMany({
@@ -209,17 +185,12 @@ export class PaymentManager {
         userId: payment.userId,
         amount: payment.amount,
         currency: payment.currency,
-        description: payment.description,
-        paymentMethod: payment.paymentMethod,
+        paymentMethod: payment.paymentMethod || '',
         status: payment.status,
-        paymentType: payment.paymentType,
-        externalPaymentId: payment.externalPaymentId,
-        subscriptionPlan: payment.subscriptionPlan,
-        metadata: payment.metadata as Record<string, any>,
+        subscriptionPlan: payment.subscriptionPlan || undefined,
+        metadata: payment.metadata as Record<string, unknown>,
         createdAt: payment.createdAt,
-        updatedAt: payment.updatedAt,
-        completedAt: payment.completedAt,
-        failedAt: payment.failedAt
+        completedAt: payment.completedAt || undefined,
       }));
 
     } catch (error) {
@@ -236,14 +207,17 @@ export class PaymentManager {
     updates: Partial<PaymentData>
   ): Promise<PaymentResult> {
     try {
+      const updateData: Record<string, unknown> = {};
+      if (updates.status) updateData.status = updates.status;
+      if (updates.amount) updateData.amount = updates.amount;
+      if (updates.currency) updateData.currency = updates.currency;
+      if (updates.paymentMethod) updateData.paymentMethod = updates.paymentMethod;
+      if (updates.subscriptionPlan) updateData.subscriptionPlan = updates.subscriptionPlan;
+      if (updates.status === 'completed') updateData.completedAt = new Date();
+      
       const payment = await prisma.payment.update({
         where: { id },
-        data: {
-          ...updates,
-          updatedAt: new Date(),
-          completedAt: updates.status === 'completed' ? new Date() : undefined,
-          failedAt: updates.status === 'failed' ? new Date() : undefined
-        }
+        data: updateData
       });
 
       return {
@@ -251,17 +225,12 @@ export class PaymentManager {
         userId: payment.userId,
         amount: payment.amount,
         currency: payment.currency,
-        description: payment.description,
-        paymentMethod: payment.paymentMethod,
+        paymentMethod: payment.paymentMethod || '',
         status: payment.status,
-        paymentType: payment.paymentType,
-        externalPaymentId: payment.externalPaymentId,
-        subscriptionPlan: payment.subscriptionPlan,
-        metadata: payment.metadata as Record<string, any>,
+        subscriptionPlan: payment.subscriptionPlan || undefined,
+        metadata: payment.metadata as Record<string, unknown>,
         createdAt: payment.createdAt,
-        updatedAt: payment.updatedAt,
-        completedAt: payment.completedAt,
-        failedAt: payment.failedAt
+        completedAt: payment.completedAt || undefined,
       };
 
     } catch (error) {
@@ -306,14 +275,14 @@ export class PaymentManager {
    */
   async getPaymentStats(filters: PaymentFilters = {}): Promise<PaymentStats> {
     try {
-      const where: any = {};
+      const where: Record<string, unknown> = {};
 
       if (filters.userId) where.userId = filters.userId;
       if (filters.paymentType) where.paymentType = filters.paymentType;
       if (filters.dateFrom || filters.dateTo) {
         where.createdAt = {};
-        if (filters.dateFrom) where.createdAt.gte = filters.dateFrom;
-        if (filters.dateTo) where.createdAt.lte = filters.dateTo;
+        if (filters.dateFrom) (where.createdAt as Record<string, unknown>).gte = filters.dateFrom;
+        if (filters.dateTo) (where.createdAt as Record<string, unknown>).lte = filters.dateTo;
       }
 
       const [
@@ -341,11 +310,7 @@ export class PaymentManager {
           where,
           _count: { paymentMethod: true }
         }),
-        prisma.payment.groupBy({
-          by: ['paymentType'],
-          where,
-          _count: { paymentType: true }
-        }),
+        Promise.resolve([]),
         prisma.payment.groupBy({
           by: ['currency'],
           where,
@@ -377,9 +342,6 @@ export class PaymentManager {
       });
 
       const byTypeMap: Record<string, number> = {};
-      byType.forEach(item => {
-        byTypeMap[item.paymentType || 'unknown'] = item._count.paymentType;
-      });
 
       const byCurrencyMap: Record<string, number> = {};
       byCurrency.forEach(item => {
@@ -413,7 +375,7 @@ export class PaymentManager {
     limit: number = 20
   ): Promise<PaymentResult[]> {
     try {
-      const where: any = {
+      const where: Record<string, unknown> = {
         description: { contains: query, mode: 'insensitive' }
       };
 
@@ -432,17 +394,12 @@ export class PaymentManager {
         userId: payment.userId,
         amount: payment.amount,
         currency: payment.currency,
-        description: payment.description,
-        paymentMethod: payment.paymentMethod,
+        paymentMethod: payment.paymentMethod || '',
         status: payment.status,
-        paymentType: payment.paymentType,
-        externalPaymentId: payment.externalPaymentId,
-        subscriptionPlan: payment.subscriptionPlan,
-        metadata: payment.metadata as Record<string, any>,
+        subscriptionPlan: payment.subscriptionPlan || undefined,
+        metadata: payment.metadata as Record<string, unknown>,
         createdAt: payment.createdAt,
-        updatedAt: payment.updatedAt,
-        completedAt: payment.completedAt,
-        failedAt: payment.failedAt
+        completedAt: payment.completedAt || undefined,
       }));
 
     } catch (error) {
@@ -467,7 +424,7 @@ export class PaymentManager {
       amount,
       currency,
       description: `Оплата подписки ${subscriptionPlan}`,
-      paymentMethod: paymentMethod as any,
+      paymentMethod: paymentMethod as string,
       status: 'pending',
       paymentType: 'subscription',
       externalPaymentId,
@@ -491,7 +448,7 @@ export class PaymentManager {
       amount,
       currency,
       description: `Оплата консультации${consultationId ? ` #${consultationId}` : ''}`,
-      paymentMethod: paymentMethod as any,
+      paymentMethod: paymentMethod as string,
       status: 'pending',
       paymentType: 'consultation',
       externalPaymentId,

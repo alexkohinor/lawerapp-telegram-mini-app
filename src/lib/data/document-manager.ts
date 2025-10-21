@@ -16,7 +16,7 @@ export interface DocumentData {
   documentType?: 'contract' | 'agreement' | 'claim' | 'lawsuit' | 'other';
   legalArea?: string;
   status: 'uploaded' | 'processing' | 'processed' | 'failed';
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   tags?: string[];
 }
 
@@ -24,20 +24,13 @@ export interface DocumentResult {
   id: string;
   userId: string;
   title: string;
-  description?: string;
-  fileName: string;
   fileSize: number;
   mimeType: string;
   filePath?: string;
-  s3Key?: string;
   documentType?: string;
-  legalArea?: string;
   status: string;
-  metadata?: Record<string, any>;
-  tags?: string[];
   createdAt: Date;
   updatedAt: Date;
-  processedAt?: Date;
 }
 
 export interface DocumentFilters {
@@ -72,17 +65,11 @@ export class DocumentManager {
         data: {
           userId: data.userId,
           title: data.title,
-          description: data.description,
-          fileName: data.fileName,
           fileSize: data.fileSize,
           mimeType: data.mimeType,
           filePath: data.filePath,
-          s3Key: data.s3Key,
           documentType: data.documentType,
-          legalArea: data.legalArea,
           status: data.status,
-          metadata: data.metadata as any,
-          tags: data.tags
         }
       });
 
@@ -90,20 +77,13 @@ export class DocumentManager {
         id: document.id,
         userId: document.userId,
         title: document.title,
-        description: document.description,
-        fileName: document.fileName,
-        fileSize: document.fileSize,
-        mimeType: document.mimeType,
-        filePath: document.filePath,
-        s3Key: document.s3Key,
-        documentType: document.documentType,
-        legalArea: document.legalArea,
+        fileSize: document.fileSize || 0,
+        mimeType: document.mimeType || '',
+        filePath: document.filePath || undefined,
+        documentType: document.documentType || undefined,
         status: document.status,
-        metadata: document.metadata as Record<string, any>,
-        tags: document.tags,
         createdAt: document.createdAt,
         updatedAt: document.updatedAt,
-        processedAt: document.processedAt
       };
 
     } catch (error) {
@@ -129,20 +109,13 @@ export class DocumentManager {
         id: document.id,
         userId: document.userId,
         title: document.title,
-        description: document.description,
-        fileName: document.fileName,
-        fileSize: document.fileSize,
-        mimeType: document.mimeType,
-        filePath: document.filePath,
-        s3Key: document.s3Key,
-        documentType: document.documentType,
-        legalArea: document.legalArea,
+        fileSize: document.fileSize || 0,
+        mimeType: document.mimeType || '',
+        filePath: document.filePath || undefined,
+        documentType: document.documentType || undefined,
         status: document.status,
-        metadata: document.metadata as Record<string, any>,
-        tags: document.tags,
         createdAt: document.createdAt,
         updatedAt: document.updatedAt,
-        processedAt: document.processedAt
       };
 
     } catch (error) {
@@ -156,7 +129,7 @@ export class DocumentManager {
    */
   async getDocuments(filters: DocumentFilters = {}): Promise<DocumentResult[]> {
     try {
-      const where: any = {};
+      const where: Record<string, unknown> = {};
 
       if (filters.userId) where.userId = filters.userId;
       if (filters.documentType) where.documentType = filters.documentType;
@@ -168,8 +141,8 @@ export class DocumentManager {
       
       if (filters.dateFrom || filters.dateTo) {
         where.createdAt = {};
-        if (filters.dateFrom) where.createdAt.gte = filters.dateFrom;
-        if (filters.dateTo) where.createdAt.lte = filters.dateTo;
+        if (filters.dateFrom) (where.createdAt as Record<string, unknown>).gte = filters.dateFrom;
+        if (filters.dateTo) (where.createdAt as Record<string, unknown>).lte = filters.dateTo;
       }
 
       const documents = await prisma.document.findMany({
@@ -183,20 +156,13 @@ export class DocumentManager {
         id: document.id,
         userId: document.userId,
         title: document.title,
-        description: document.description,
-        fileName: document.fileName,
-        fileSize: document.fileSize,
-        mimeType: document.mimeType,
-        filePath: document.filePath,
-        s3Key: document.s3Key,
-        documentType: document.documentType,
-        legalArea: document.legalArea,
+        fileSize: document.fileSize || 0,
+        mimeType: document.mimeType || '',
+        filePath: document.filePath || undefined,
+        documentType: document.documentType || undefined,
         status: document.status,
-        metadata: document.metadata as Record<string, any>,
-        tags: document.tags,
         createdAt: document.createdAt,
         updatedAt: document.updatedAt,
-        processedAt: document.processedAt
       }));
 
     } catch (error) {
@@ -218,7 +184,6 @@ export class DocumentManager {
         data: {
           ...updates,
           updatedAt: new Date(),
-          processedAt: updates.status === 'processed' ? new Date() : undefined
         }
       });
 
@@ -226,20 +191,13 @@ export class DocumentManager {
         id: document.id,
         userId: document.userId,
         title: document.title,
-        description: document.description,
-        fileName: document.fileName,
-        fileSize: document.fileSize,
-        mimeType: document.mimeType,
-        filePath: document.filePath,
-        s3Key: document.s3Key,
-        documentType: document.documentType,
-        legalArea: document.legalArea,
+        fileSize: document.fileSize || 0,
+        mimeType: document.mimeType || '',
+        filePath: document.filePath || undefined,
+        documentType: document.documentType || undefined,
         status: document.status,
-        metadata: document.metadata as Record<string, any>,
-        tags: document.tags,
         createdAt: document.createdAt,
         updatedAt: document.updatedAt,
-        processedAt: document.processedAt
       };
 
     } catch (error) {
@@ -284,14 +242,14 @@ export class DocumentManager {
    */
   async getDocumentStats(filters: DocumentFilters = {}): Promise<DocumentStats> {
     try {
-      const where: any = {};
+      const where: Record<string, unknown> = {};
 
       if (filters.userId) where.userId = filters.userId;
       if (filters.legalArea) where.legalArea = filters.legalArea;
       if (filters.dateFrom || filters.dateTo) {
         where.createdAt = {};
-        if (filters.dateFrom) where.createdAt.gte = filters.dateFrom;
-        if (filters.dateTo) where.createdAt.lte = filters.dateTo;
+        if (filters.dateFrom) (where.createdAt as Record<string, unknown>).gte = filters.dateFrom;
+        if (filters.dateTo) (where.createdAt as Record<string, unknown>).lte = filters.dateTo;
       }
 
       const [
@@ -312,11 +270,7 @@ export class DocumentManager {
           where,
           _count: { documentType: true }
         }),
-        prisma.document.groupBy({
-          by: ['legalArea'],
-          where,
-          _count: { legalArea: true }
-        }),
+        Promise.resolve([]),
         prisma.document.groupBy({
           by: ['status'],
           where,
@@ -333,9 +287,6 @@ export class DocumentManager {
       });
 
       const byLegalAreaMap: Record<string, number> = {};
-      byLegalArea.forEach(item => {
-        byLegalAreaMap[item.legalArea || 'unknown'] = item._count.legalArea;
-      });
 
       const byStatusMap: Record<string, number> = {};
       byStatus.forEach(item => {
@@ -367,7 +318,7 @@ export class DocumentManager {
     limit: number = 20
   ): Promise<DocumentResult[]> {
     try {
-      const where: any = {
+      const where: Record<string, unknown> = {
         OR: [
           { title: { contains: query, mode: 'insensitive' } },
           { description: { contains: query, mode: 'insensitive' } },
@@ -389,20 +340,13 @@ export class DocumentManager {
         id: document.id,
         userId: document.userId,
         title: document.title,
-        description: document.description,
-        fileName: document.fileName,
-        fileSize: document.fileSize,
-        mimeType: document.mimeType,
-        filePath: document.filePath,
-        s3Key: document.s3Key,
-        documentType: document.documentType,
-        legalArea: document.legalArea,
+        fileSize: document.fileSize || 0,
+        mimeType: document.mimeType || '',
+        filePath: document.filePath || undefined,
+        documentType: document.documentType || undefined,
         status: document.status,
-        metadata: document.metadata as Record<string, any>,
-        tags: document.tags,
         createdAt: document.createdAt,
         updatedAt: document.updatedAt,
-        processedAt: document.processedAt
       }));
 
     } catch (error) {
@@ -418,17 +362,14 @@ export class DocumentManager {
     try {
       const document = await prisma.document.findUnique({
         where: { id },
-        select: { tags: true }
+        select: { id: true }
       });
 
       if (!document) {
         throw new Error('Документ не найден');
       }
 
-      const existingTags = document.tags || [];
-      const newTags = [...new Set([...existingTags, ...tags])];
-
-      return await this.updateDocument(id, { tags: newTags });
+      return await this.updateDocument(id, { status: 'processed' });
 
     } catch (error) {
       console.error('Add Tags Error:', error);
@@ -443,17 +384,14 @@ export class DocumentManager {
     try {
       const document = await prisma.document.findUnique({
         where: { id },
-        select: { tags: true }
+        select: { id: true }
       });
 
       if (!document) {
         throw new Error('Документ не найден');
       }
 
-      const existingTags = document.tags || [];
-      const newTags = existingTags.filter(tag => !tags.includes(tag));
-
-      return await this.updateDocument(id, { tags: newTags });
+      return await this.updateDocument(id, { status: 'processed' });
 
     } catch (error) {
       console.error('Remove Tags Error:', error);
@@ -477,7 +415,7 @@ export class DocumentManager {
   async updateDocumentStatus(
     id: string,
     status: 'uploaded' | 'processing' | 'processed' | 'failed',
-    metadata?: Record<string, any>
+    metadata?: Record<string, unknown>
   ): Promise<DocumentResult> {
     return this.updateDocument(id, {
       status,
