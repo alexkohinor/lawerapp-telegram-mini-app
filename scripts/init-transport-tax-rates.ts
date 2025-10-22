@@ -17,7 +17,17 @@ interface TaxRateData {
   source: string;
 }
 
-const taxRates: TaxRateData[] = [
+/**
+ * Генерация ставок для следующего года
+ */
+function generateRatesForYear(year: number, baseTaxRates: TaxRateData[]): TaxRateData[] {
+  return baseTaxRates.map(rate => ({
+    ...rate,
+    year,
+  }));
+}
+
+const baseTaxRates: TaxRateData[] = [
   // ============================================
   // Москва (код 77)
   // ============================================
@@ -380,20 +390,13 @@ const taxRates: TaxRateData[] = [
     year: 2024,
     source: 'Закон Московской области от 16.11.2002 № 129/2002-ОЗ',
   },
-  
-  // Копируем те же данные для 2025 года
-  ...generateRatesForYear(2025),
 ];
 
-/**
- * Генерация ставок для следующего года
- */
-function generateRatesForYear(year: number) {
-  return taxRates.map(rate => ({
-    ...rate,
-    year,
-  }));
-}
+// Объединяем 2024 и 2025 года
+const taxRates: TaxRateData[] = [
+  ...baseTaxRates,
+  ...generateRatesForYear(2025, baseTaxRates),
+];
 
 async function initializeTransportTaxRates() {
   consola.start('Инициализация ставок транспортного налога...');
