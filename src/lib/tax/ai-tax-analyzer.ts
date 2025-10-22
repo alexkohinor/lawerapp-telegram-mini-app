@@ -1,6 +1,7 @@
 import OpenAI from 'openai';
 import { getPromptByType, logPromptUsage } from './ai-prompt-service';
 import { prisma } from '../prisma';
+import { findRelevantPrecedents, type Precedent } from './rag-precedent-finder';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -67,6 +68,9 @@ export interface TaxAnalysisResult {
     stepByStepPlan: string[];
     alternativeOptions: string[];
   };
+  
+  // RAG прецеденты (опционально)
+  precedents?: Precedent[];
 }
 
 export interface TaxError {
@@ -116,9 +120,30 @@ export interface Risk {
  */
 export async function analyzeTaxRequirement(
   request: TaxAnalysisRequest,
-  userId?: string
+  userId?: string,
+  usePrecedents: boolean = true
 ): Promise<TaxAnalysisResult> {
   const startTime = Date.now();
+  
+  // Поиск релевантных прецедентов (RAG)
+  let precedents: Precedent[] = [];
+  if (usePrecedents) {
+    try {
+      const grounds = request.grounds?.join('. ') || '';
+      const searchQuery = `${request.taxType} налог ${request.taxPeriod}. ${grounds}. 
+        Оспаривание начисления, судебная практика, решения судов.`;
+      
+      precedents = await findRelevantPrecedents({
+        query: searchQuery,
+        taxType: request.taxType,
+        limit: 5,
+        minRelevance: 0.75,
+      });
+    } catch (error) {
+      console.error('Error finding precedents:', error);
+      // Продолжаем без прецедентов
+    }
+  }
   
   // Получение промпта из БД
   const promptTemplate = await getPromptByType('tax_analysis', request.taxType);
@@ -132,14 +157,14 @@ export async function analyzeTaxRequirement(
   
   if (promptTemplate) {
     systemPrompt = promptTemplate.systemPrompt || getDefaultAnalysisSystemPrompt();
-    userPrompt = buildUserPrompt(request, promptTemplate.userPrompt);
+    userPrompt = buildUserPrompt(request, promptTemplate.userPrompt, precedents);
     temperature = promptTemplate.temperature;
     maxTokens = promptTemplate.maxTokens;
     model = promptTemplate.model;
     promptId = promptTemplate.id;
   } else {
     systemPrompt = getDefaultAnalysisSystemPrompt();
-    userPrompt = buildUserPrompt(request);
+    userPrompt = buildUserPrompt(request, undefined, precedents);
   }
   
   try {
@@ -159,6 +184,11 @@ export async function analyzeTaxRequirement(
     
     // Парсинг JSON ответа
     const parsedAnalysis = parseAnalysisResponse(analysisContent, request);
+    
+    // Добавление прецедентов к результату
+    if (precedents.length > 0) {
+      parsedAnalysis.precedents = precedents;
+    }
     
     // Сохранение анализа в БД
     await saveAnalysisToDatabase(request.disputeId, parsedAnalysis);
@@ -273,7 +303,7 @@ function getDefaultAnalysisSystemPrompt(): string {
 /**
  * Построение пользовательского промпта
  */
-function buildUserPrompt(request: TaxAnalysisRequest, template?: string): string {
+function buildUserPrompt(request: TaxAnalysisRequest, template?: string, precedents?: Precedent[]): string {
   if (template) {
     // TODO: Интерполяция переменных в шаблоне
     return template;
@@ -325,6 +355,21 @@ function buildUserPrompt(request: TaxAnalysisRequest, template?: string): string
     request.grounds.forEach((ground, index) => {
       prompt += `${index + 1}. ${ground}\n`;
     });
+  }
+  
+  // Добавление прецедентов в промпт (если найдены)
+  if (precedents && precedents.length > 0) {
+    prompt += `\nНАЙДЕННЫЕ ПРЕЦЕДЕНТЫ И РЕЛЕВАНТНЫЕ ДОКУМЕНТЫ:\n`;
+    precedents.forEach((precedent, index) => {
+      prompt += `${index + 1}. ${precedent.title} (${precedent.type}, релевантность: ${(precedent.relevanceScore * 100).toFixed(0)}%)\n`;
+      if (precedent.legalBasis && precedent.legalBasis.length > 0) {
+        prompt += `   Правовая база: ${precedent.legalBasis.join(', ')}\n`;
+      }
+      if (precedent.applicableArguments && precedent.applicableArguments.length > 0) {
+        prompt += `   Применимые аргументы: ${precedent.applicableArguments[0]}\n`;
+      }
+    });
+    prompt += `\nИСПОЛЬЗУЙ эти прецеденты для усиления правовых аргументов.\n`;
   }
   
   prompt += `\nВЫПОЛНИ ДЕТАЛЬНЫЙ АНАЛИЗ:\n`;
