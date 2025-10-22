@@ -39,6 +39,9 @@ model User {
   ragConsultations      RAGConsultation[]
   processedDocuments    ProcessedDocument[]
   ragQueries           RAGQuery[]
+  
+  // Tax Dispute Relations
+  taxDisputes          TaxDispute[]
 
   @@map("lawerapp_users")
 }
@@ -282,5 +285,197 @@ model DocumentChunk {
   document        ProcessedDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
 
   @@map("document_chunks")
+}
+
+// ============================================
+// Tax Dispute Models (Phase 9)
+// ============================================
+
+model TaxDispute {
+  id              String    @id @default(uuid())
+  userId          String    @map("user_id")
+  taxType         String    @map("tax_type") // NDFL, transport, property, land, NPD
+  amount          Decimal   @db.Decimal(12, 2)
+  penaltyAmount   Decimal?  @default(0) @map("penalty_amount") @db.Decimal(12, 2)
+  fineAmount      Decimal?  @default(0) @map("fine_amount") @db.Decimal(12, 2)
+  totalAmount     Decimal?  @map("total_amount") @db.Decimal(12, 2) // amount + penalty + fine
+  period          String    // Налоговый период, например "2023"
+  status          String    @default("active") // active, pending_response, resolved, rejected, closed
+  
+  // Основания для оспаривания
+  grounds         Json?     // Массив оснований: ["already_paid", "incorrect_calculation", "expired", etc.]
+  
+  // AI-анализ
+  successRate     Float?    @map("success_rate") // Шансы на успех (0-100%)
+  aiAnalysis      Json?     @map("ai_analysis") // Результаты AI-анализа
+  
+  // Сроки
+  requirementDate DateTime? @map("requirement_date") // Дата налогового требования
+  deadline        DateTime? // Крайний срок для подачи возражения
+  
+  // Данные налогоплательщика
+  taxpayerINN     String?   @map("taxpayer_inn")
+  taxpayerAddress String?   @map("taxpayer_address")
+  taxpayerPhone   String?   @map("taxpayer_phone")
+  
+  // ИФНС
+  inspectionNumber String?  @map("inspection_number") // Номер ИФНС
+  inspectionName   String?  @map("inspection_name") // Название ИФНС
+  
+  // Timestamps
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  resolvedAt      DateTime? @map("resolved_at")
+  
+  // Relations
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  documents       TaxDisputeDocument[]
+  timeline        TaxDisputeTimeline[]
+  calculations    TaxCalculation[]
+  
+  @@index([userId])
+  @@index([status])
+  @@index([taxType])
+  @@map("tax_disputes")
+}
+
+model TaxDisputeDocument {
+  id              String    @id @default(uuid())
+  disputeId       String    @map("dispute_id")
+  type            String    // objection, complaint, notice, recalculation_request
+  title           String
+  content         String    @db.Text // Содержимое документа
+  
+  // Шаблон и метаданные
+  templateId      String?   @map("template_id")
+  variables       Json?     // Переменные для шаблона
+  
+  // Правовое обоснование
+  legalBasis      Json?     @map("legal_basis") // Массив ссылок на статьи НК РФ
+  
+  // Статус документа
+  status          String    @default("draft") // draft, generated, sent, delivered, rejected
+  
+  // Файлы
+  s3Key           String?   @map("s3_key") // Ключ в S3 для PDF/DOCX
+  fileUrl         String?   @map("file_url") // URL для скачивания
+  
+  // Отправка
+  sentAt          DateTime? @map("sent_at")
+  deliveredAt     DateTime? @map("delivered_at")
+  sentMethod      String?   @map("sent_method") // electronic, mail, personal
+  trackingNumber  String?   @map("tracking_number") // Трек-номер почты
+  
+  // Timestamps
+  generatedAt     DateTime  @default(now()) @map("generated_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  
+  // Relations
+  dispute         TaxDispute @relation(fields: [disputeId], references: [id], onDelete: Cascade)
+  
+  @@index([disputeId])
+  @@index([type])
+  @@index([status])
+  @@map("tax_dispute_documents")
+}
+
+model TaxDisputeTimeline {
+  id              String    @id @default(uuid())
+  disputeId       String    @map("dispute_id")
+  eventType       String    @map("event_type") // created, document_generated, document_sent, status_changed, response_received
+  description     String
+  metadata        Json?     // Дополнительные данные события
+  eventDate       DateTime  @default(now()) @map("event_date")
+  
+  // Relations
+  dispute         TaxDispute @relation(fields: [disputeId], references: [id], onDelete: Cascade)
+  
+  @@index([disputeId])
+  @@index([eventType])
+  @@map("tax_dispute_timeline")
+}
+
+model TaxCalculation {
+  id              String    @id @default(uuid())
+  disputeId       String?   @map("dispute_id")
+  userId          String    @map("user_id")
+  
+  // Тип налога
+  taxType         String    @map("tax_type") // transport, property, land, NDFL, NPD
+  
+  // Параметры расчета (зависят от типа налога)
+  parameters      Json      // Гибкое хранение параметров для разных налогов
+  
+  // Результаты расчета
+  calculatedAmount Decimal  @map("calculated_amount") @db.Decimal(12, 2)
+  rate            Decimal?  @db.Decimal(10, 4) // Ставка налога
+  
+  // Сравнение с начислением налоговой
+  claimedAmount   Decimal?  @map("claimed_amount") @db.Decimal(12, 2) // Сумма от налоговой
+  difference      Decimal?  @db.Decimal(12, 2) // Разница
+  
+  // Метаданные
+  region          String?   // Регион РФ
+  period          String?   // Налоговый период
+  
+  // Timestamps
+  createdAt       DateTime  @default(now()) @map("created_at")
+  
+  // Relations (optional связь с TaxDispute)
+  dispute         TaxDispute? @relation(fields: [disputeId], references: [id], onDelete: SetNull)
+  
+  @@index([userId])
+  @@index([taxType])
+  @@map("tax_calculations")
+}
+
+model TransportTaxRate {
+  id              String    @id @default(uuid())
+  region          String    // Регион РФ
+  regionCode      String?   @map("region_code") // Код региона (например, "77" для Москвы)
+  vehicleType     String    @map("vehicle_type") // car, motorcycle, truck, bus
+  powerMin        Int       @map("power_min") // Минимальная мощность (л.с.)
+  powerMax        Int       @map("power_max") // Максимальная мощность (л.с.)
+  rate            Decimal   @db.Decimal(10, 2) // Ставка (руб./л.с.)
+  year            Int       // Год действия ставки
+  
+  // Метаданные
+  source          String?   // Источник данных (закон субъекта РФ)
+  isActive        Boolean   @default(true) @map("is_active")
+  
+  // Timestamps
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  
+  @@index([region, year])
+  @@index([vehicleType])
+  @@map("transport_tax_rates")
+}
+
+model TaxDocumentTemplate {
+  id              String    @id @default(uuid())
+  name            String
+  type            String    // objection, complaint, notice, recalculation_request
+  category        String?   // Категория (transport, property, land, NDFL, NPD)
+  
+  // Шаблон
+  template        String    @db.Text // Handlebars/Mustache шаблон
+  variables       Json      // Описание переменных шаблона
+  
+  // Метаданные
+  description     String?
+  legalBasis      Json?     @map("legal_basis") // Ссылки на статьи НК РФ по умолчанию
+  
+  // Статистика использования
+  usageCount      Int       @default(0) @map("usage_count")
+  successRate     Float?    @map("success_rate") // Процент успешных оспариваний
+  
+  // Timestamps
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  
+  @@index([type])
+  @@index([category])
+  @@map("tax_document_templates")
 }
 
