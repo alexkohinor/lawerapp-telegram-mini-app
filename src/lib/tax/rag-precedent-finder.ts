@@ -243,7 +243,7 @@ function extractLegalBasis(content: string): string[] {
 function extractArguments(content: string): string[] {
   if (!content) return [];
   
-  const arguments: string[] = [];
+  const extractedArguments: string[] = [];
   
   // Поиск аргументов в тексте (предложения с ключевыми словами)
   const sentences = content.split(/[.!?]+/);
@@ -266,15 +266,15 @@ function extractArguments(content: string): string[] {
     
     for (const phrase of keyPhrases) {
       if (trimmed.toLowerCase().includes(phrase)) {
-        arguments.push(trimmed);
+        extractedArguments.push(trimmed);
         break;
       }
     }
     
-    if (arguments.length >= 3) break;
+    if (extractedArguments.length >= 3) break;
   }
   
-  return arguments;
+  return extractedArguments;
 }
 
 /**

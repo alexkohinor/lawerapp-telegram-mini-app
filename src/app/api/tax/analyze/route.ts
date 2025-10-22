@@ -76,7 +76,12 @@ export async function POST(request: NextRequest) {
         aiAnalysis: {
           analyzedAt: new Date().toISOString(),
           analysis,
-          parameters: params,
+          parameters: {
+            taxType: params.taxType,
+            claimedAmount: params.claimedAmount,
+            calculatedAmount: params.calculatedAmount,
+            difference: params.difference,
+          },
         },
       },
     });

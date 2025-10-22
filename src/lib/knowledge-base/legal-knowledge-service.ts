@@ -334,7 +334,7 @@ export class LegalKnowledgeService {
         Prefix: 'document-templates/',
       });
 
-      const response = await this.s3Client.send(command);
+      const response = await (this.s3Client as { send: (command: unknown) => Promise<{ Contents?: unknown[] }> }).send(command);
       
       if (!response.Contents) {
         return [];
@@ -343,8 +343,9 @@ export class LegalKnowledgeService {
       const templates: DocumentTemplate[] = [];
       
       for (const obj of response.Contents) {
-        if (obj.Key?.endsWith('.json')) {
-          const template = await this.getDocumentTemplate(obj.Key);
+        const typedObj = obj as { Key?: string };
+        if (typedObj.Key?.endsWith('.json')) {
+          const template = await this.getDocumentTemplate(typedObj.Key);
           if (template && (!category || template.category === category)) {
             templates.push(template);
           }
@@ -370,7 +371,7 @@ export class LegalKnowledgeService {
         Key: key,
       });
 
-      const response = await this.s3Client.send(command);
+      const response = await (this.s3Client as { send: (command: unknown) => Promise<{ Body?: { transformToString: () => Promise<string> } }> }).send(command);
       const content = await response.Body?.transformToString();
       
       if (!content) {
@@ -517,7 +518,7 @@ export class LegalKnowledgeService {
         Prefix: 'document-templates/',
       });
 
-      const response = await this.s3Client.send(command);
+      const response = await (this.s3Client as { send: (command: unknown) => Promise<{ Contents?: unknown[] }> }).send(command);
       return {
         totalTemplates: response.Contents?.length || 0,
       };

@@ -13,6 +13,9 @@ export { DocumentProcessor } from './document-processor';
 // Конфигурация
 export { defaultRAGConfig, type RAGConfig } from './config';
 
+// Локальный импорт для использования в фабричных методах
+import { RAGService } from './rag-service';
+
 // Типы
 export type {
   RAGQuery,

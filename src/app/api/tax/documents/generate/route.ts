@@ -8,7 +8,7 @@ const generateDocumentSchema = z.object({
   disputeId: z.string().uuid(),
   documentType: z.enum(['objection', 'complaint', 'notice', 'recalculation_request']),
   templateId: z.string().uuid().optional(),
-  customData: z.record(z.unknown()).optional(),
+  customData: z.record(z.string(), z.unknown()).optional(),
   useAI: z.boolean().default(true), // Использовать AI для генерации
 });
 

@@ -7,12 +7,13 @@ import { getPromptStatistics } from '@/lib/tax/ai-prompt-service';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const resolvedParams = await params;
   try {
     // TODO: Добавить проверку прав админа
     
-    const promptId = params.id;
+    const promptId = resolvedParams.id;
     
     const statistics = await getPromptStatistics(promptId);
     

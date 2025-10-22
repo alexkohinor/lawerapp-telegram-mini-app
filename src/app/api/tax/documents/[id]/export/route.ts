@@ -14,10 +14,11 @@ const exportDocumentSchema = z.object({
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const resolvedParams = await params;
   try {
-    const documentId = params.id;
+    const documentId = resolvedParams.id;
     
     // Валидация параметров
     const body = await request.json();
@@ -71,7 +72,7 @@ export async function POST(
         taxpayerName,
         taxType: taxTypeLabels[document.dispute.taxType] || document.dispute.taxType,
         period: document.dispute.period,
-        generatedAt: document.createdAt,
+        generatedAt: new Date(),
       },
     });
     
@@ -143,10 +144,11 @@ export async function POST(
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const resolvedParams = await params;
   try {
-    const documentId = params.id;
+    const documentId = resolvedParams.id;
     
     const document = await prisma.taxDisputeDocument.findUnique({
       where: { id: documentId },
@@ -155,7 +157,6 @@ export async function GET(
         title: true,
         type: true,
         s3Key: true,
-        createdAt: true,
         status: true,
       },
     });

@@ -8,10 +8,11 @@ import { analyzeTaxRequirement, type TaxAnalysisRequest } from '@/lib/tax/ai-tax
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const resolvedParams = await params;
   try {
-    const disputeId = params.id;
+    const disputeId = resolvedParams.id;
     
     // Получение данных спора
     const dispute = await prisma.taxDispute.findUnique({
@@ -96,10 +97,11 @@ export async function POST(
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const resolvedParams = await params;
   try {
-    const disputeId = params.id;
+    const disputeId = resolvedParams.id;
     
     const dispute = await prisma.taxDispute.findUnique({
       where: { id: disputeId },

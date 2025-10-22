@@ -1,0 +1,312 @@
+// Test Prisma schema для LawerApp (SQLite для локального тестирования)
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/test-client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./test.db"
+}
+
+model User {
+  id                    String    @id @default(uuid())
+  telegramId            BigInt    @unique @map("telegram_id")
+  telegramUsername      String?   @map("telegram_username")
+  firstName             String?   @map("first_name")
+  lastName              String?   @map("last_name")
+  phone                 String?
+  email                 String?
+  username              String?
+  isActive              Boolean   @default(true) @map("is_active")
+  isPremium             Boolean   @default(false) @map("is_premium")
+  subscriptionExpiresAt DateTime? @map("subscription_expires_at")
+  createdAt             DateTime  @default(now()) @map("created_at")
+  updatedAt             DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  disputes              TaxDispute[]
+  consultations         Consultation[]
+  documents             Document[]
+  payments              Payment[]
+
+  @@map("users")
+}
+
+model TaxDispute {
+  id              String    @id @default(uuid())
+  userId          String    @map("user_id")
+  
+  // Основная информация
+  taxType         String    @map("tax_type") // transport, property, land, NDFL, NPD
+  period          String    // 2024, 2024-Q1, 2024-01
+  amount          Float     // Сумма начисления
+  status          String    @default("draft") // draft, in_progress, submitted, resolved, closed
+  
+  // Детали спора
+  grounds         String    // JSON массив оснований для оспаривания
+  claimedAmount   Float?    @map("claimed_amount") // Начислено налоговой
+  calculatedAmount Float?   @map("calculated_amount") // Рассчитано пользователем
+  difference      Float?    // Разница
+  
+  // AI-анализ
+  aiAnalysis      String?   @map("ai_analysis") // JSON результата анализа
+  successRate     Int?      @map("success_rate") // Процент успеха (0-100)
+  
+  // Метаданные
+  metadata        String?   // JSON дополнительных данных
+  
+  // Timestamps
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  resolvedAt      DateTime? @map("resolved_at")
+  
+  // Relations
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  documents       TaxDisputeDocument[]
+  timeline        TaxDisputeTimeline[]
+  calculations    TaxCalculation[]
+  
+  @@index([userId])
+  @@index([status])
+  @@index([taxType])
+  @@map("tax_disputes")
+}
+
+model TaxDisputeDocument {
+  id              String    @id @default(uuid())
+  disputeId       String    @map("dispute_id")
+  
+  // Информация о документе
+  documentType    String    @map("document_type") // objection, complaint, notice, recalculation_request
+  title           String
+  content         String    // Основное содержимое
+  status          String    @default("draft") // draft, generated, exported, sent
+  
+  // Файлы
+  filePath        String?   @map("file_path") // Путь в S3
+  fileType        String?   @map("file_type") // pdf, docx
+  fileSize        Int?      @map("file_size")
+  
+  // AI-генерация
+  aiGenerated     Boolean   @default(false) @map("ai_generated")
+  aiMetadata      String?   @map("ai_metadata") // JSON метаданных AI
+  
+  // Timestamps
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  exportedAt      DateTime? @map("exported_at")
+  
+  // Relations
+  dispute         TaxDispute @relation(fields: [disputeId], references: [id], onDelete: Cascade)
+  
+  @@index([disputeId])
+  @@index([documentType])
+  @@map("tax_dispute_documents")
+}
+
+model TaxDisputeTimeline {
+  id              String    @id @default(uuid())
+  disputeId       String    @map("dispute_id")
+  
+  // Событие
+  eventType       String    @map("event_type") // dispute_created, document_generated, ai_analysis, etc.
+  description     String
+  metadata        String?   // JSON дополнительных данных
+  
+  // Timestamps
+  createdAt       DateTime  @default(now()) @map("created_at")
+  
+  // Relations
+  dispute         TaxDispute @relation(fields: [disputeId], references: [id], onDelete: Cascade)
+  
+  @@index([disputeId])
+  @@index([eventType])
+  @@map("tax_dispute_timeline")
+}
+
+model TaxCalculation {
+  id              String    @id @default(uuid())
+  disputeId       String?   @map("dispute_id")
+  
+  // Параметры расчета
+  taxType         String    @map("tax_type")
+  taxPeriod       String    @map("tax_period")
+  region          String?
+  
+  // Данные для расчета
+  calculationData String    @map("calculation_data") // JSON данных
+  
+  // Результат
+  calculatedAmount Float    @map("calculated_amount")
+  methodology     String?   // Описание методологии
+  
+  // Timestamps
+  createdAt       DateTime  @default(now()) @map("created_at")
+  
+  // Relations
+  dispute         TaxDispute? @relation(fields: [disputeId], references: [id], onDelete: SetNull)
+  
+  @@index([taxType])
+  @@map("tax_calculations")
+}
+
+model TransportTaxRate {
+  id              String    @id @default(uuid())
+  
+  // Регион
+  region          String    // moscow, spb, mo
+  regionName      String    @map("region_name")
+  
+  // Тип ТС
+  vehicleType     String    @map("vehicle_type") // car, motorcycle, truck, bus
+  
+  // Диапазон мощности
+  powerFrom       Int       @map("power_from") // л.с.
+  powerTo         Int?      @map("power_to") // null = без ограничения
+  
+  // Ставка
+  rate            Float     // руб. за л.с.
+  
+  // Год действия
+  year            Int
+  
+  // Источник
+  legalBasis      String    @map("legal_basis") // Номер закона
+  
+  // Timestamps
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  
+  @@unique([region, vehicleType, powerFrom, year])
+  @@index([region])
+  @@index([vehicleType])
+  @@index([year])
+  @@map("transport_tax_rates")
+}
+
+model TaxDocumentTemplate {
+  id              String    @id @default(uuid())
+  
+  // Тип документа
+  documentType    String    @map("document_type") // objection, complaint, notice, recalculation_request
+  taxType         String?   @map("tax_type") // transport, property, land (null = для всех)
+  
+  // Название и описание
+  title           String
+  description     String?
+  
+  // Шаблон
+  template        String    // Текст шаблона с переменными {{variable}}
+  variables       String    // JSON массива переменных
+  
+  // Версия
+  version         String    @default("1.0")
+  isActive        Boolean   @default(true) @map("is_active")
+  
+  // Timestamps
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  
+  @@index([documentType])
+  @@index([taxType])
+  @@map("tax_document_templates")
+}
+
+model AIPromptTemplate {
+  id              String    @id @default(uuid())
+  name            String
+  promptType      String    @map("prompt_type")
+  category        String?
+  
+  systemPrompt    String?   @map("system_prompt")
+  userPrompt      String?   @map("user_prompt")
+  
+  description     String?
+  version         String    @default("1.0")
+  
+  temperature     Float     @default(0.3)
+  maxTokens       Int       @default(3000) @map("max_tokens")
+  model           String    @default("gpt-4")
+  
+  isActive        Boolean   @default(true) @map("is_active")
+  isDefault       Boolean   @default(false) @map("is_default")
+  
+  usageCount      Int       @default(0) @map("usage_count")
+  successRate     Float?    @map("success_rate")
+  avgResponseTime Int?      @map("avg_response_time")
+  
+  positiveVotes   Int       @default(0) @map("positive_votes")
+  negativeVotes   Int       @default(0) @map("negative_votes")
+  
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  
+  usageLogs       AIPromptUsageLog[]
+  
+  @@index([promptType])
+  @@index([category])
+  @@index([isActive])
+  @@index([isDefault])
+  @@map("ai_prompt_templates")
+}
+
+model AIPromptUsageLog {
+  id              String    @id @default(uuid())
+  promptId        String    @map("prompt_id")
+  userId          String?   @map("user_id")
+  disputeId       String?   @map("dispute_id")
+  
+  inputData       String    @map("input_data")
+  
+  generatedContent String?  @map("generated_content")
+  responseTime    Int?      @map("response_time")
+  tokensUsed      Int?      @map("tokens_used")
+  
+  wasSuccessful   Boolean?  @map("was_successful")
+  userRating      Int?      @map("user_rating")
+  feedback        String?
+  
+  errorMessage    String?   @map("error_message")
+  
+  createdAt       DateTime  @default(now()) @map("created_at")
+  
+  prompt          AIPromptTemplate @relation(fields: [promptId], references: [id], onDelete: Cascade)
+  
+  @@index([promptId])
+  @@index([userId])
+  @@index([disputeId])
+  @@index([wasSuccessful])
+  @@map("ai_prompt_usage_logs")
+}
+
+// Дополнительные модели для совместимости
+
+model Consultation {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  @@map("consultations")
+}
+
+model Document {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  @@map("documents")
+}
+
+model Payment {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  @@map("payments")
+}
+

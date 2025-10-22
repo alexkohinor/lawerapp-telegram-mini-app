@@ -21,10 +21,11 @@ const S3_BUCKET = process.env.S3_BUCKET_NAME || 'lawerapp-documents';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const resolvedParams = await params;
   try {
-    const documentId = params.id;
+    const documentId = resolvedParams.id;
     
     // Получение документа
     const document = await prisma.taxDisputeDocument.findUnique({

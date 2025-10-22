@@ -6,7 +6,18 @@ import consola from 'consola';
  * Данные взяты из законов субъектов РФ за 2024-2025 годы
  */
 
-const taxRates = [
+interface TaxRateData {
+  region: string;
+  regionCode: string;
+  vehicleType: string;
+  powerMin: number;
+  powerMax: number;
+  rate: number;
+  year: number;
+  source: string;
+}
+
+const taxRates: TaxRateData[] = [
   // ============================================
   // Москва (код 77)
   // ============================================

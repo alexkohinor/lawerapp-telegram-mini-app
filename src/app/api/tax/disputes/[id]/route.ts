@@ -6,7 +6,7 @@ import { z } from 'zod';
 const updateTaxDisputeSchema = z.object({
   status: z.enum(['active', 'pending_response', 'resolved', 'rejected', 'closed']).optional(),
   successRate: z.number().min(0).max(100).optional(),
-  aiAnalysis: z.record(z.unknown()).optional(),
+  aiAnalysis: z.record(z.string(), z.unknown()).optional(),
 }).strict();
 
 /**
@@ -15,10 +15,11 @@ const updateTaxDisputeSchema = z.object({
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const resolvedParams = await params;
   try {
-    const disputeId = params.id;
+    const disputeId = resolvedParams.id;
     
     const dispute = await prisma.taxDispute.findUnique({
       where: { id: disputeId },
@@ -79,10 +80,11 @@ export async function GET(
  */
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const resolvedParams = await params;
   try {
-    const disputeId = params.id;
+    const disputeId = resolvedParams.id;
     const body = await request.json();
     const validatedData = updateTaxDisputeSchema.parse(body);
     
@@ -178,10 +180,11 @@ export async function PATCH(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const resolvedParams = await params;
   try {
-    const disputeId = params.id;
+    const disputeId = resolvedParams.id;
     
     // Проверка существования спора
     const existingDispute = await prisma.taxDispute.findUnique({

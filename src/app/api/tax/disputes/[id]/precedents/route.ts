@@ -20,10 +20,11 @@ const searchPrecedentsSchema = z.object({
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const resolvedParams = await params;
   try {
-    const disputeId = params.id;
+    const disputeId = resolvedParams.id;
     
     // Валидация параметров
     const body = await request.json().catch(() => ({}));
@@ -118,10 +119,11 @@ export async function POST(
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const resolvedParams = await params;
   try {
-    const disputeId = params.id;
+    const disputeId = resolvedParams.id;
     
     const dispute = await prisma.taxDispute.findUnique({
       where: { id: disputeId },
