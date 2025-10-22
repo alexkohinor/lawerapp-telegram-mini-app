@@ -140,7 +140,12 @@ export async function POST(request: NextRequest) {
         legalBasis: template.legalBasis ? Object.values(template.legalBasis as Record<string, string>) : undefined,
       };
       
-      const aiDocument = await generateTaxDocument(aiParams, template.template);
+      const aiDocument = await generateTaxDocument(
+        aiParams,
+        template.template,
+        dispute.userId,
+        dispute.id
+      );
       content = aiDocument.content;
       title = aiDocument.title;
       aiGeneratedData = {

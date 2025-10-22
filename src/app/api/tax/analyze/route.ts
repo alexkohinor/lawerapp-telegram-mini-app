@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
     };
     
     // Получение AI-анализа
-    const analysis = await analyzeTaxSituation(params);
+    const analysis = await analyzeTaxSituation(params, dispute.userId, dispute.id);
     
     // Сохранение анализа в БД
     await prisma.taxDispute.update({

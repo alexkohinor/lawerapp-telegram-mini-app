@@ -479,3 +479,88 @@ model TaxDocumentTemplate {
   @@map("tax_document_templates")
 }
 
+// ============================================
+// AI Prompts Models (для настраиваемых промптов)
+// ============================================
+
+model AIPromptTemplate {
+  id              String    @id @default(uuid())
+  name            String
+  promptType      String    @map("prompt_type") // system, user, document_generation, analysis
+  category        String?   // transport, property, land, NDFL, NPD, general
+  
+  // Промпт
+  systemPrompt    String?   @db.Text @map("system_prompt") // Системный промпт
+  userPrompt      String?   @db.Text @map("user_prompt") // Пользовательский промпт (шаблон)
+  
+  // Метаданные
+  description     String?
+  version         String    @default("1.0")
+  
+  // AI параметры
+  temperature     Float     @default(0.3) // 0.0-2.0
+  maxTokens       Int       @default(3000) @map("max_tokens")
+  model           String    @default("gpt-4")
+  
+  // Статус и валидация
+  isActive        Boolean   @default(true) @map("is_active")
+  isDefault       Boolean   @default(false) @map("is_default") // Промпт по умолчанию
+  
+  // Статистика использования
+  usageCount      Int       @default(0) @map("usage_count")
+  successRate     Float?    @map("success_rate") // Процент успешных генераций
+  avgResponseTime Int?      @map("avg_response_time") // Среднее время ответа (мс)
+  
+  // Feedback и обучение
+  positiveVotes   Int       @default(0) @map("positive_votes")
+  negativeVotes   Int       @default(0) @map("negative_votes")
+  
+  // Timestamps
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  
+  // Relations
+  usageLogs       AIPromptUsageLog[]
+  
+  @@index([promptType])
+  @@index([category])
+  @@index([isActive])
+  @@index([isDefault])
+  @@map("ai_prompt_templates")
+}
+
+model AIPromptUsageLog {
+  id              String    @id @default(uuid())
+  promptId        String    @map("prompt_id")
+  userId          String?   @map("user_id")
+  disputeId       String?   @map("dispute_id")
+  
+  // Параметры запроса
+  inputData       Json      @map("input_data") // Данные, переданные в промпт
+  
+  // Результат
+  generatedContent String?  @db.Text @map("generated_content")
+  responseTime    Int?      @map("response_time") // мс
+  tokensUsed      Int?      @map("tokens_used")
+  
+  // Оценка качества
+  wasSuccessful   Boolean?  @map("was_successful")
+  userRating      Int?      @map("user_rating") // 1-5 звезд
+  feedback        String?   @db.Text
+  
+  // Ошибки
+  errorMessage    String?   @db.Text @map("error_message")
+  
+  // Timestamps
+  createdAt       DateTime  @default(now()) @map("created_at")
+  
+  // Relations
+  prompt          AIPromptTemplate @relation(fields: [promptId], references: [id], onDelete: Cascade)
+  
+  @@index([promptId])
+  @@index([userId])
+  @@index([disputeId])
+  @@index([wasSuccessful])
+  @@map("ai_prompt_usage_logs")
+}
+

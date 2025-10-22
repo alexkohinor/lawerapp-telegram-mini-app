@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import { getPromptByType, logPromptUsage, type AIPrompt } from './ai-prompt-service';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -49,40 +50,156 @@ export interface GeneratedDocument {
 
 /**
  * Генерация налогового документа с помощью AI
+ * Использует промпты из БД для настраиваемой генерации
  */
 export async function generateTaxDocument(
   params: DocumentGenerationParams,
-  baseTemplate?: string
+  baseTemplate?: string,
+  userId?: string,
+  disputeId?: string
 ): Promise<GeneratedDocument> {
-  const systemPrompt = getSystemPrompt(params.documentType);
-  const userPrompt = getUserPrompt(params, baseTemplate);
+  const startTime = Date.now();
+  
+  // Получение промпта из БД
+  const promptTemplate = await getPromptByType('document_generation', params.taxType);
+  
+  let systemPrompt: string;
+  let userPrompt: string;
+  let temperature = 0.3;
+  let maxTokens = 3000;
+  let model = 'gpt-4';
+  let promptId: string | null = null;
+  
+  if (promptTemplate) {
+    // Используем промпт из БД
+    systemPrompt = promptTemplate.systemPrompt || getSystemPrompt(params.documentType);
+    userPrompt = interpolateUserPrompt(
+      promptTemplate.userPrompt || getUserPrompt(params, baseTemplate),
+      params,
+      baseTemplate
+    );
+    temperature = promptTemplate.temperature;
+    maxTokens = promptTemplate.maxTokens;
+    model = promptTemplate.model;
+    promptId = promptTemplate.id;
+  } else {
+    // Fallback на хардкодные промпты
+    systemPrompt = getSystemPrompt(params.documentType);
+    userPrompt = getUserPrompt(params, baseTemplate);
+  }
   
   try {
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4',
+      model,
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt },
       ],
-      temperature: 0.3, // Низкая температура для точности юридических текстов
-      max_tokens: 3000,
+      temperature,
+      max_tokens: maxTokens,
     });
     
     const generatedContent = completion.choices[0].message.content || '';
+    const responseTime = Date.now() - startTime;
     
     // Парсинг ответа AI
     const document = parseAIResponse(generatedContent, params);
     
+    // Логирование использования промпта
+    if (promptId) {
+      await logPromptUsage({
+        promptId,
+        userId,
+        disputeId,
+        success: true,
+        responseTime,
+        tokensUsed: completion.usage?.total_tokens,
+        content: generatedContent,
+        inputData: {
+          documentType: params.documentType,
+          taxType: params.taxType,
+          claimedAmount: params.claimedAmount,
+          calculatedAmount: params.calculatedAmount,
+          difference: params.difference,
+        },
+      });
+    }
+    
     return document;
     
   } catch (error) {
+    const responseTime = Date.now() - startTime;
+    
+    // Логирование ошибки
+    if (promptId) {
+      await logPromptUsage({
+        promptId,
+        userId,
+        disputeId,
+        success: false,
+        responseTime,
+        error: error instanceof Error ? error.message : String(error),
+        inputData: {
+          documentType: params.documentType,
+          taxType: params.taxType,
+        },
+      });
+    }
+    
     console.error('AI Document Generation Error:', error);
     throw new Error(`Failed to generate document: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
 /**
- * Системный промпт для разных типов документов
+ * Интерполяция пользовательского промпта с данными
+ * Заменяет переменные вида {{variable}} на актуальные значения
+ */
+function interpolateUserPrompt(
+  template: string,
+  params: DocumentGenerationParams,
+  baseTemplate?: string
+): string {
+  const taxTypeLabels: Record<string, string> = {
+    'transport': 'транспортного налога',
+    'property': 'налога на имущество',
+    'land': 'земельного налога',
+    'NDFL': 'НДФЛ',
+    'NPD': 'налога на профессиональный доход',
+  };
+  
+  const variables: Record<string, string> = {
+    documentType: getDocumentTypeLabel(params.documentType),
+    taxType: params.taxType,
+    taxTypeLabel: taxTypeLabels[params.taxType] || params.taxType,
+    taxPeriod: params.taxPeriod,
+    taxpayerName: params.taxpayerName,
+    taxpayerINN: params.taxpayerINN || '',
+    taxpayerAddress: params.taxpayerAddress || '',
+    taxpayerPhone: params.taxpayerPhone || '',
+    inspectionNumber: params.inspectionNumber || '',
+    inspectionName: params.inspectionName || '',
+    claimedAmount: params.claimedAmount.toString(),
+    calculatedAmount: params.calculatedAmount.toString(),
+    difference: Math.abs(params.difference).toString(),
+    grounds: params.grounds.map((g, i) => `${i + 1}. ${g}`).join('\n'),
+    legalBasis: params.legalBasis?.join('\n') || '',
+    baseTemplate: baseTemplate || '',
+  };
+  
+  let interpolated = template;
+  
+  // Замена переменных {{variable}}
+  Object.entries(variables).forEach(([key, value]) => {
+    const regex = new RegExp(`\\{\\{\\s*${key}\\s*\\}\\}`, 'g');
+    interpolated = interpolated.replace(regex, value);
+  });
+  
+  return interpolated;
+}
+
+/**
+ * Системный промпт для разных типов документов (Fallback)
  */
 function getSystemPrompt(documentType: string): string {
   const basePrompt = `Ты - опытный налоговый юрист с 15+ летним стажем работы в области защиты прав налогоплательщиков. 
@@ -390,35 +507,116 @@ function getDefaultRecommendations(params: DocumentGenerationParams): string[] {
 
 /**
  * Генерация краткого анализа ситуации
+ * Использует промпты из БД
  */
-export async function analyzeTaxSituation(params: DocumentGenerationParams): Promise<string> {
-  const systemPrompt = `Ты - опытный налоговый консультант. 
+export async function analyzeTaxSituation(
+  params: DocumentGenerationParams,
+  userId?: string,
+  disputeId?: string
+): Promise<string> {
+  const startTime = Date.now();
+  
+  // Получение промпта из БД
+  const promptTemplate = await getPromptByType('analysis', params.taxType);
+  
+  let systemPrompt: string;
+  let userPrompt: string;
+  let temperature = 0.5;
+  let maxTokens = 500;
+  let model = 'gpt-4';
+  let promptId: string | null = null;
+  
+  if (promptTemplate) {
+    systemPrompt = promptTemplate.systemPrompt || getDefaultAnalysisSystemPrompt();
+    userPrompt = interpolateUserPrompt(
+      promptTemplate.userPrompt || getDefaultAnalysisUserPrompt(params),
+      params
+    );
+    temperature = promptTemplate.temperature;
+    maxTokens = promptTemplate.maxTokens;
+    model = promptTemplate.model;
+    promptId = promptTemplate.id;
+  } else {
+    systemPrompt = getDefaultAnalysisSystemPrompt();
+    userPrompt = getDefaultAnalysisUserPrompt(params);
+  }
+
+  try {
+    const completion = await openai.chat.completions.create({
+      model,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
+      temperature,
+      max_tokens: maxTokens,
+    });
+    
+    const responseTime = Date.now() - startTime;
+    const analysisResult = completion.choices[0].message.content || 'Анализ недоступен';
+    
+    // Логирование использования промпта
+    if (promptId) {
+      await logPromptUsage({
+        promptId,
+        userId,
+        disputeId,
+        success: true,
+        responseTime,
+        tokensUsed: completion.usage?.total_tokens,
+        content: analysisResult,
+        inputData: {
+          taxType: params.taxType,
+          claimedAmount: params.claimedAmount,
+          calculatedAmount: params.calculatedAmount,
+          difference: params.difference,
+        },
+      });
+    }
+
+    return analysisResult;
+  } catch (error) {
+    const responseTime = Date.now() - startTime;
+    
+    // Логирование ошибки
+    if (promptId) {
+      await logPromptUsage({
+        promptId,
+        userId,
+        disputeId,
+        success: false,
+        responseTime,
+        error: error instanceof Error ? error.message : String(error),
+        inputData: {
+          taxType: params.taxType,
+        },
+      });
+    }
+    
+    console.error('AI Analysis Error:', error);
+    return 'Не удалось выполнить анализ. Рекомендуется обратиться к специалисту.';
+  }
+}
+
+/**
+ * Промпт по умолчанию для анализа (Fallback)
+ */
+function getDefaultAnalysisSystemPrompt(): string {
+  return `Ты - опытный налоговый консультант. 
 Проанализируй налоговую ситуацию и дай краткую профессиональную оценку в 2-3 предложениях.
 Укажи основные риски и шансы на успех.`;
+}
 
-  const userPrompt = `Налогоплательщик получил требование по ${params.taxType} за ${params.taxPeriod}.
+/**
+ * Пользовательский промпт по умолчанию для анализа (Fallback)
+ */
+function getDefaultAnalysisUserPrompt(params: DocumentGenerationParams): string {
+  return `Налогоплательщик получил требование по ${params.taxType} за ${params.taxPeriod}.
 Начислено: ${params.claimedAmount} руб.
 По расчету должно быть: ${params.calculatedAmount} руб.
 Разница: ${Math.abs(params.difference)} руб.
 Основания: ${params.grounds.join(', ')}.
 
 Дай краткий анализ ситуации.`;
-
-  try {
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt },
-      ],
-      temperature: 0.5,
-      max_tokens: 500,
-    });
-
-    return completion.choices[0].message.content || 'Анализ недоступен';
-  } catch (error) {
-    console.error('AI Analysis Error:', error);
-    return 'Не удалось выполнить анализ. Рекомендуется обратиться к специалисту.';
-  }
 }
 
