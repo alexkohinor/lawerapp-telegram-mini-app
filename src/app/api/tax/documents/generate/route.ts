@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
+import { generateTaxDocument, analyzeTaxSituation, type DocumentGenerationParams } from '@/lib/tax/ai-document-generator';
 
 // Схема валидации для генерации документа
 const generateDocumentSchema = z.object({
@@ -8,6 +9,7 @@ const generateDocumentSchema = z.object({
   documentType: z.enum(['objection', 'complaint', 'notice', 'recalculation_request']),
   templateId: z.string().uuid().optional(),
   customData: z.record(z.unknown()).optional(),
+  useAI: z.boolean().default(true), // Использовать AI для генерации
 });
 
 /**
@@ -115,14 +117,61 @@ export async function POST(request: NextRequest) {
     };
     
     // Генерация содержимого документа
-    const content = await generateDocumentContent(
-      template.template,
-      variables,
-      template.legalBasis as Record<string, unknown> | null
-    );
+    let content: string;
+    let title: string;
+    let aiGeneratedData: { legalReferences?: string[]; recommendations?: string[]; estimatedSuccessRate?: number } = {};
     
-    // Определение заголовка документа
-    const title = getDocumentTitle(validatedData.documentType, dispute.taxType, dispute.period);
+    if (validatedData.useAI && process.env.OPENAI_API_KEY) {
+      // AI-генерация документа
+      const aiParams: DocumentGenerationParams = {
+        documentType: validatedData.documentType,
+        taxType: dispute.taxType,
+        taxPeriod: dispute.period,
+        taxpayerName: variables.taxpayerName as string,
+        taxpayerINN: variables.taxpayerINN as string | undefined,
+        taxpayerAddress: variables.taxpayerAddress as string | undefined,
+        taxpayerPhone: variables.taxpayerPhone as string | undefined,
+        inspectionNumber: variables.inspectionNumber as string | undefined,
+        inspectionName: variables.inspectionName as string | undefined,
+        claimedAmount: Number(variables.taxAmount),
+        calculatedAmount: Number(variables.correctAmount),
+        difference: Number(variables.overpaidAmount),
+        grounds: variables.grounds as string[],
+        legalBasis: template.legalBasis ? Object.values(template.legalBasis as Record<string, string>) : undefined,
+      };
+      
+      const aiDocument = await generateTaxDocument(aiParams, template.template);
+      content = aiDocument.content;
+      title = aiDocument.title;
+      aiGeneratedData = {
+        legalReferences: aiDocument.legalReferences,
+        recommendations: aiDocument.recommendations,
+        estimatedSuccessRate: aiDocument.estimatedSuccessRate,
+      };
+      
+      // Обновляем AI-анализ в споре
+      if (aiDocument.estimatedSuccessRate) {
+        await prisma.taxDispute.update({
+          where: { id: dispute.id },
+          data: {
+            successRate: aiDocument.estimatedSuccessRate,
+            aiAnalysis: {
+              generatedAt: new Date().toISOString(),
+              legalReferences: aiDocument.legalReferences,
+              recommendations: aiDocument.recommendations,
+            },
+          },
+        });
+      }
+    } else {
+      // Обычная генерация на основе шаблона
+      content = await generateDocumentContent(
+        template.template,
+        variables,
+        template.legalBasis as Record<string, unknown> | null
+      );
+      title = getDocumentTitle(validatedData.documentType, dispute.taxType, dispute.period);
+    }
     
     // Создание документа в БД
     const document = await prisma.taxDisputeDocument.create({
@@ -164,6 +213,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       document,
+      aiAnalysis: aiGeneratedData,
     }, { status: 201 });
     
   } catch (error) {
