@@ -55,9 +55,13 @@ export class RAGSystemFactory {
    * Создание полной RAG системы
    */
   static createRAGSystem(config: import('./config').RAGConfig) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { VectorDBClient } = require('./vector-db-client');
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { ObjectStorageClient } = require('./object-storage-client');
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { EmbeddingClient } = require('./embedding-client');
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { DocumentProcessor } = require('./document-processor');
     
     const vectorDbClient = new VectorDBClient(config);

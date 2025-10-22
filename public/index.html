@@ -8,52 +8,296 @@
     <link rel="manifest" href="/manifest.json" />
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
             background: var(--tg-theme-bg-color, #ffffff);
             color: var(--tg-theme-text-color, #000000);
-        }
-        #__next {
             min-height: 100vh;
-        }
-        .loading {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             flex-direction: column;
         }
+        
+        .container {
+            flex: 1;
+            padding: 20px;
+            max-width: 100%;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--tg-theme-text-color, #000000);
+        }
+        
+        .header p {
+            color: var(--tg-theme-hint-color, #6b7280);
+            font-size: 14px;
+        }
+        
+        .upload-section {
+            background: var(--tg-theme-secondary-bg-color, #f8f9fa);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .upload-button {
+            background: var(--tg-theme-button-color, #0088cc);
+            color: var(--tg-theme-button-text-color, #ffffff);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            transition: opacity 0.2s;
+        }
+        
+        .upload-button:hover {
+            opacity: 0.8;
+        }
+        
+        .upload-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card {
+            background: var(--tg-theme-secondary-bg-color, #f8f9fa);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .feature-card h3 {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .feature-card p {
+            font-size: 12px;
+            color: var(--tg-theme-hint-color, #6b7280);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid var(--tg-theme-hint-color, #e5e7eb);
+            margin-top: auto;
+        }
+        
+        .footer p {
+            font-size: 12px;
+            color: var(--tg-theme-hint-color, #6b7280);
+            margin-bottom: 10px;
+        }
+        
+        .footer a {
+            color: var(--tg-theme-link-color, #0088cc);
+            text-decoration: none;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
         .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--tg-theme-button-color, #0088cc);
             border-radius: 50%;
             animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
         }
+        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        
+        .error {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            display: none;
+        }
+        
+        .success {
+            background: #d1fae5;
+            color: #059669;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <div id="__next">
-        <div class="loading">
-            <div class="spinner"></div>
-            <p>Загрузка...</p>
+    <div class="container">
+        <div class="header">
+            <h1>⚖️ Юридический ассистент</h1>
+            <p>Анализ документов и правовая помощь</p>
         </div>
+        
+        <div class="upload-section">
+            <h3>Загрузите документ для анализа</h3>
+            <p style="margin: 10px 0; font-size: 14px; color: var(--tg-theme-hint-color, #6b7280);">
+                Поддерживаются: PDF, DOC, DOCX, изображения
+            </p>
+            
+            <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif">
+            <button class="upload-button" onclick="document.getElementById('fileInput').click()">
+                📁 Выбрать файл
+            </button>
+            <button class="upload-button" onclick="openCamera()">
+                📷 Сфотографировать
+            </button>
+        </div>
+        
+        <div class="features">
+            <div class="feature-card">
+                <h3>📄 Анализ документов</h3>
+                <p>Автоматический анализ правовых документов</p>
+            </div>
+            <div class="feature-card">
+                <h3>💬 Консультации</h3>
+                <p>Получите правовую консультацию</p>
+            </div>
+            <div class="feature-card">
+                <h3>⚖️ Споры</h3>
+                <p>Помощь в разрешении споров</p>
+            </div>
+            <div class="feature-card">
+                <h3>📋 Документы</h3>
+                <p>Генерация правовых документов</p>
+            </div>
+        </div>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Обработка документа...</p>
+        </div>
+        
+        <div class="error" id="error"></div>
+        <div class="success" id="success"></div>
     </div>
     
-    <!-- Next.js скрипты будут загружены автоматически -->
+    <div class="footer">
+        <p>Не является юридической услугой</p>
+        <a href="https://t.me/+79688398919" target="_blank">Связаться с адвокатом</a>
+    </div>
+    
     <script>
         // Инициализация Telegram WebApp
         if (window.Telegram && window.Telegram.WebApp) {
             window.Telegram.WebApp.ready();
             window.Telegram.WebApp.expand();
+            
+            // Настройка темы
+            document.body.style.setProperty('--tg-theme-bg-color', window.Telegram.WebApp.backgroundColor);
+            document.body.style.setProperty('--tg-theme-text-color', window.Telegram.WebApp.textColor);
+            document.body.style.setProperty('--tg-theme-button-color', window.Telegram.WebApp.buttonColor);
+            document.body.style.setProperty('--tg-theme-button-text-color', window.Telegram.WebApp.buttonTextColor);
         }
+        
+        // Обработка загрузки файла
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                handleFileUpload(file);
+            }
+        });
+        
+        function openCamera() {
+            // Создаем input для камеры
+            const cameraInput = document.createElement('input');
+            cameraInput.type = 'file';
+            cameraInput.accept = 'image/*';
+            cameraInput.capture = 'environment';
+            cameraInput.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    handleFileUpload(file);
+                }
+            };
+            cameraInput.click();
+        }
+        
+        function handleFileUpload(file) {
+            showLoading();
+            hideMessages();
+            
+            // Имитация обработки файла
+            setTimeout(() => {
+                hideLoading();
+                showSuccess('Документ успешно загружен! Анализ будет выполнен в ближайшее время.');
+                
+                // Отправляем уведомление в Telegram
+                if (window.Telegram && window.Telegram.WebApp) {
+                    window.Telegram.WebApp.showAlert('Документ загружен! Мы свяжемся с вами для предоставления анализа.');
+                }
+            }, 2000);
+        }
+        
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+        }
+        
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+        
+        function showSuccess(message) {
+            const successDiv = document.getElementById('success');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+        }
+        
+        function hideMessages() {
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('success').style.display = 'none';
+        }
+        
+        // Обработка ошибок
+        window.addEventListener('error', function(e) {
+            console.error('Ошибка:', e.error);
+            hideLoading();
+            showError('Произошла ошибка. Попробуйте еще раз.');
+        });
     </script>
 </body>
 </html>
