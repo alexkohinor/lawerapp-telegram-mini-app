@@ -1,282 +1,168 @@
 'use client';
 
-import React, { useState } from 'react';
-import DocumentUpload from '@/components/DocumentUpload';
-import ExtractedData from '@/components/ExtractedData';
-import SolutionProposal from '@/components/SolutionProposal';
-import DocumentExport from '@/components/DocumentExport';
-import SubscriptionCheck from '@/components/SubscriptionCheck';
-import SubscriptionStatus from '@/components/SubscriptionStatus';
-import { ExtractedData as ExtractedDataType, Solution } from '@/types/document';
-
-type WorkflowStep = 'upload' | 'extracted' | 'solutions' | 'export';
+import React from 'react';
+import Link from 'next/link';
 
 export default function Home() {
-  const [currentStep, setCurrentStep] = useState<WorkflowStep>('upload');
-  const [extractedData, setExtractedData] = useState<ExtractedDataType | null>(null);
-  const [selectedSolution, setSelectedSolution] = useState<Solution | null>(null);
-  const [generatedDocument, setGeneratedDocument] = useState<string>('');
+  const features = [
+    {
+      icon: '🚗',
+      title: 'Транспортный налог',
+      description: 'Автоматический расчет и генерация документов для оспаривания',
+      link: '/tax-disputes',
+      available: true
+    },
+    {
+      icon: '🏠',
+      title: 'Налог на имущество',
+      description: 'Скоро: проверка расчетов и создание возражений',
+      link: '#',
+      available: false
+    },
+    {
+      icon: '🌾',
+      title: 'Земельный налог',
+      description: 'Скоро: помощь в оспаривании земельного налога',
+      link: '#',
+      available: false
+    },
+    {
+      icon: '🤖',
+      title: 'AI Консультации',
+      description: 'Получите ответы на юридические вопросы',
+      link: '/consultations',
+      available: true
+    },
+  ];
 
-  const handleDocumentUploaded = (_file: File, _type: 'camera' | 'file') => {
-    // Document uploaded successfully
-  };
-
-  const handleAnalysisComplete = (data: ExtractedDataType) => {
-    setExtractedData(data);
-    setCurrentStep('extracted');
-  };
-
-  const handleDataConfirmed = () => {
-    setCurrentStep('solutions');
-  };
-
-  const handleSolutionSelected = (solution: Solution) => {
-    setSelectedSolution(solution);
-  };
-
-  const handleGenerateDocument = (solution: Solution) => {
-    // Генерируем документ на основе извлеченных данных и выбранного решения
-    const document = generateDocument(extractedData!, solution);
-    setGeneratedDocument(document);
-    setCurrentStep('export');
-  };
-
-  const generateDocument = (data: ExtractedDataType, solution: Solution) => {
-    return `
-${solution.title.toUpperCase()}
-
-Дата: ${new Date().toLocaleDateString('ru-RU')}
-
-От: ${data.parties.buyer.name}
-Адрес: ${data.parties.buyer.address}
-Телефон: ${data.parties.buyer.phone}
-
-Кому: ${data.parties.seller.name}
-Адрес: ${data.parties.seller.address}
-
-Уважаемые господа!
-
-Настоящим уведомляю вас о том, что ${data.issue.toLowerCase()}.
-
-Согласно ст. 18 Закона РФ "О защите прав потребителей", потребитель в случае обнаружения недостатков товара имеет право потребовать:
-- замены товара на товар надлежащего качества;
-- соразмерного уменьшения покупной цены;
-- незамедлительного безвозмездного устранения недостатков товара;
-- возмещения расходов на устранение недостатков товара;
-- возврата уплаченной за товар суммы.
-
-${solution.description}
-
-Требую: ${data.demand}
-
-В случае неисполнения моих требований в течение 10 дней с момента получения настоящего обращения, я буду вынужден обратиться в суд с требованием о защите нарушенных прав.
-
-Приложение: копии документов, подтверждающих факт покупки товара.
-
-${data.parties.buyer.name}
-${new Date().toLocaleDateString('ru-RU')}
-    `.trim();
-  };
-
-  const handleExport = (_format: 'docx' | 'pdf') => {
-    // В реальном приложении здесь был бы вызов API для экспорта
-  };
-
-  const resetWorkflow = () => {
-    setCurrentStep('upload');
-    setExtractedData(null);
-    setSelectedSolution(null);
-    setGeneratedDocument('');
-  };
-
-  const renderCurrentStep = () => {
-    switch (currentStep) {
-      case 'upload':
-        return (
-          <DocumentUpload
-            onDocumentUploaded={handleDocumentUploaded}
-            onAnalysisComplete={handleAnalysisComplete}
-          />
-        );
-      
-      case 'extracted':
-        return extractedData ? (
-          <ExtractedData
-            data={extractedData}
-            onConfirm={handleDataConfirmed}
-          />
-        ) : null;
-      
-      case 'solutions':
-        return extractedData ? (
-          <SolutionProposal
-            extractedData={extractedData}
-            onSolutionSelected={handleSolutionSelected}
-            onGenerateDocument={handleGenerateDocument}
-          />
-        ) : null;
-      
-      case 'export':
-        return (
-          <DocumentExport
-            documentContent={generatedDocument}
-            documentTitle={selectedSolution?.title || 'Документ'}
-            onExport={handleExport}
-          />
-        );
-      
-      default:
-        return null;
-    }
-  };
+  const stats = [
+    { value: '95%', label: 'Успешных споров' },
+    { value: '₽8,500', label: 'Средняя экономия' },
+    { value: '24ч', label: 'Время создания' },
+  ];
 
   return (
-    <SubscriptionCheck
-      onSubscriptionVerified={(_isSubscribed) => {
-        // Subscription verified
-      }}
-      onLimitExceeded={() => {
-        // Document limit exceeded
-      }}
-    >
-      <div style={{ padding: '20px', maxWidth: '100%' }}>
-        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-          <h1 style={{ 
-            color: 'var(--tg-theme-text-color, #111827)', 
-            marginBottom: '10px',
-            fontSize: '24px'
-          }}>
-            Юридический ассистент
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+      {/* Hero Section */}
+      <div className="px-4 pt-8 pb-12 text-center">
+        <div className="mb-6">
+          <div className="text-6xl mb-4">⚖️</div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-3">
+            Оспаривание налогов с AI
           </h1>
-          
-          <p style={{ 
-            color: 'var(--tg-theme-hint-color, #6b7280)',
-            fontSize: '14px',
-            margin: 0
-          }}>
-            Загрузите документ → ИИ проанализирует → Предложит решение → Сгенерирует ответ
+          <p className="text-lg text-gray-600 max-w-lg mx-auto">
+            Автоматическая генерация юридических документов для защиты ваших прав
           </p>
         </div>
 
-        {/* Статус подписки */}
-        <SubscriptionStatus />
-
-        {/* Progress indicator */}
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          marginBottom: '30px',
-          gap: '8px'
-        }}>
-          {['upload', 'extracted', 'solutions', 'export'].map((step, index) => (
-            <div
-              key={step}
-              style={{
-                width: '12px',
-                height: '12px',
-                borderRadius: '50%',
-                background: currentStep === step 
-                  ? 'var(--tg-theme-button-color, #2563eb)' 
-                  : index < ['upload', 'extracted', 'solutions', 'export'].indexOf(currentStep)
-                  ? '#10b981'
-                  : '#e5e7eb',
-                transition: 'all 0.3s ease'
-              }}
-            />
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-4 max-w-md mx-auto mb-8">
+          {stats.map((stat, index) => (
+            <div key={index} className="bg-white rounded-lg p-4 shadow-sm">
+              <div className="text-2xl font-bold text-blue-600 mb-1">
+                {stat.value}
+              </div>
+              <div className="text-xs text-gray-600">
+                {stat.label}
+              </div>
+            </div>
           ))}
         </div>
 
-        {/* Current step content */}
-        {renderCurrentStep()}
+        {/* CTA */}
+        <Link
+          href="/tax-disputes"
+          className="inline-block px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all"
+        >
+          🚀 Начать оспаривание
+        </Link>
+      </div>
 
-        {/* Navigation buttons */}
-        {currentStep !== 'upload' && (
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            marginTop: '20px',
-            gap: '12px'
-          }}>
-            <button
-              onClick={resetWorkflow}
-              style={{
-                padding: '12px 20px',
-                background: 'var(--tg-theme-secondary-bg-color, #f3f4f6)',
-                color: 'var(--tg-theme-text-color, #111827)',
-                border: '1px solid #d1d5db',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontSize: '14px'
-              }}
+      {/* Features */}
+      <div className="px-4 pb-8">
+        <h2 className="text-xl font-bold text-gray-900 mb-4 text-center">
+          Доступные услуги
+        </h2>
+        <div className="grid grid-cols-1 gap-4 max-w-2xl mx-auto">
+          {features.map((feature, index) => (
+            <Link
+              key={index}
+              href={feature.available ? feature.link : '#'}
+              className={`block p-6 bg-white rounded-lg shadow-sm border-2 transition-all ${
+                feature.available
+                  ? 'border-transparent hover:border-blue-300 hover:shadow-md cursor-pointer'
+                  : 'border-gray-200 opacity-60 cursor-not-allowed'
+              }`}
             >
-              ← Начать заново
-            </button>
-            
-            <button
-              onClick={() => window.location.href = '/consultations'}
-              style={{
-                padding: '12px 20px',
-                background: 'var(--tg-theme-button-color, #2563eb)',
-                color: 'var(--tg-theme-button-text-color, #ffffff)',
-                border: 'none',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontSize: '14px'
-              }}
-            >
-              AI Консультации →
-            </button>
-          </div>
-        )}
+              <div className="flex items-start gap-4">
+                <span className="text-4xl">{feature.icon}</span>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      {feature.title}
+                    </h3>
+                    {!feature.available && (
+                      <span className="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">
+                        Скоро
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    {feature.description}
+                  </p>
+                </div>
+                {feature.available && (
+                  <span className="text-2xl text-blue-600">→</span>
+                )}
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
 
-        {/* Footer */}
-        <div style={{ 
-          marginTop: '30px', 
-          textAlign: 'center',
-          fontSize: 'clamp(10px, 2.5vw, 12px)', 
-          color: 'var(--tg-theme-hint-color, #6b7280)'
-        }}>
-          {/* Ограничение на бесплатный анализ */}
-          <div style={{
-            padding: '12px',
-            background: '#fef3c7',
-            border: '1px solid #f59e0b',
-            borderRadius: '8px',
-            marginBottom: '20px',
-            fontSize: 'clamp(11px, 2.8vw, 13px)',
-            color: '#92400e'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-              <span style={{ fontSize: 'clamp(14px, 3.5vw, 16px)' }}>⚠️</span>
-              <strong style={{ fontSize: 'clamp(11px, 2.8vw, 13px)' }}>
-                Бесплатно можно загрузить и проанализировать только один документ
-              </strong>
+      {/* How it works */}
+      <div className="px-4 pb-8">
+        <h2 className="text-xl font-bold text-gray-900 mb-4 text-center">
+          Как это работает
+        </h2>
+        <div className="max-w-md mx-auto space-y-4">
+          {[
+            { step: '1', text: 'Введите данные о налоговом требовании', icon: '📝' },
+            { step: '2', text: 'AI проанализирует ситуацию и найдет ошибки', icon: '🤖' },
+            { step: '3', text: 'Сгенерируем профессиональные документы', icon: '📄' },
+            { step: '4', text: 'Скачайте в PDF/DOCX и подайте в ИФНС', icon: '✅' },
+          ].map((item) => (
+            <div key={item.step} className="flex items-start gap-4 p-4 bg-white rounded-lg shadow-sm">
+              <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center font-bold text-blue-600">
+                {item.step}
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl">{item.icon}</span>
+                  <p className="text-gray-700">{item.text}</p>
+                </div>
+              </div>
             </div>
-            <p style={{ margin: 0, fontSize: 'clamp(10px, 2.5vw, 12px)' }}>
-              Для анализа дополнительных документов обратитесь к адвокату.
-            </p>
-          </div>
-          
-          <p style={{ 
-            margin: '0 0 10px 0',
-            fontSize: 'clamp(10px, 2.5vw, 12px)'
-          }}>
-            Не является юридической услугой.
+          ))}
+        </div>
+      </div>
+
+      {/* Disclaimer */}
+      <div className="px-4 pb-8">
+        <div className="max-w-md mx-auto p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <p className="text-sm text-yellow-800 text-center">
+            ⚠️ Сервис не является юридической консультацией. Для получения профессиональной помощи обратитесь к адвокату.
           </p>
-          
           <a
             href="https://t.me/+79688398919"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ 
-              color: 'var(--tg-theme-link-color, #2563eb)', 
-              textDecoration: 'underline' 
-            }}
+            className="block text-center text-blue-600 underline mt-3 text-sm"
           >
             Связаться с адвокатом
           </a>
         </div>
       </div>
-    </SubscriptionCheck>
+    </div>
   );
 }

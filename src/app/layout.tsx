@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import ThemeBridge from '@/components/ThemeBridge';
+import { Navigation } from '@/components/Navigation';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -594,9 +595,10 @@ export default function RootLayout({
         }} />
       </head>
       <body className={inter.className}>
-          <div className="min-h-screen bg-gray-50">
+          <div className="min-h-screen bg-gray-50 pb-20">
             {children}
           </div>
+          <Navigation />
           <ThemeBridge />
       </body>
     </html>
